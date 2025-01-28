@@ -4,9 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\Partner;
 use App\Models\Province;
-use App\Models\Region;
+use App\Models\Zone;
 use App\Models\Locality;
 use App\Models\FormSubmissionStatus;
 
@@ -23,10 +22,9 @@ class FormSubmissionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'partner_id' => Partner::inRandomOrder()->first()->id,
+            'user_id' => User::where('role', '!=', 'admin')->inRandomOrder()->first()?->id ?? User::factory()->create(['role' => 'partner'])->id,
             'province_id' => Province::inRandomOrder()->first()->id,
-            'region_id' => Region::inRandomOrder()->first()->id,
+            'zone_id' => Zone::inRandomOrder()->first()->id,
             'locality_id' => Locality::inRandomOrder()->first()->id,
             'data' => json_encode([
                 'name' => $this->faker->firstName(),

@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('form_submissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('partner_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade'); // Puede ser CABA en lugar de una provincia normal
-            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('set null'); // Nulo si es CABA
+            $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
+            $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('set null');
             $table->foreignId('locality_id')->constrained('localities')->onDelete('cascade');
             $table->json('data'); // Datos del formulario en formato JSON
             $table->foreignId('form_submission_status_id')->constrained('form_submission_statuses')->onDelete('cascade');

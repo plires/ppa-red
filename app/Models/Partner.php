@@ -10,9 +10,4 @@ class Partner extends Model
 {
     /** @use HasFactory<\Database\Factories\PartnerFactory> */
     use HasFactory;
-
-    public function localities()
-    {
-        return $this->belongsToMany(Locality::class, 'partner_locality');
-    }
 }

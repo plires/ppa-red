@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Partner;
+use App\Models\User;
 use App\Models\Locality;
 
 class PartnerLocalitySeeder extends Seeder
@@ -12,25 +12,21 @@ class PartnerLocalitySeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-        // Aseguramos que cada localidad tenga un único partner
-        $localities = Locality::all();
+        // Filtrar usuarios válidos que no sean admin
+        $partners = User::where('role', '!=', 'admin')->get();
 
-        foreach ($localities as $locality) {
-            Partner::inRandomOrder()
-                ->limit(1)
-                ->get()
-                ->each(function ($partner) use ($locality) {
-                    $locality->partner()->attach($partner->id); // Relación pivot
-                });
+        // Crear socios si no hay disponibles
+        if ($partners->isEmpty()) {
+            $partners = User::factory(10)->create(['role' => 'partner']);
         }
 
-        // Adicional: Si quieres relaciones múltiples para partners
-        // Partner::all()->each(function ($partner) use ($localities) {
-        //     $localities->random(rand(1, 5))->each(function ($locality) use ($partner) {
-        //         $partner->localities()->syncWithoutDetaching($locality->id);
-        //     });
-        // });
+        // Asignar localidades a socios
+        Locality::all()->each(function ($locality) use ($partners) {
+            $locality->update([
+                'user_id' => $partners->random()->id,
+            ]);
+        });
     }
 }

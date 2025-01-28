@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('region_id')->constrained('regions')->onDelete('cascade'); // FK hacia regiones
+            $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
             $table->timestamps();
         });
     }

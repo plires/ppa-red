@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('localities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade'); // FK hacia provincias
-            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade'); // FK hacia regiones
-            $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('cascade'); // FK hacia zonas
-            $table->string('type'); // Tipo de localidad: 'ciudad', 'barrio', 'departamento'
+            $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('cascade');
+            $table->foreignId('province_id')->nullable()->constrained('provinces')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

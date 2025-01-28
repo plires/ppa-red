@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('partner'); // 'partner' será el rol por defecto para socios
             $table->rememberToken();
             $table->timestamps();
         });

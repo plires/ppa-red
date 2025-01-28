@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\FormSubmission;
+use App\Models\Locality;
 
 class FormSubmissionSeeder extends Seeder
 {
@@ -13,6 +14,15 @@ class FormSubmissionSeeder extends Seeder
      */
     public function run(): void
     {
-        FormSubmission::factory(90)->create();
+        $localities = Locality::all();
+
+        foreach ($localities as $locality) {
+
+            FormSubmission::factory()->create([
+                'user_id' => $locality->user_id,
+                'zone_id' => $locality->zone_id,
+                'province_id' => $locality->province_id,
+            ]);
+        }
     }
 }

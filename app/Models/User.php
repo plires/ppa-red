@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relación uno a muchos: Un socio tiene varias localidades.
+     */
+    public function localities()
+    {
+        return $this->hasMany(Locality::class);
+    }
 }
