@@ -1,0 +1,429 @@
+{
+  "Buenos Aires": {
+    "AMBA": {
+      "Zona Norte": [
+        "Partido de Vicente López",
+        "Partido de San Isidro",
+        "Partido de Tigre",
+        "Partido de San Fernando",
+        "Partido de Pilar",
+        "Partido de Escobar",
+        "Partido de Malvinas Argentinas",
+        "Partido de José C. Paz",
+        "Partido de General San Martín"
+      ],
+      "Zona Sur": [
+        "Partido de Avellaneda",
+        "Partido de Lanús",
+        "Partido de Lomas de Zamora",
+        "Partido de Quilmes",
+        "Partido de Berazategui",
+        "Partido de Florencio Varela",
+        "Partido de Almirante Brown",
+        "Partido de Esteban Echeverría",
+        "Partido de Ezeiza",
+        "Partido de Presidente Perón"
+      ],
+      "Zona Oeste": [
+        "Partido de La Matanza",
+        "Partido de Morón",
+        "Partido de Ituzaingó",
+        "Partido de Hurlingham",
+        "Partido de Tres de Febrero",
+        "Partido de San Martín",
+        "Partido de Merlo",
+        "Partido de Moreno",
+        "Partido de General Rodríguez",
+        "Partido de Marcos Paz"
+      ]
+    },
+    "Interior": {
+      "Bahía Blanca": ["Bahía Blanca", "Ingeniero White", "Cabildo"],
+      "Mar del Plata": ["Mar del Plata", "Batán", "Sierra de los Padres"],
+      "Tandil": ["Tandil", "Gardey", "Vela"],
+      "Pergamino": ["Pergamino", "Acevedo", "J. A. de la Peña", "Rancagua"],
+      "Junín": ["Junín", "Agustina", "La Agraria", "Fortín Tiburcio"],
+      "Olavarría": ["Olavarría", "Sierras Bayas", "Hinojo"],
+      "Chivilcoy": ["Chivilcoy", "Moquehuá", "La Rica"],
+      "Pehuajó": ["Pehuajó", "Yohué", "Daireaux"],
+      "Tres Arroyos": ["Tres Arroyos", "Claromecó", "Copetonas"],
+      "Dolores": ["Dolores", "Las Heras", "Castelli"],
+      "Mercedes": ["Mercedes", "Luján", "Tomás Jofré"],
+      "Bragado": ["Bragado", "Olascoaga", "Mechita"],
+      "Zárate": ["Zárate", "Campana", "La Luisa"],
+      "San Nicolás": ["San Nicolás", "Conesa", "Rocca"],
+      "Azul": ["Azul", "Chillar", "Sánchez"],
+      "Marcos Paz": ["Marcos Paz", "Cañuelas", "Uribelarrea"],
+      "Rojas": ["Rojas", "Pardo", "La Delfina"],
+      "Saladillo": ["Saladillo", "Cazón", "Del Carril"],
+      "General Alvear": ["General Alvear", "La Colorada", "Rivadavia"],
+      "Carlos Casares": ["Carlos Casares", "Morea", "Mechita"],
+      "Lezama": ["Lezama", "La Dulce"],
+      "Lobería": ["Lobería", "La Lobería"],
+      "La Plata": [
+        "La Plata",
+        "Ringuelet",
+        "Gonnet",
+        "City Bell",
+        "Los Hornos"
+      ],
+      "Rivadavia": ["Rivadavia", "Fortín Olavarría"],
+      "Chacabuco": ["Chacabuco", "Rawson", "Castilla"],
+      "General Viamonte": ["Los Toldos", "El Tejar"],
+      "San Pedro": ["San Pedro", "Río Tala"],
+      "Berisso": ["Berisso", "Villa Progreso"],
+      "Pilar": ["Pilar", "Del Viso", "Manzanares"],
+      "Exaltación de la Cruz": ["Capilla del Señor", "Parada Robles"],
+      "San Cayetano": ["San Cayetano", "Dunamar"],
+      "Tigre": ["Tigre", "Don Torcuato", "Rincón de Milberg"],
+      "9 de Julio": ["9 de Julio", "La Niña", "El Chajá", "Los Toldos"],
+      "Leandro N. Alem": ["Leandro N. Alem", "Lobos", "Cabo San Antonio"],
+      "General Belgrano": ["General Belgrano", "Piedra Buena", "Lope de Vega"],
+      "Las Flores": ["Las Flores", "Henderson", "Cruz Chica"],
+      "Lincoln": ["Lincoln", "Las Heras", "Carlos Spegazzini"],
+      "General Pueyrredón": ["Mar del Plata", "Batán", "Sierra de los Padres"],
+      "9 de Julio": ["9 de Julio", "La Niña", "El Chajá", "Los Toldos"],
+      "San Fernando": ["San Fernando", "Tigre", "San Isidro"],
+      "Luján": ["Luján", "Open Door", "El Ceibo"]
+    }
+  },
+
+  "Ciudad Autónoma de Buenos Aires": {
+    "barrios": [
+      "Agronomía",
+      "Almagro",
+      "Balvanera",
+      "Barracas",
+      "Belgrano",
+      "Boedo",
+      "Caballito",
+      "Chacarita",
+      "Coghlan",
+      "Congreso",
+      "La Boca",
+      "La Paternal",
+      "Liniers",
+      "Mataderos",
+      "Monte Castro",
+      "Montevideo",
+      "Núñez",
+      "Once",
+      "Palermo",
+      "Parque Avellaneda",
+      "Parque Chacabuco",
+      "Parque Patricios",
+      "Recoleta",
+      "Retiro",
+      "San Cristóbal",
+      "San Telmo",
+      "Villa Devoto",
+      "Villa del Parque",
+      "Villa del Parque",
+      "Villa del Parque",
+      "Villa del Parque",
+      "Villa del Parque"
+    ]
+  },
+  "Catamarca": {
+    "departamentos": [
+      "Ancasti",
+      "Antofagasta de la Sierra",
+      "Belén",
+      "Capayán",
+      "Chilecito",
+      "El Alto",
+      "Fray Mamerto Esquiú",
+      "La Paz",
+      "Los Altos",
+      "Santa María",
+      "Tinogasta",
+      "Valle Viejo",
+      "Capayán"
+    ]
+  },
+  "Chaco": {
+    "departamentos": [
+      "Almirante Brown",
+      "Bermejo",
+      "Cerrito",
+      "Chacabuco",
+      "Frías",
+      "General Belgrano",
+      "General San Martín",
+      "La Leonesa",
+      "Margarita Belén",
+      "Presidencia Roque Sáenz Peña",
+      "Quimilí",
+      "Sáenz Peña",
+      "Resistencia"
+    ]
+  },
+  "Chubut": {
+    "departamentos": [
+      "Biedma",
+      "Rivadavia",
+      "Telsen",
+      "Esquel",
+      "Fitz Roy",
+      "Gaiman",
+      "Gdor. Costa",
+      "Laguna Blanca",
+      "María Luján",
+      "Menchu",
+      "Trevelin"
+    ]
+  },
+  "Córdoba": {
+    "departamentos": [
+      "Calamuchita",
+      "Colón",
+      "Cruz del Eje",
+      "General Roca",
+      "General San Martín",
+      "Ischilin",
+      "Juan Felipe",
+      "Marcos Juárez",
+      "Río Cuarto",
+      "San Javier",
+      "San Justo",
+      "Santa María",
+      "Totoral"
+    ]
+  },
+  "Corrientes": {
+    "departamentos": [
+      "Bella Vista",
+      "Berón de Astrada",
+      "Capital",
+      "Cerro Azul",
+      "Chavarría",
+      "Colonia Carlos Pellegrini",
+      "Curuzú Cuatiá",
+      "Empedrado",
+      "Esquina",
+      "Goya",
+      "Itatí",
+      "La Cruz",
+      "Mercedes",
+      "Monte Caseros",
+      "Paso de los Libres",
+      "San Roque"
+    ]
+  },
+  "Entre Ríos": {
+    "departamentos": [
+      "Colón",
+      "Concordia",
+      "Diamante",
+      "Federación",
+      "Gualeguay",
+      "Gualeguaychú",
+      "Islas del Ibicuy",
+      "La Paz",
+      "Nogoyá",
+      "Paraná",
+      "Talar",
+      "Victoria"
+    ]
+  },
+  "Formosa": {
+    "departamentos": [
+      "Bermejo",
+      "Formosa",
+      "Laishí",
+      "Pilcomayo",
+      "Pirané",
+      "Río Verde",
+      "Vera"
+    ]
+  },
+  "Jujuy": {
+    "departamentos": [
+      "El Carmen",
+      "Ledesma",
+      "San Pedro",
+      "Palpalá",
+      "Perico",
+      "San Salvador",
+      "Susques",
+      "Yavi",
+      "Humahuaca"
+    ]
+  },
+  "La Pampa": {
+    "departamentos": [
+      "Adolfo Van Praet",
+      "Catriló",
+      "Conhello",
+      "General Acha",
+      "Guatraché",
+      "Intendente Alvear",
+      "Lihuel Calel",
+      "Macachín",
+      "Parera",
+      "Rancul",
+      "Santa Rosa"
+    ]
+  },
+  "La Rioja": {
+    "departamentos": [
+      "Capital",
+      "Chilecito",
+      "Famatina",
+      "General Lamadrid",
+      "General Ocampo",
+      "Independencia",
+      "Felipe Varela",
+      "Sanagasta",
+      "Santiago del Estero"
+    ]
+  },
+  "Mendoza": {
+    "departamentos": [
+      "Capital",
+      "General Alvear",
+      "Guaymallén",
+      "Las Heras",
+      "Lavalle",
+      "Maipú",
+      "San Carlos",
+      "San Martín",
+      "Tunuyán"
+    ]
+  },
+  "Misiones": {
+    "departamentos": [
+      "Apóstoles",
+      "Candelaria",
+      "Campo Ramón",
+      "Cainguás",
+      "Capital",
+      "Eldorado",
+      "Guaraní",
+      "Leandro N. Alem",
+      "Montecarlo",
+      "Oberá",
+      "San Ignacio"
+    ]
+  },
+  "Neuquén": {
+    "departamentos": [
+      "Aluminé",
+      "Aguada San Roque",
+      "Chos Malal",
+      "Cutral Co",
+      "Hua Hum",
+      "Picún Leufú",
+      "San Martín de los Andes",
+      "Zapala"
+    ]
+  },
+  "Río Negro": {
+    "departamentos": [
+      "Bariloche",
+      "General Roca",
+      "Ingeniero Huergo",
+      "Valcheta",
+      "Viedma",
+      "Cipolletti",
+      "Alto Valle",
+      "Gral. Conesa"
+    ]
+  },
+  "Salta": {
+    "departamentos": [
+      "Cachi",
+      "Capital",
+      "Cerrillos",
+      "General Güemes",
+      "La Caldera",
+      "La Candelaria",
+      "Los Andes",
+      "Metán",
+      "Rosario de la Frontera",
+      "San Martín",
+      "Seclantás"
+    ]
+  },
+  "San Juan": {
+    "departamentos": [
+      "Capital",
+      "Chimbas",
+      "Jáchal",
+      "Pocito",
+      "Rawson",
+      "Rivadavia",
+      "San Martín",
+      "Santa Lucía",
+      "Ullum"
+    ]
+  },
+  "San Luis": {
+    "departamentos": [
+      "Capital",
+      "Ayacucho",
+      "Belgrano",
+      "Candelaria",
+      "Chacabuco",
+      "Coronel Pringles",
+      "Desaguadero",
+      "El Trapiche",
+      "La Punta",
+      "Justo Daract"
+    ]
+  },
+  "Santa Cruz": {
+    "departamentos": [
+      "Capital",
+      "Caleta Olivia",
+      "El Chaltén",
+      "El Calafate",
+      "Las Heras",
+      "Río Gallegos"
+    ]
+  },
+  "Santa Fe": {
+    "departamentos": [
+      "Capital",
+      "Castellanos",
+      "General López",
+      "Garay",
+      "La Capital",
+      "Las Colonias",
+      "Nueve de Julio",
+      "San Jerónimo",
+      "San Justo",
+      "San Lorenzo",
+      "San Martín"
+    ]
+  },
+  "Santiago del Estero": {
+    "departamentos": [
+      "Capital",
+      "Avellaneda",
+      "Belgrano",
+      "Choya",
+      "Figueroa",
+      "Guasayán",
+      "Moreno",
+      "Ojo de Agua",
+      "Robles",
+      "Rivadavia",
+      "Sarmiento"
+    ]
+  },
+  "Tierra del Fuego": {
+    "departamentos": ["Capital", "Río Grande", "Ushuaia"]
+  },
+  "Tucumán": {
+    "departamentos": [
+      "Capital",
+      "Burruyacú",
+      "Leales",
+      "Lules",
+      "Río Chico",
+      "Tafí del Valle",
+      "Yerba Buena"
+    ]
+  }
+}
