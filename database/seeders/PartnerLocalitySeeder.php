@@ -22,7 +22,7 @@ class PartnerLocalitySeeder extends Seeder
                 ->limit(1)
                 ->get()
                 ->each(function ($partner) use ($locality) {
-                    $locality->partners()->attach($partner->id); // Relación pivot
+                    $locality->partner()->attach($partner->id); // Relación pivot
                 });
         }
 
