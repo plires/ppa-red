@@ -12,10 +12,10 @@ class FormSubmissionStatus extends Model
     use HasFactory;
 
     /**
-     * Relación uno a muchos: Un estado puede tener varios envíos de formularios.
+     * Relación uno a muchos: Un estado puede tener muchos envíos de formularios.
      */
     public function formSubmissions()
     {
-        return $this->hasMany(FormSubmission::class, 'form_submission_status_id');
+        return $this->hasMany(FormSubmission::class);
     }
 }

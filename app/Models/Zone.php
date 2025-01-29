@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Province;
 use App\Models\Locality;
+use App\Models\Province;
+use App\Models\FormSubmission;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Zone extends Model
 {
@@ -20,5 +21,13 @@ class Zone extends Model
     public function localities()
     {
         return $this->hasMany(Locality::class);
+    }
+
+    /**
+     * Relación uno a muchos: Una zona puede tener varios envíos de formularios.
+     */
+    public function formSubmissions()
+    {
+        return $this->hasMany(FormSubmission::class);
     }
 }

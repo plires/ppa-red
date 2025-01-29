@@ -3,14 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Locality;
+use Illuminate\Support\Str;
+use App\Models\FormSubmission;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    const ADMIN_USER = 'admin';
+    const PARTNER_USER = 'partner';
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -33,6 +40,37 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function isAdmin()
+    {
+        return $this->role == User::ADMIN_USER;
+    }
+
+    public function isPartner()
+    {
+        return $this->role == User::PARTNER_USER;
+    }
+
+    public static function generateVerificationToken()
+    {
+        return Str::random(40);
+    }
+
+    /**
+     * Relación uno a muchos: Un usuario puede tener varios envíos de formularios.
+     */
+    public function formSubmissions()
+    {
+        return $this->hasMany(FormSubmission::class);
+    }
+
+    /**
+     * Relación uno a muchos: Un usuario puede tener varias localidades
+     */
+    public function localities()
+    {
+        return $this->hasMany(Locality::class, 'user_id'); // Especificar la clave foránea correcta
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -44,13 +82,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * Relación uno a muchos: Un socio tiene varias localidades.
-     */
-    public function localities()
-    {
-        return $this->hasMany(Locality::class);
     }
 }

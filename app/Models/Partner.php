@@ -2,12 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Locality;
+use App\Models\FormSubmission;
 
-class Partner extends Model
+class Partner extends User
 {
-    /** @use HasFactory<\Database\Factories\PartnerFactory> */
-    use HasFactory;
+
+    protected $table = 'users'; // Forzar que use la tabla "users"
+
+    public function localities()
+    {
+        return $this->hasMany(Locality::class, 'user_id'); // Especificar la clave foránea correcta
+    }
+
+    public function formSubmissions()
+    {
+        return $this->hasMany(FormSubmission::class, 'user_id'); // Especificar la clave foránea correcta
+    }
 }
