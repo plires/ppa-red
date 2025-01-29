@@ -11,9 +11,23 @@ class LocalityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Locality::all());
+        // Obtener los parámetros de la URL
+        $provinceId = $request->query('province_id');
+        $zoneId = $request->query('zone_id');
+
+        // Filtrar localidades según los parámetros recibidos
+        $localities = Locality::when($provinceId, function ($query) use ($provinceId) {
+            return $query->where('province_id', $provinceId);
+        })
+            ->when($zoneId, function ($query) use ($zoneId) {
+                return $query->where('zone_id', $zoneId);
+            })
+            ->get();
+
+        // Retornar la respuesta en formato JSON
+        return response()->json($localities);
     }
 
     /**

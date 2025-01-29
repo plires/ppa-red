@@ -11,9 +11,18 @@ class ZoneController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Zone::all());
+        // Obtener el parámetro province_id de la URL
+        $provinceId = $request->query('province_id');
+
+        // Si se pasa province_id, filtrar por provincia; si no, devolver todas las zonas
+        $zones = Zone::when($provinceId, function ($query) use ($provinceId) {
+            return $query->where('province_id', $provinceId);
+        })->get();
+
+        // Devolver la respuesta en formato JSON
+        return response()->json($zones);
     }
 
     /**
