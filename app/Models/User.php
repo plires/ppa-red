@@ -18,6 +18,8 @@ class User extends Authenticatable
     const ADMIN_USER = 'admin';
     const PARTNER_USER = 'partner';
 
+    const UNVERIFIED_USER = NULL;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,8 +28,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role',
+        'email_verified_at',
+        'remember_token'
     ];
 
     /**

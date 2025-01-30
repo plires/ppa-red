@@ -14,21 +14,14 @@ class PartnerSeeder extends Seeder
      */
     public function run()
     {
-        // Crear 1 admin
-        User::factory(1)->create([
-            'name' => 'Pablo Admin',
-            'email' => 'pablo@admin.com',
-            'phone' => '115-049-7501',
-            'role' => 'admin', // Definir que es admin
-            'password' => Hash::make('123123123'),
-        ]);
-
         // Crear 1 partner
         User::factory(1)->create([
             'name' => 'Pablo Partner',
             'email' => 'pablo@partner.com',
             'phone' => '115-049-7501',
             'role' => 'partner', // Definir que es admin
+            'email_verified_at' => NULL,
+            'remember_token' => User::generateVerificationToken(),
             'password' => Hash::make('123123123'),
         ]);
 
