@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -18,7 +19,8 @@ class PartnerSeeder extends Seeder
             'name' => 'Pablo Lires',
             'email' => 'pablolires@gmail.com',
             'phone' => '115-049-7501',
-            'role' => 'admin', // Definir que son socios
+            'role' => 'admin', // Definir que es admin
+            'password' => Hash::make('123123123'),
         ]);
 
         // Crear 10 socios
