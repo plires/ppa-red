@@ -12,6 +12,8 @@
     @vite(['resources/css/fonts-admin.css', 'resources/css/app.css', 'resources/fonts/bootstrap-icons/bootstrap-icons.min.css'])
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" />
+
+    @yield('css') <!-- Sección específica para CSS extra -->
 </head>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-mini sidebar-collapse bg-body-tertiary">
@@ -67,4 +69,6 @@
     </script>
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
+
+    @yield('scripts') <!-- Sección específica para JS extra -->
 </body>
