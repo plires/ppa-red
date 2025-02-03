@@ -9,6 +9,7 @@ use App\Models\Province;
 use App\Models\Zone;
 use App\Models\Locality;
 use App\Models\FormSubmissionStatus;
+use Carbon\Carbon;
 
 class FormSubmission extends Model
 {
@@ -61,5 +62,10 @@ class FormSubmission extends Model
     public function status()
     {
         return $this->belongsTo(FormSubmissionStatus::class, 'form_submission_status_id');
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format('d/m/y');
     }
 }
