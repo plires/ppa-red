@@ -28,7 +28,6 @@
                         <!-- /.card-header -->
                         <div class="card-body">
 
-
                             <table id="formSubmissionTable" class="display table table-striped table-bordered"
                                 style="width:100%">
                                 <thead>
@@ -36,7 +35,11 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Localidad</th>
-                                        <th>Email</th>
+                                        @if ($user->role === $role_admin)
+                                            <th>Partner</th>
+                                        @else
+                                            <th>Email</th>
+                                        @endif
                                         <th>Estado</th>
                                         <th>Fecha</th>
                                         <th>Acciones</th>
@@ -53,11 +56,33 @@
                                             <td>{{ $formSubmission->id }}</td>
                                             <td>{{ $data['name'] }}</td>
                                             <td>{{ $formSubmission->locality->name }}</td>
-                                            <td>{{ $data['email'] }}</td>
+                                            @if ($user->role === $role_admin)
+                                                <td>{{ $formSubmission->partner->name }}</td>
+                                            @else
+                                                <td>{{ $data['email'] }}</td>
+                                            @endif
                                             <td>{{ $formSubmission->status->status }}</td>
                                             <td>{{ $formSubmission->FormattedDate }}</td>
                                             <td>
-                                                <a href="#">✏️ Editar</a>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Acciones
+                                                    </button>
+                                                    <ul class="dropdown-menu" style="">
+                                                        <li><a class="dropdown-item"
+                                                                href="{{ route('form_submissions.show', $formSubmission->id) }}">Ver
+                                                                consulta</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Something else
+                                                                here</a></li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li><a class="dropdown-item" href="#">Separated link</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -68,7 +93,11 @@
                                         <th>Nombre</th>
                                         <th>Position</th>
                                         <th>Localidad</th>
-                                        <th>Email</th>
+                                        @if ($user->role === $role_admin)
+                                            <th>Partner</th>
+                                        @else
+                                            <th>Email</th>
+                                        @endif
                                         <th>Estado</th>
                                         <th>Fecha</th>
                                         <th>Acciones</th>

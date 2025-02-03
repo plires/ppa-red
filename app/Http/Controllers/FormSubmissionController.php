@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FormSubmission;
 use Illuminate\Support\Facades\Auth;
+use \App\Models\User;
 
 class FormSubmissionController extends Controller
 {
@@ -21,6 +22,13 @@ class FormSubmissionController extends Controller
         // Obtener resultados
         $formSubmissions = $query->get();
 
-        return view('form_submissions.index', compact('formSubmissions'));
+        $role_admin = User::ADMIN_USER;
+
+        return view('form_submissions.index', compact('formSubmissions', 'user', 'role_admin'));
+    }
+
+    public function show(FormSubmission $formSubmission)
+    {
+        dd($formSubmission);
     }
 }
