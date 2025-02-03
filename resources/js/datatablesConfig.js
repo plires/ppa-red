@@ -6,6 +6,6 @@ $('#formSubmissionTable').DataTable({
   stateSave: true,
   scrollX: true,
   language: {
-    url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
+    url: '/locales/dataTables_es-ES.json',
   },
 })
