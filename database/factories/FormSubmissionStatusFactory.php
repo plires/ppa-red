@@ -17,7 +17,7 @@ class FormSubmissionStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => $this->faker->randomElement(['en_curso', 'demorado', 'completo', 'rechazado', 'pendiente']),
+            'status' => $this->faker->randomElement(['En Curso', 'Demorado', 'Completo', 'Cerrado', 'Pendiente']),
         ];
     }
 }

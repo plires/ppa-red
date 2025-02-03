@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('form_submission_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['en_curso', 'demorado', 'completo', 'rechazado', 'pendiente'])->default('en_curso'); // Diferentes estados posibles
+            $table->enum('status', ['En Curso', 'Demorado', 'Completo', 'Cerrado', 'Pendiente'])->default('Pendiente'); // Diferentes estados posibles
             $table->timestamps();
         });
     }
