@@ -18,17 +18,8 @@ class FormSubmissionController extends Controller
             $query->where('user_id', $user->id);
         }
 
-        // Aplicar filtrado y ordenación
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        if ($request->filled('sort_by') && in_array($request->sort_by, ['name', 'created_at'])) {
-            $query->orderBy($request->sort_by, $request->get('order', 'asc'));
-        }
-
-        // Obtener resultados con paginación
-        $formSubmissions = $query->paginate(10);
+        // Obtener resultados
+        $formSubmissions = $query->get();
 
         return view('form_submissions.index', compact('formSubmissions'));
     }
