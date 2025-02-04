@@ -15,12 +15,12 @@ return new class extends Migration
         Schema::create('form_submission_statuses', function (Blueprint $table) {
             $table->id();
             $table->enum('status', [
-                FormSubmissionStatus::STATUS_EN_CURSO,
                 FormSubmissionStatus::STATUS_DEMORADO,
+                FormSubmissionStatus::STATUS_PENDIENTE,
+                FormSubmissionStatus::STATUS_EN_CURSO,
                 FormSubmissionStatus::STATUS_COMPLETO,
                 FormSubmissionStatus::STATUS_CERRADO,
-                FormSubmissionStatus::STATUS_PENDIENTE
-            ])->default('Pendiente'); // Diferentes estados posibles
+            ])->default(FormSubmissionStatus::STATUS_PENDIENTE); // Diferentes estados posibles
             $table->timestamps();
         });
     }
