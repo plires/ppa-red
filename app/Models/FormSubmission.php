@@ -9,6 +9,7 @@ use App\Models\Province;
 use App\Models\Zone;
 use App\Models\Locality;
 use App\Models\FormSubmissionStatus;
+use App\Models\FormResponse;
 use Carbon\Carbon;
 
 class FormSubmission extends Model
@@ -54,6 +55,11 @@ class FormSubmission extends Model
     public function partner()
     {
         return $this->belongsTo(Partner::class, 'user_id'); // Especificamos la clave foránea correcta
+    }
+
+    public function formResponses()
+    {
+        return $this->hasMany(FormResponse::class);
     }
 
     /**

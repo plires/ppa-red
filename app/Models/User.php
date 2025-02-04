@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Locality;
 use Illuminate\Support\Str;
 use App\Models\FormSubmission;
+use App\Models\FormResponse;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,6 +67,11 @@ class User extends Authenticatable
     public function formSubmissions()
     {
         return $this->hasMany(FormSubmission::class);
+    }
+
+    public function formResponses()
+    {
+        return $this->hasMany(FormResponse::class);
     }
 
     /**

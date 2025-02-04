@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
             $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('set null');
             $table->foreignId('locality_id')->constrained('localities')->onDelete('cascade');
-            $table->json('data'); // Datos del formulario en formato JSON
+            $table->json('data'); // Contiene nombre, email y teléfono, pero no los comentarios
             $table->foreignId('form_submission_status_id')->constrained('form_submission_statuses')->onDelete('cascade');
             $table->timestamps();
         });

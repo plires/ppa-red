@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(class: PartnerLocalitySeeder::class);
         $this->call(class: FormSubmissionStatusSeeder::class);
         $this->call(class: FormSubmissionSeeder::class);
+        $this->call(class: FormResponseSeeder::class);
     }
 }
