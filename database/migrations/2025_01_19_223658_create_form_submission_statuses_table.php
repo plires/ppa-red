@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\FormSubmissionStatus;
 
 return new class extends Migration
 {
@@ -13,7 +14,13 @@ return new class extends Migration
     {
         Schema::create('form_submission_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['En Curso', 'Demorado', 'Completo', 'Cerrado', 'Pendiente'])->default('Pendiente'); // Diferentes estados posibles
+            $table->enum('status', [
+                FormSubmissionStatus::STATUS_EN_CURSO,
+                FormSubmissionStatus::STATUS_DEMORADO,
+                FormSubmissionStatus::STATUS_COMPLETO,
+                FormSubmissionStatus::STATUS_CERRADO,
+                FormSubmissionStatus::STATUS_PENDIENTE
+            ])->default('Pendiente'); // Diferentes estados posibles
             $table->timestamps();
         });
     }

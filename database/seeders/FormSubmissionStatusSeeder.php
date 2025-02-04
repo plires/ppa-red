@@ -14,23 +14,23 @@ class FormSubmissionStatusSeeder extends Seeder
     public function run(): void
     {
         FormSubmissionStatus::factory()->create([
-            'status' => 'En Curso',
+            'status' => FormSubmissionStatus::STATUS_EN_CURSO,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => 'Demorado',
+            'status' => FormSubmissionStatus::STATUS_DEMORADO,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => 'Completo',
+            'status' => FormSubmissionStatus::STATUS_COMPLETO,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => 'Cerrado',
+            'status' => FormSubmissionStatus::STATUS_CERRADO,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => 'Pendiente',
+            'status' => FormSubmissionStatus::STATUS_PENDIENTE,
         ]);
     }
 }

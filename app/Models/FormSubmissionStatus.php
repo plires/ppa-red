@@ -11,6 +11,12 @@ class FormSubmissionStatus extends Model
     /** @use HasFactory<\Database\Factories\FormSubmissionStatusFactory> */
     use HasFactory;
 
+    const STATUS_EN_CURSO = 'En Curso';
+    const STATUS_DEMORADO = 'Demorado';
+    const STATUS_COMPLETO = 'Completo';
+    const STATUS_CERRADO = 'Cerrado';
+    const STATUS_PENDIENTE = 'Pendiente';
+
     /**
      * Relación uno a muchos: Un estado puede tener muchos envíos de formularios.
      */

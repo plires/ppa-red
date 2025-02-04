@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\FormSubmissionStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,15 @@ class FormSubmissionStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => $this->faker->randomElement(['En Curso', 'Demorado', 'Completo', 'Cerrado', 'Pendiente']),
+            'status' => $this->faker->randomElement(
+                [
+                    FormSubmissionStatus::STATUS_EN_CURSO,
+                    FormSubmissionStatus::STATUS_DEMORADO,
+                    FormSubmissionStatus::STATUS_COMPLETO,
+                    FormSubmissionStatus::STATUS_CERRADO,
+                    FormSubmissionStatus::STATUS_PENDIENTE
+                ]
+            ),
         ];
     }
 }
