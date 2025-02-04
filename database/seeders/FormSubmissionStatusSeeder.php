@@ -14,24 +14,28 @@ class FormSubmissionStatusSeeder extends Seeder
     public function run(): void
     {
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_DEMORADO,
+            'status' => FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_PENDIENTE,
+            'status' => FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_EN_CURSO,
+            'status' => FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
         ]);
 
 
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_COMPLETO,
+            'status' => FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_CERRADO,
+            'status' => FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+        ]);
+
+        FormSubmissionStatus::factory()->create([
+            'status' => FormSubmissionStatus::STATUS_CERRADO_POR_PARTNER,
         ]);
     }
 }

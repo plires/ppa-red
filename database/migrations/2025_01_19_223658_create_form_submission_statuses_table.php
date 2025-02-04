@@ -15,15 +15,18 @@ return new class extends Migration
         Schema::create('form_submission_statuses', function (Blueprint $table) {
             $table->id();
             $table->enum('status', [
-                FormSubmissionStatus::STATUS_DEMORADO,
-                FormSubmissionStatus::STATUS_PENDIENTE,
-                FormSubmissionStatus::STATUS_EN_CURSO,
-                FormSubmissionStatus::STATUS_COMPLETO,
-                FormSubmissionStatus::STATUS_CERRADO,
-            ])->default(FormSubmissionStatus::STATUS_PENDIENTE); // Diferentes estados posibles
+                FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
+                FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,
+                FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                FormSubmissionStatus::STATUS_CERRADO_POR_PARTNER,
+
+            ])->default(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER); // Diferentes estados posibles
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

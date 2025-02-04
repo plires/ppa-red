@@ -20,11 +20,12 @@ class FormSubmissionStatusFactory extends Factory
         return [
             'status' => $this->faker->randomElement(
                 [
-                    FormSubmissionStatus::STATUS_DEMORADO,
-                    FormSubmissionStatus::STATUS_PENDIENTE,
-                    FormSubmissionStatus::STATUS_EN_CURSO,
-                    FormSubmissionStatus::STATUS_COMPLETO,
-                    FormSubmissionStatus::STATUS_CERRADO
+                    FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
+                    FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,
+                    FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
+                    FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
+                    FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                    FormSubmissionStatus::STATUS_CERRADO_POR_PARTNER
                 ]
             ),
         ];
