@@ -14,6 +14,27 @@
 
     <!--begin::App Content-->
     <div class="app-content">
+
+        @php
+            function statusColorClass($status)
+            {
+                switch ($status) {
+                    case App\Models\FormSubmissionStatus::STATUS_EN_CURSO:
+                        return 'text-bg-primary';
+                    case App\Models\FormSubmissionStatus::STATUS_DEMORADO:
+                        return 'bg-danger';
+                    case App\Models\FormSubmissionStatus::STATUS_COMPLETO:
+                        return 'bg-success';
+                    case App\Models\FormSubmissionStatus::STATUS_CERRADO:
+                        return 'bg-info';
+                    case App\Models\FormSubmissionStatus::STATUS_PENDIENTE:
+                        return 'bg-warning';
+                    default:
+                        return App\Models\FormSubmissionStatus::STATUS_PENDIENTE; // Estado por defecto
+                }
+            }
+        @endphp
+
         <!--begin::Container-->
         <div class="container-fluid">
             <!--begin::Row-->
@@ -61,7 +82,12 @@
                                             @else
                                                 <td>{{ $data['email'] }}</td>
                                             @endif
-                                            <td>{{ $formSubmission->status->status }}</td>
+
+                                            <td>
+                                                <span
+                                                    class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
+                                                </span>
+                                            </td>
                                             <td>{{ $formSubmission->FormattedDate }}</td>
                                             <td>
                                                 <div class="btn-group">
