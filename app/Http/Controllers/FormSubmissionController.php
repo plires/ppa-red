@@ -29,6 +29,11 @@ class FormSubmissionController extends Controller
 
     public function show(FormSubmission $formSubmission)
     {
-        dd($formSubmission);
+
+        $user = Auth::user();
+
+        $role_admin = User::ADMIN_USER;
+
+        return view('form_submissions.show', compact('formSubmission', 'user', 'role_admin'));
     }
 }
