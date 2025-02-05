@@ -1,7 +1,7 @@
 <x-app-layout>
 
     @section('css')
-        @vite(['resources/css/dataTables.dataTables.css'])
+        {{-- @vite(['resources/css/dataTables.dataTables.css']) --}}
     @endsection
 
     {{-- <x-slot name="header">
@@ -10,11 +10,8 @@
         </h2>
     </x-slot> --}}
 
-    @include('layouts.app_content_header_admin')
-
     <!--begin::App Content-->
     <div class="app-content">
-
 
         <!--begin::Container-->
         <div class="container-fluid">
@@ -55,6 +52,6 @@
     <!--end::App Content-->
 
     @section('scripts')
-        @vite(['resources/js/datatablesConfig.js', 'resources/js/jquery-3.7.1.js', 'resources/js/datatables.js'])
+        {{-- @vite(['resources/js/datatablesConfig.js', 'resources/js/jquery-3.7.1.js', 'resources/js/datatables.js']) --}}
     @endsection
 </x-app-layout>
