@@ -65,7 +65,6 @@
                                         @endif
                                         <th>Estado</th>
                                         <th>Fecha</th>
-                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,42 +75,36 @@
                                         @endphp
 
                                         <tr class="align-middle">
-                                            <td>{{ $formSubmission->id }}</td>
-                                            <td>{{ $data['name'] }}</td>
-                                            <td>{{ $formSubmission->locality->name }}</td>
+                                            <td><a
+                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->id }}</a>
+                                            </td>
+                                            <td><a
+                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['name'] }}</a>
+                                            </td>
+                                            <td><a
+                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->locality->name }}</a>
+                                            </td>
                                             @if ($user->role === $role_admin)
-                                                <td>{{ $formSubmission->partner->name }}</td>
+                                                <td><a
+                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->partner->name }}</a>
+                                                </td>
                                             @else
-                                                <td>{{ $data['email'] }}</td>
+                                                <td><a
+                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['email'] }}</a>
+                                                </td>
                                             @endif
 
                                             <td>
-                                                <span
-                                                    class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
-                                                </span>
+                                                <a href="{{ route('form_submissions.show', $formSubmission->id) }}">
+                                                    <span
+                                                        class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
+                                                    </span>
+                                                </a>
                                             </td>
-                                            <td>{{ $formSubmission->FormattedDate }}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-primary dropdown-toggle"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Acciones
-                                                    </button>
-                                                    <ul class="dropdown-menu" style="">
-                                                        <li><a class="dropdown-item"
-                                                                href="{{ route('form_submissions.show', $formSubmission->id) }}">Ver
-                                                                consulta</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="#">Something else
-                                                                here</a></li>
-                                                        <li>
-                                                            <hr class="dropdown-divider">
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="#">Separated link</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                            <td><a
+                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->FormattedDate }}</a>
                                             </td>
+
                                         </tr>
                                     @endforeach
 
@@ -128,7 +121,6 @@
                                         @endif
                                         <th>Estado</th>
                                         <th>Fecha</th>
-                                        <th>Acciones</th>
                                     </tr>
                                 </tfoot>
                             </table>
