@@ -15,7 +15,7 @@ class FormSubmissionController extends Controller
         $query = FormSubmission::query();
 
         // Si el usuario es 'partner', solo puede ver sus propios formularios
-        if ($user->role === 'partner') {
+        if ($user->role === User::PARTNER_USER) {
             $query->where('user_id', $user->id);
         }
 
