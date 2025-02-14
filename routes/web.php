@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormSubmissionController;
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'show'])->name('form_submissions.show');
     Route::get('/form_submissions/{id}/edit', [FormSubmissionController::class, 'edit'])->middleware('can:admin')->name('form_submissions.edit');
     Route::delete('/form_submissions/{id}', [FormSubmissionController::class, 'destroy'])->middleware('can:admin')->name('form_submissions.destroy');
+
+    // Rutas para interactuar con las provincias del sistema
+    // TODO: verificar porque no funciona el middleware admin
+    Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');
+    Route::get('/provinces/{province}', [ProvinceController::class, 'show'])->name('provinces.show');
+    Route::get('/provinces/{id}/edit', [ProvinceController::class, 'edit'])->middleware('can:admin')->name('provinces.edit');
+    Route::delete('/provinces/{id}', [ProvinceController::class, 'destroy'])->middleware('can:admin')->name('provinces.destroy');
 });
 
 require __DIR__ . '/auth.php';

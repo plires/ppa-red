@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Zone;
 use App\Models\Locality;
 use App\Models\FormSubmission;
+use Carbon\Carbon;
 
 class Province extends Model
 {
@@ -29,5 +30,10 @@ class Province extends Model
     public function formSubmissions()
     {
         return $this->hasMany(FormSubmission::class);
+    }
+
+    public function getFormattedModifiedDateAttribute()
+    {
+        return Carbon::parse($this->attributes['updated_at'])->format('d/m/y');
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use \App\Models\User;
 
 class ProvinceController extends Controller
 {
@@ -12,7 +14,17 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $provinces = [];
+
+        // Si el usuario es 'admin', se listan las provincias
+        if ($user->role === User::ADMIN_USER) {
+            $provinces = Province::all();
+        }
+
+        $role_admin = User::ADMIN_USER;
+
+        return view('provinces.index', compact('provinces', 'user', 'role_admin'));
     }
 
     /**
@@ -36,7 +48,7 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
-        //
+        return view('provinces.show', compact('province'));
     }
 
     /**
