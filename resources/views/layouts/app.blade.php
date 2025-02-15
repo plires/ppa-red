@@ -20,15 +20,15 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        @include('layouts.nav_admin')
+        @include('parts.nav_admin')
 
-        @include('layouts.aside_admin')
+        @include('parts.aside_admin')
 
         <main>
             {{ $slot }}
         </main>
 
-        @include('layouts.footer_admin')
+        @include('parts.footer_admin')
 
     </div>
 
