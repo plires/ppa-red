@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Province;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
+use App\Http\Requests\ProvinceRequest;
 
 class ProvinceController extends Controller
 {
@@ -32,15 +32,18 @@ class ProvinceController extends Controller
      */
     public function create()
     {
-        //
+        return view('provinces.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProvinceRequest $request)
     {
-        //
+        $province = Province::create($request->validated());
+
+        // Redirigir a la lista de provincias con un mensaje de éxito
+        return redirect()->route('provinces.index')->with('success', 'la provincia ' . $province->name . ' fue agregada correctamente.');
     }
 
     /**
@@ -48,7 +51,7 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
-        return view('provinces.show', compact('province'));
+        //
     }
 
     /**
@@ -56,15 +59,18 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
-        //
+        return view('provinces.edit', compact('province'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Province $province)
+    public function update(ProvinceRequest $request, Province $province)
     {
-        //
+        $province->update($request->validated());
+
+        // Redirigir a la lista de provincias con un mensaje de éxito
+        return redirect()->route('provinces.index')->with('success', 'la provincia ' . $province->name . ' fue actualizada correctamente.');
     }
 
     /**
@@ -72,6 +78,26 @@ class ProvinceController extends Controller
      */
     public function destroy(Province $province)
     {
-        //
+        $province->delete();
+
+        // Redirigir a la lista de provincias con un mensaje de éxito
+        return redirect()->route('provinces.index')->with('success', 'La provincia ' . $province->name . ' fue eliminada correctamente.');
+    }
+
+    // Método para listar provincias eliminadas
+    public function trashed()
+    {
+        $provinces = Province::onlyTrashed()->get();
+        return view('provinces.trashed', compact('provinces'));
+    }
+
+    // Método para restaurar una provincia
+    public function restore($id)
+    {
+
+        $province = Province::withTrashed()->findOrFail($id);
+        $province->restore();
+
+        return redirect()->route('provinces.trashed')->with('success', 'La provincia ' . $province->name . ' fue restaurada correctamente.');
     }
 }

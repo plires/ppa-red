@@ -34,13 +34,42 @@
                 </li>
                 @if (auth()->check() && auth()->user()->role === 'admin')
                     <li class="nav-item">
-                        <a href="{{ route('provinces.index') }}" class="nav-link">
+                        <a href="#" class="nav-link {{ Route::is('provinces.index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-earth-americas"></i>
                             <p>
                                 Provincias
+                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('provinces.index') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-list-ul"></i>
+                                    <p>
+                                        Listar
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('provinces.create') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Agregar
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('provinces.trashed') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-trash-can-arrow-up"></i>
+                                    <p>
+                                        Restaurar
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li class="nav-item">
                         <a href="{{ route('provinces.index') }}" class="nav-link">
                             <i class="nav-icon fa-solid fa-map-location"></i>

@@ -11,14 +11,12 @@
         @include('parts.msg-success')
         @include('parts.msg-errors')
 
-        @include('parts.modal-confirm-delete')
-
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-12">
-                        <h1>Listado de Provincias</h1>
+                        <h1>Listado de Provincias Eliminadas</h1>
                     </div>
 
                 </div>
@@ -33,7 +31,7 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Sección para editar el nombre o eliminar la provincia</h3>
+                                <h3 class="card-title">Sección para restarurar provincias al listado original</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -41,7 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Fecha de Modificación</th>
+                                            <th>Fecha de Eliminación</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -60,31 +58,17 @@
                                                     </td>
 
                                                     <td>
-                                                        {{ $province->FormattedModifiedDate }}
+                                                        {{ $province->FormattedDeletedDate }}
                                                     </td>
                                                     <td>
-                                                        <div class="btn-group">
-                                                            <button type="button"
-                                                                class="btn btn-default">Acción</button>
-                                                            <button type="button"
-                                                                class="btn btn-default dropdown-toggle dropdown-icon"
-                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <div class="dropdown-menu" role="menu" style="">
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('provinces.edit', $province->id) }}">Editar</a>
-                                                                <a data-toggle="modal" data-target="#modalConfirm"
-                                                                    data-entity="la provincia"
-                                                                    data-name="{{ $province->name }}"
-                                                                    data-delete-route="{{ route('provinces.destroy', $province->id) }}"
-                                                                    class="dropdown-item delete-btn" dropdown-item"
-                                                                    href="{{ route('provinces.destroy', $province->id) }}">Eliminar</a>
-
-                                                            </div>
-                                                        </div>
+                                                        <form action="{{ route('provinces.restore', $province->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit"
+                                                                class="btn btn-block btn-success btn-sm">Restaurar</button>
+                                                        </form>
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -92,7 +76,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Fecha de Modificación</th>
+                                            <th>Fecha de Eliminación</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </tfoot>
@@ -114,7 +98,7 @@
     <!-- /.content-wrapper -->
 
     @section('scripts')
-        @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js', 'resources/js/configure-modal-confirm-delete.js'])
+        @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js'])
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 jQuery("#tableProvinces").DataTable({
@@ -124,6 +108,21 @@
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                 }).buttons().container().appendTo(
                     '#tableProvinces_wrapper .col-md-6:eq(0)');
+            });
+        </script>
+
+        <script>
+            document.addEventListener('click', function(event) {
+                // Verifica si el clic fue en un botón con la clase 'delete-btn'
+                if (event.target.classList.contains('delete-btn')) {
+
+                    // Obtén los datos del botón
+                    const deleteRoute = event.target.getAttribute('data-delete-route');
+
+                    // Actualiza el formulario de eliminación dentro del modal
+                    const deleteForm = document.getElementById('deleteForm');
+                    deleteForm.setAttribute('action', deleteRoute);
+                }
             });
         </script>
     @endsection
