@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
