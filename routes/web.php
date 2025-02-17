@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\ZoneController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
@@ -37,12 +38,25 @@ Route::middleware('auth')->group(function () {
 
         // Rutas estándar de Provinces
         Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');
-        Route::get('/provinces/create', [ProvinceController::class, 'create'])->name('provinces.create'); // <- si hay formulario de creación
-        Route::post('/provinces', [ProvinceController::class, 'store'])->name('provinces.store'); // <- si guardas nuevas provincias
+        Route::get('/provinces/create', [ProvinceController::class, 'create'])->name('provinces.create');
+        Route::post('/provinces', [ProvinceController::class, 'store'])->name('provinces.store');
         Route::get('/provinces/{province}/edit', [ProvinceController::class, 'edit'])->name('provinces.edit');
         Route::put('/provinces/{province}', [ProvinceController::class, 'update'])->name('provinces.update');
         Route::delete('/provinces/{province}', [ProvinceController::class, 'destroy'])->name('provinces.destroy');
         Route::get('/provinces/{province}', [ProvinceController::class, 'show'])->name('provinces.show');
+
+        // Rutas para zonas eliminadas
+        Route::get('/zones/trashed', [ZoneController::class, 'trashed'])->name('zones.trashed');
+        Route::patch('/zones/{id}/restore', [ZoneController::class, 'restore'])->name('zones.restore');
+
+        // Rutas estándar de zones
+        Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
+        Route::get('/zones/create', [ZoneController::class, 'create'])->name('zones.create');
+        Route::post('/zones', [ZoneController::class, 'store'])->name('zones.store');
+        Route::get('/zones/{zone}/edit', [ZoneController::class, 'edit'])->name('zones.edit');
+        Route::put('/zones/{zone}', [ZoneController::class, 'update'])->name('zones.update');
+        Route::delete('/zones/{zone}', [ZoneController::class, 'destroy'])->name('zones.destroy');
+        Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
     });
 });
 
