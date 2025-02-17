@@ -3,63 +3,75 @@
 namespace App\Http\Controllers;
 
 use App\Models\Zone;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use \App\Models\User;
+use App\Http\Requests\ProvinceRequest;
 
 class ZoneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $zones = [];
+
+        // Si el usuario es 'admin', se listan las zonas
+        if ($user->role === User::ADMIN_USER) {
+            $zones = Zone::all();
+        }
+
+        $role_admin = User::ADMIN_USER;
+
+        return view('zones.index', compact('zones', 'user', 'role_admin'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('zones.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(ProvinceRequest $request)
     {
-        //
+        $zone = Zone::create($request->validated());
+
+        return redirect()->route('zones.index')->with('success', 'La zona ' . $zone->name . ' fue agregada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Zone $zone)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Zone $zone)
     {
-        //
+        return view('zones.edit', compact('province'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Zone $zone)
+    public function update(ProvinceRequest $request, Zone $zone)
     {
-        //
+        $zone->update($request->validated());
+
+        return redirect()->route('zones.index')->with('success', 'La zona ' . $zone->name . ' fue actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Zone $zone)
     {
-        //
+        $zone->delete();
+
+        return redirect()->route('zones.index')->with('success', 'La zona ' . $zone->name . ' fue eliminada correctamente.');
+    }
+
+    public function trashed()
+    {
+        $zones = Zone::onlyTrashed()->get();
+        return view('zones.trashed', compact('zones'));
+    }
+
+    public function restore($id)
+    {
+
+        $zone = Zone::withTrashed()->findOrFail($id);
+        $zone->restore();
+
+        return redirect()->route('zones.trashed')->with('success', 'La zona ' . $zone->name . ' fue restaurada correctamente.');
     }
 }
