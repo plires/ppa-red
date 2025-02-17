@@ -30,8 +30,14 @@
                     <div class="col-12">
 
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Sección para restarurar provincias al listado original</h3>
+                            <div class="card-header  header-index">
+                                <div class="content-buttons">
+                                    <a href="{{ route('provinces.create') }}" type="button"
+                                        class="btn btn-primary btn-sm">Agregar Provincia</a>
+                                    <a href="{{ route('provinces.index') }}" type="button"
+                                        class="btn btn-primary btn-sm">Ver Provincias
+                                        Habilitadas</a>
+                                </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">

@@ -20,7 +20,6 @@
                     <div class="col-sm-12">
                         <h1>Listado de Provincias</h1>
                     </div>
-
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -32,8 +31,14 @@
                     <div class="col-12">
 
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Sección para editar el nombre o eliminar la provincia</h3>
+                            <div class="card-header header-index">
+                                <div class="content-buttons">
+                                    <a href="{{ route('provinces.create') }}" type="button"
+                                        class="btn btn-primary btn-sm">Agregar Provincia</a>
+                                    <a href="{{ route('provinces.trashed') }}" type="button"
+                                        class="btn btn-primary btn-sm">Ver Provincias
+                                        Eliminadas</a>
+                                </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">

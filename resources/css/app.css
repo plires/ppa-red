@@ -1,0 +1,5 @@
+.data-table-lists .header-index {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
