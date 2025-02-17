@@ -43,7 +43,7 @@ class ZoneController extends Controller
 
     public function edit(Zone $zone)
     {
-        return view('zones.edit', compact('province'));
+        return view('zones.edit', compact('zone'));
     }
 
     public function update(ProvinceRequest $request, Zone $zone)
