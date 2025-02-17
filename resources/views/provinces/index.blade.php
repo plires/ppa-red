@@ -126,6 +126,9 @@
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
+                    "language": {
+                        url: '/locales/dataTables_es-ES.json',
+                    },
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                 }).buttons().container().appendTo(
                     '#tableProvinces_wrapper .col-md-6:eq(0)');
