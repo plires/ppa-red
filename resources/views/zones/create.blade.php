@@ -24,7 +24,7 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form class="form-horizontal" method="POST" action="{{ route('provinces.store') }}">
+                            <form class="form-horizontal" method="POST" action="{{ route('zones.store') }}">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group row">
@@ -41,7 +41,7 @@
                                 <!-- /.card-body -->
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-info float-right ml-3">Agregar</button>
-                                    <a class="btn btn-default float-right" href="{{ route('provinces.index') }}">
+                                    <a class="btn btn-default float-right" href="{{ route('zones.index') }}">
                                         Cancelar y volver
                                     </a>
                                 </div>
