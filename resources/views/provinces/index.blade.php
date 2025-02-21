@@ -61,7 +61,10 @@
                                         @else
                                             @foreach ($provinces as $province)
                                                 <tr class="align-middle">
-                                                    <td>{{ $province['name'] }}
+                                                    <td>
+                                                        <a href="{{ route('provinces.edit', $province->id) }}">
+                                                            {{ $province['name'] }}
+                                                        </a>
                                                     </td>
 
                                                     <td>
