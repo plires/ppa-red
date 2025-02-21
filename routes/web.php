@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\FormSubmissionController;
-use App\Http\Controllers\ProvinceController;
-use App\Http\Controllers\ZoneController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LocalityController;
+use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\FormSubmissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,6 +58,19 @@ Route::middleware('auth')->group(function () {
         Route::put('/zones/{zone}', [ZoneController::class, 'update'])->name('zones.update');
         Route::delete('/zones/{zone}', [ZoneController::class, 'destroy'])->name('zones.destroy');
         Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
+
+        // Rutas para localidades eliminadas
+        Route::get('/localities/trashed', [LocalityController::class, 'trashed'])->name('localities.trashed');
+        Route::patch('/localities/{id}/restore', [LocalityController::class, 'restore'])->name('localities.restore');
+
+        // Rutas estándar de localidades
+        Route::get('/localities', [LocalityController::class, 'index'])->name('localities.index');
+        Route::get('/localities/create', [LocalityController::class, 'create'])->name('localities.create');
+        Route::post('/localities', [LocalityController::class, 'store'])->name('localities.store');
+        Route::get('/localities/{locality}/edit', [LocalityController::class, 'edit'])->name('localities.edit');
+        Route::put('/localities/{locality}', [LocalityController::class, 'update'])->name('localities.update');
+        Route::delete('/localities/{locality}', [LocalityController::class, 'destroy'])->name('localities.destroy');
+        Route::get('/localities/{locality}', [LocalityController::class, 'show'])->name('localities.show');
     });
 });
 
