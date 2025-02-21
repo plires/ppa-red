@@ -29,7 +29,6 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-
                         <div class="card">
                             <div class="card-header header-index">
                                 <div class="content-buttons">
@@ -46,6 +45,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
+                                            <th>Provincia</th>
                                             <th>Fecha de Modificación</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -56,13 +56,20 @@
                                                 <td>No hay zonas para listar</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
                                                 </td>
                                             </tr>
                                         @else
                                             @foreach ($zones as $zone)
                                                 <tr class="align-middle">
-                                                    <td>{{ $zone['name'] }}
+
+                                                    <td>
+                                                        <a href="{{ route('zones.edit', $zone->id) }}">
+                                                            {{ $zone['name'] }}
+                                                        </a>
                                                     </td>
+
+                                                    <td>{{ $zone->province->name }}</td>
 
                                                     <td>
                                                         {{ $zone->FormattedModifiedDate }}
@@ -97,6 +104,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Nombre</th>
+                                            <th>Provincia</th>
                                             <th>Fecha de Modificación</th>
                                             <th>Acciones</th>
                                         </tr>

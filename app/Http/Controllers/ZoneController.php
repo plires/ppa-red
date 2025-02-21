@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
-use App\Http\Requests\ProvinceRequest;
+use \App\Models\Province;
+use App\Http\Requests\ZoneRequest;
 
 class ZoneController extends Controller
 {
@@ -29,7 +30,7 @@ class ZoneController extends Controller
         return view('zones.create');
     }
 
-    public function store(ProvinceRequest $request)
+    public function store(ZoneRequest $request)
     {
         $zone = Zone::create($request->validated());
 
@@ -43,10 +44,11 @@ class ZoneController extends Controller
 
     public function edit(Zone $zone)
     {
-        return view('zones.edit', compact('zone'));
+        $provinces = Province::all();
+        return view('zones.edit', compact('zone', 'provinces'));
     }
 
-    public function update(ProvinceRequest $request, Zone $zone)
+    public function update(ZoneRequest $request, Zone $zone)
     {
         $zone->update($request->validated());
 

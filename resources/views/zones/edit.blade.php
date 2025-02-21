@@ -20,7 +20,8 @@
                     <div class="col-12">
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Editá el nombre de la zona</h3>
+                                <h3 class="card-title">Editá el nombre de la zona y la provincia a la que pertenece.
+                                </h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
@@ -35,6 +36,28 @@
                                             <input class="form-control" id="name" placeholder="Nombre"
                                                 type="text" name="name" value="{{ old('name', $zone->name) }}">
                                             @error('name')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="name" class="col-sm-2 col-form-label">Provincia</label>
+                                        <div class="col-sm-10">
+                                            <select name="province_id" class="form-control">
+
+                                                @if ($provinces->isEmpty())
+                                                    <option>No existen provincias para enlazar esta zona</option>
+                                                @else
+                                                    @foreach ($provinces as $province)
+                                                        <option value="{{ $province->id }}"
+                                                            {{ $province->id === $zone->province_id ? 'selected' : '' }}>
+                                                            {{ $province->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+
+                                            </select>
+                                            @error('province_id')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
