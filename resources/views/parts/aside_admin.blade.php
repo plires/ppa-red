@@ -24,6 +24,8 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+
+                {{-- Formularios --}}
                 <li class="nav-item">
                     <a href="{{ route('form_submissions.index') }}" class="nav-link">
                         <i class="nav-icon fa-brands fa-wpforms"></i>
@@ -32,7 +34,10 @@
                         </p>
                     </a>
                 </li>
+                {{-- Formularios end --}}
+
                 @if (auth()->check() && auth()->user()->role === 'admin')
+                    {{-- Provicincias --}}
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ Route::is('provinces.index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-earth-americas"></i>
@@ -69,7 +74,9 @@
                             </li>
                         </ul>
                     </li>
+                    {{-- Provicincias end --}}
 
+                    {{-- Zonas --}}
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ Route::is('zones.index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-map-location-dot"></i>
@@ -106,15 +113,46 @@
                             </li>
                         </ul>
                     </li>
+                    {{-- Zonas end --}}
 
+                    {{-- Localidades --}}
                     <li class="nav-item">
-                        <a href="{{ route('provinces.index') }}" class="nav-link">
+                        <a href="#" class="nav-link {{ Route::is('localities.index') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-location-dot"></i>
                             <p>
                                 Localidades
+                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('localities.index') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-list-ul"></i>
+                                    <p>
+                                        Listar
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('localities.create') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Agregar
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('localities.trashed') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-trash-can-arrow-up"></i>
+                                    <p>
+                                        Restaurar
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+                    {{-- Localidades end --}}
                 @endif
 
                 @auth
