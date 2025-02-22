@@ -27,7 +27,8 @@ class ZoneController extends Controller
 
     public function create()
     {
-        return view('zones.create');
+        $provinces = Province::all();
+        return view('zones.create', compact('provinces'));
     }
 
     public function store(ZoneRequest $request)
