@@ -72,4 +72,9 @@ class ZoneController extends Controller
     {
         //
     }
+
+    public function getZonesByProvinceId($provinceId)
+    {
+        return response()->json(Zone::where('province_id', $provinceId)->get());
+    }
 }

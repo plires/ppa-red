@@ -19,3 +19,4 @@ use App\Http\Controllers\Api\LocalityController;
 Route::middleware('throttle:60,1')->get('/provinces', [ProvinceController::class, 'index']);
 Route::middleware('throttle:60,1')->get('/zones', [ZoneController::class, 'index']);
 Route::middleware('throttle:60,1')->get('/localities', [LocalityController::class, 'index']);
+Route::middleware('throttle:60,1')->get('/get-zones/{provinceId}', [ZoneController::class, 'getZonesByProvinceId']);
