@@ -23,7 +23,7 @@ class LocalityRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'zone_id' => ['required', 'numeric', 'exists:zones,id'],
+            'zone_id' => ['sometimes', 'numeric', 'exists:zones,id'],
             'province_id' => ['required', 'numeric', 'exists:provinces,id'],
             'user_id' => ['required', 'numeric', 'exists:users,id'],
         ];
