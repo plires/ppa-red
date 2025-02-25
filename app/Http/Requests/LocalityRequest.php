@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Zone;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LocalityRequest extends FormRequest
@@ -23,9 +25,24 @@ class LocalityRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'zone_id' => ['sometimes', 'numeric', 'exists:zones,id'],
+            'zone_id' => ['nullable', 'numeric', 'exists:zones,id'],
             'province_id' => ['required', 'numeric', 'exists:provinces,id'],
-            'user_id' => ['required', 'numeric', 'exists:users,id'],
+            // 'user_id' => ['required', 'numeric', 'exists:users,id'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function (Validator $validator) {
+            $provinceId = $this->input('province_id');
+
+            if ($provinceId) {
+                $provinceHasZones = Zone::where('province_id', $provinceId)->exists();
+
+                if ($provinceHasZones && !$this->input('zone_id')) {
+                    $validator->errors()->add('zone_id', 'El campo zona es obligatorio para la provincia seleccionada.');
+                }
+            }
+        });
     }
 }

@@ -1,0 +1,155 @@
+<x-app-layout>
+
+    @section('css')
+        <!-- DataTables -->
+        @vite(['resources/css/dataTables.bootstrap4.min.css', 'resources/css/responsive.bootstrap4.min.css', 'resources/css/buttons.bootstrap4.min.css'])
+    @endsection
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper data-table-lists">
+
+        @include('parts.msg-success')
+        @include('parts.msg-errors')
+
+        @include('parts.modal-confirm-delete')
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <h1>Listado de Localidades</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header header-index">
+                                <div class="content-buttons">
+                                    <a href="{{ route('localities.create') }}" type="button"
+                                        class="btn btn-primary btn-sm">Agregar Localidad</a>
+                                    <a href="{{ route('localities.trashed') }}" type="button"
+                                        class="btn btn-primary btn-sm">Ver Localidades
+                                        Eliminadas</a>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="tableLocalities" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Localidad</th>
+                                            <th>Zona</th>
+                                            <th>Provincia</th>
+                                            <th>Fecha de Modificación</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($localities->isEmpty())
+                                            <tr class="align-middle">
+                                                <td>No hay localidades para listar</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            @foreach ($localities as $locality)
+                                                <tr class="align-middle">
+
+                                                    <td>
+                                                        <a href="{{ route('localities.edit', $locality->id) }}">
+                                                            {{ $locality->name }}
+                                                        </a>
+                                                    </td>
+
+                                                    <td>
+                                                        <a href="{{ route('localities.edit', $locality->id) }}">
+                                                            {{ $locality->zone?->name ?? '' }}
+                                                        </a>
+                                                    </td>
+
+                                                    <td>{{ $locality->province->name }}</td>
+
+                                                    <td>
+                                                        {{ $locality->FormattedModifiedDate }}
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button"
+                                                                class="btn btn-default">Acción</button>
+                                                            <button type="button"
+                                                                class="btn btn-default dropdown-toggle dropdown-icon"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                            </button>
+                                                            <div class="dropdown-menu" role="menu" style="">
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('localities.edit', $locality->id) }}">Editar</a>
+                                                                <a data-toggle="modal" data-target="#modalConfirm"
+                                                                    data-entity="la localidad"
+                                                                    data-name="{{ $locality->name }}"
+                                                                    data-delete-route="{{ route('localities.destroy', $locality->id) }}"
+                                                                    class="dropdown-item delete-btn" dropdown-item"
+                                                                    href="{{ route('localities.destroy', $locality->id) }}">Eliminar</a>
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Localidad</th>
+                                            <th>Zona</th>
+                                            <th>Provincia</th>
+                                            <th>Fecha de Modificación</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    @section('scripts')
+        @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js', 'resources/js/configure-modal-confirm-delete.js'])
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                jQuery("#tableLocalities").DataTable({
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "language": {
+                        url: '/locales/dataTables_es-ES.json',
+                    },
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                }).buttons().container().appendTo(
+                    '#tableLocalities_wrapper .col-md-6:eq(0)');
+            });
+        </script>
+    @endsection
+</x-app-layout>
