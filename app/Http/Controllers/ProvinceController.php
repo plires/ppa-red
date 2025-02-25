@@ -76,8 +76,9 @@ class ProvinceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Province $province)
+    public function destroy(ProvinceRequest $request, Province $province)
     {
+
         $province->delete();
 
         // Redirigir a la lista de provincias con un mensaje de éxito
