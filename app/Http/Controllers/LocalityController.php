@@ -48,8 +48,9 @@ class LocalityController extends Controller
     {
         // Obtener todas las provincias
         $provinces = Province::with('zones')->get(); // Cargamos las zonas para usarlas en el front
+        $partners = User::where('role', 'partner')->get();
 
-        return view('localities.edit', compact('locality', 'provinces'));
+        return view('localities.edit', compact('locality', 'provinces', 'partners'));
     }
 
     public function update(LocalityRequest $request, Locality $locality)
