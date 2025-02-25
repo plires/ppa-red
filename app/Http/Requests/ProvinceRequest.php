@@ -28,4 +28,15 @@ class ProvinceRequest extends FormRequest
             'name' => 'required|string|max:255|unique:provinces,name,' . $provinceId,
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $province = $this->route('province'); // Obtiene la provincia de la ruta
+
+            if ($province->localities()->exists() || $province->zones()->exists()) {
+                $validator->errors()->add('province', 'No puedes eliminar esta provincia porque tiene zonas o localidades asociadas.');
+            }
+        });
+    }
 }
