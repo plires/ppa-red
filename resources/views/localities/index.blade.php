@@ -47,6 +47,7 @@
                                             <th>Localidad</th>
                                             <th>Zona</th>
                                             <th>Provincia</th>
+                                            <th>Partner Asignado</th>
                                             <th>Fecha de Modificación</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -55,6 +56,7 @@
                                         @if ($localities->isEmpty())
                                             <tr class="align-middle">
                                                 <td>No hay localidades para listar</td>
+                                                <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
@@ -78,6 +80,8 @@
                                                     </td>
 
                                                     <td>{{ $locality->province->name }}</td>
+
+                                                    <td>{{ $locality->partner->name }}</td>
 
                                                     <td>
                                                         {{ $locality->FormattedModifiedDate }}
@@ -114,6 +118,7 @@
                                             <th>Localidad</th>
                                             <th>Zona</th>
                                             <th>Provincia</th>
+                                            <th>Partner Asignado</th>
                                             <th>Fecha de Modificación</th>
                                             <th>Acciones</th>
                                         </tr>
