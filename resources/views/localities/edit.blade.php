@@ -74,6 +74,23 @@
                                     </div>
                                     {{-- Zona end --}}
 
+                                    {{-- Partner --}}
+                                    <div class="form-group row">
+                                        <label for="user_id" class="col-sm-2 col-form-label">Partner
+                                            Asignado</label>
+                                        <div class="col-sm-10">
+                                            <select id="user_id" name="user_id" class="form-control" required>
+                                                @foreach ($partners as $partner)
+                                                    <option value="{{ $partner->id }}"
+                                                        {{ old('user_id', $locality->user_id) == $partner->id ? 'selected' : '' }}>
+                                                        {{ $partner->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{-- Partner end --}}
+
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
