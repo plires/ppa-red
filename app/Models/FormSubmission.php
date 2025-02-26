@@ -2,27 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Province;
 use App\Models\Zone;
 use App\Models\Locality;
-use App\Models\FormSubmissionStatus;
+use App\Models\Province;
 use App\Models\FormResponse;
-use Carbon\Carbon;
+use App\Models\FormSubmissionStatus;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FormSubmission extends Model
 {
     /** @use HasFactory<\Database\Factories\FormSubmissionFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * Relación muchos a uno: Una Region pertenece a una provincia.
      */
     public function province()
     {
-        return $this->belongsTo(Province::class);
+        return $this->belongsTo(Province::class)->withTrashed();
     }
 
     /**
@@ -30,7 +32,7 @@ class FormSubmission extends Model
      */
     public function zone()
     {
-        return $this->belongsTo(Zone::class);
+        return $this->belongsTo(Zone::class)->withTrashed();
     }
 
     /**
@@ -38,7 +40,7 @@ class FormSubmission extends Model
      */
     public function locality()
     {
-        return $this->belongsTo(Locality::class);
+        return $this->belongsTo(Locality::class)->withTrashed();
     }
 
     /**
@@ -46,7 +48,7 @@ class FormSubmission extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
@@ -59,7 +61,7 @@ class FormSubmission extends Model
 
     public function formResponses()
     {
-        return $this->hasMany(FormResponse::class);
+        return $this->hasMany(FormResponse::class)->withTrashed();
     }
 
     /**
