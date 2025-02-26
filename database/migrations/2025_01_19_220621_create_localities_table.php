@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('zone_id')->nullable()->constrained('zones')->onDelete('cascade');
-            $table->foreignId('province_id')->nullable()->constrained('provinces')->onDelete('cascade');
+            $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
