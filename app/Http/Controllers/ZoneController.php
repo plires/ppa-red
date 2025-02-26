@@ -56,7 +56,7 @@ class ZoneController extends Controller
         return redirect()->route('zones.index')->with('success', 'La zona ' . $zone->name . ' fue actualizada correctamente.');
     }
 
-    public function destroy(Zone $zone)
+    public function destroy(ZoneRequest $request, Zone $zone)
     {
         $zone->delete();
 
