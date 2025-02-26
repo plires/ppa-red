@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\ProfileController;
@@ -71,6 +72,19 @@ Route::middleware('auth')->group(function () {
         Route::put('/localities/{locality}', [LocalityController::class, 'update'])->name('localities.update');
         Route::delete('/localities/{locality}', [LocalityController::class, 'destroy'])->name('localities.destroy');
         Route::get('/localities/{locality}', [LocalityController::class, 'show'])->name('localities.show');
+
+        // Rutas para Partners (usuarios) eliminadas
+        Route::get('/partners/trashed', [UserController::class, 'trashed'])->name('partners.trashed');
+        Route::patch('/partners/{id}/restore', [UserController::class, 'restore'])->name('partners.restore');
+
+        // Rutas estándar de Partners (usuarios)
+        Route::get('/partners', [UserController::class, 'index'])->name('partners.index');
+        Route::get('/partners/create', [UserController::class, 'create'])->name('partners.create');
+        Route::post('/partners', [UserController::class, 'store'])->name('partners.store');
+        Route::get('/partners/{partner}/edit', [UserController::class, 'edit'])->name('partners.edit');
+        Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
+        Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
+        Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
     });
 });
 

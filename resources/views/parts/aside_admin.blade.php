@@ -153,6 +153,45 @@
                         </ul>
                     </li>
                     {{-- Localidades end --}}
+
+                    {{-- Partners --}}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link {{ Route::is('partners.index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-location-dot"></i>
+                            <p>
+                                Partners
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('partners.index') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-list-ul"></i>
+                                    <p>
+                                        Listar
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('partners.create') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-plus"></i>
+                                    <p>
+                                        Agregar
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('partners.trashed') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-trash-can-arrow-up"></i>
+                                    <p>
+                                        Restaurar
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Partners end --}}
                 @endif
 
                 @auth

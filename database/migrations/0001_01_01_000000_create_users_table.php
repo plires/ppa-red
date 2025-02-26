@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('role')->default('partner'); // 'partner' será el rol por defecto para socios
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
