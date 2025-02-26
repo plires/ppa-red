@@ -126,6 +126,7 @@
                 let zoneSelect = document.getElementById('zone_id');
                 let zoneContainer = document.getElementById('zone-container');
 
+                // TODO: intentar sacar esta funcion (loadZone) a un archivo externo para usarla en otras vistas como edit
                 function loadZones(provinceId, selectedZoneId = null) {
                     if (!provinceId) {
                         zoneSelect.innerHTML = '<option value="">Seleccione una provincia primero</option>';
@@ -141,6 +142,7 @@
                                 zoneContainer.style.display = 'block';
                                 zoneSelect.innerHTML =
                                     '<option value="">Seleccione una zona (obligatorio)</option>';
+                                zoneSelect.setAttribute("required", "true");
                                 zones.forEach(zone => {
                                     let option = document.createElement('option');
                                     option.value = zone.id;
@@ -152,6 +154,7 @@
                                 });
                             } else {
                                 zoneContainer.style.display = 'none';
+                                zoneSelect.removeAttribute("required");
                                 zoneSelect.innerHTML =
                                     '<option value="">No existen zonas para la provincia seleccionada</option>';
                             }
