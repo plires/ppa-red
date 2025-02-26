@@ -29,7 +29,9 @@ class LocalityController extends Controller
 
     public function create()
     {
-        return view('localities.create');
+        $provinces = Province::all();
+        $partners = User::where('role', 'partner')->get();
+        return view('localities.create', compact('provinces', 'partners'));
     }
 
     public function store(LocalityRequest $request)
