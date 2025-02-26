@@ -21,9 +21,28 @@ class ZoneRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        // Verificamos qué acción se está ejecutando
+        if ($this->isMethod('delete')) {
+            return []; // No aplicamos validaciones generales al eliminar
+        }
+
         return [
             'name' => 'required|string|max:255',
             'province_id' => ['required', 'numeric', 'exists:provinces,id'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        if ($this->isMethod('delete')) {
+            $validator->after(function ($validator) {
+                $zone = $this->route('zone'); // Obtiene la provincia de la ruta
+
+                if ($zone->localities()->exists()) {
+                    $validator->errors()->add('zone', 'No puedes eliminar esta zona porque tiene localidades asociadas.');
+                }
+            });
+        }
     }
 }
