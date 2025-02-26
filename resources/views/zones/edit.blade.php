@@ -3,6 +3,9 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 
+        @include('parts.msg-success')
+        @include('parts.msg-errors')
+
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
@@ -35,9 +38,6 @@
                                         <div class="col-sm-10">
                                             <input class="form-control" id="name" placeholder="Nombre"
                                                 type="text" name="name" value="{{ old('name', $zone->name) }}">
-                                            @error('name')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -57,9 +57,6 @@
                                                 @endif
 
                                             </select>
-                                            @error('province_id')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
                                         </div>
                                     </div>
                                 </div>
