@@ -22,6 +22,11 @@ class ProvinceRequest extends FormRequest
     public function rules(): array
     {
 
+        // Verificamos qué acción se está ejecutando
+        if ($this->isMethod('delete')) {
+            return []; // No aplicamos validaciones generales al eliminar
+        }
+
         $provinceId = $this->route('province')?->id ?? null;
 
         return [
@@ -31,12 +36,14 @@ class ProvinceRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            $province = $this->route('province'); // Obtiene la provincia de la ruta
+        if ($this->isMethod('delete')) {
+            $validator->after(function ($validator) {
+                $province = $this->route('province'); // Obtiene la provincia de la ruta
 
-            if ($province->localities()->exists() || $province->zones()->exists()) {
-                $validator->errors()->add('province', 'No puedes eliminar esta provincia porque tiene zonas o localidades asociadas.');
-            }
-        });
+                if ($province->localities()->exists() || $province->zones()->exists()) {
+                    $validator->errors()->add('province', 'No puedes eliminar esta provincia porque tiene zonas o localidades asociadas.');
+                }
+            });
+        }
     }
 }
