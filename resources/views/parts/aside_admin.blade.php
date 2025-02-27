@@ -157,7 +157,7 @@
                     {{-- Partners --}}
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ Route::is('partners.index') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-location-dot"></i>
+                            <i class="nav-icon fa-regular fa-handshake"></i>
                             <p>
                                 Partners
                                 <i class="right fas fa-angle-left"></i>
