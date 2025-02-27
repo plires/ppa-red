@@ -47,6 +47,7 @@
                                             <th>Nombre</th>
                                             <th>Email</th>
                                             <th>Teléfono</th>
+                                            <th>Fecha de eliminación</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -56,49 +57,30 @@
                                                 <td>No hay partners para listar</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
-                                                <td></td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
                                             </tr>
                                         @else
                                             @foreach ($partners as $partner)
                                                 <tr class="align-middle">
+                                                    <td>{{ $partner['name'] }}</td>
+
+                                                    <td>{{ $partner['email'] }}</td>
+
+                                                    <td>{{ $partner['phone'] }}</td>
 
                                                     <td>
-                                                        <a href="{{ route('partners.edit', $partner->id) }}">
-                                                            {{ $partner['name'] }}
-                                                        </a>
-                                                    </td>
-
-                                                    <td>{{ $partner->email }}</td>
-
-                                                    <td>
-                                                        {{ $partner->phone }}
+                                                        {{ $partner->FormattedDeletedDate }}
                                                     </td>
                                                     <td>
-                                                        <div class="btn-group">
-                                                            <button type="button"
-                                                                class="btn btn-default">Acción</button>
-                                                            <button type="button"
-                                                                class="btn btn-default dropdown-toggle dropdown-icon"
-                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <div class="dropdown-menu" role="menu" style="">
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('partners.show', $partner->id) }}">Ver
-                                                                    Detalles</a>
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('partners.edit', $partner->id) }}">Editar</a>
-                                                                <a data-toggle="modal" data-target="#modalConfirm"
-                                                                    data-entity="el partner"
-                                                                    data-name="{{ $partner->name }}"
-                                                                    data-delete-route="{{ route('partners.destroy', $partner->id) }}"
-                                                                    class="dropdown-item delete-btn" dropdown-item"
-                                                                    href="{{ route('partners.destroy', $partner->id) }}">Eliminar</a>
-
-                                                            </div>
-                                                        </div>
+                                                        <form action="{{ route('partners.restore', $partner->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit"
+                                                                class="btn btn-block btn-success btn-sm">Restaurar</button>
+                                                        </form>
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -108,6 +90,7 @@
                                             <th>Nombre</th>
                                             <th>Email</th>
                                             <th>Teléfono</th>
+                                            <th>Fecha de eliminación</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </tfoot>
