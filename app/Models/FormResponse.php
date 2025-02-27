@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\FormSubmission;
 use App\Models\User;
+use App\Models\FormSubmission;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FormResponse extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public function formSubmission()
     {

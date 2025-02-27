@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('message'); // Contenido de la respuesta
             $table->boolean('is_system')->default(false); // Para diferenciar si es un mensaje del usuario (0) o una respuesta automática del sistema (1).
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
