@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use App\Models\Locality;
 use Illuminate\Support\Str;
 use App\Models\FormResponse;
@@ -95,5 +96,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFormattedModifiedDateAttribute()
+    {
+        return Carbon::parse($this->attributes['updated_at'])->format('d/m/y');
+    }
+
+    public function getFormattedDeletedDateAttribute()
+    {
+        return Carbon::parse($this->attributes['deleted_at'])->format('d/m/y');
     }
 }
