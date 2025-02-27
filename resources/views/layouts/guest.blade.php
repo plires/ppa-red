@@ -16,12 +16,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="login-page">
+@php
+    $bodyClass = match (Route::currentRouteName()) {
+        'login' => 'login-page',
+        'password.request' => 'lockscreen',
+        default => '',
+    };
+@endphp
 
-    <div class="login-box">
-        {{ $slot }}
-    </div>
-
+<body class="{{ $bodyClass }}">
+    {{ $slot }}
 </body>
 
 </html>
