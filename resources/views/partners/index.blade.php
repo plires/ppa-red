@@ -41,7 +41,8 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="tablePartners" class="table table-bordered table-striped">
+                                <table id="tablePartners"
+                                    class="table table-hover table-head-fixed table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>

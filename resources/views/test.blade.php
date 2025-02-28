@@ -20,7 +20,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-head-fixed table-bordered">
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
