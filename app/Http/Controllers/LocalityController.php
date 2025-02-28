@@ -43,7 +43,7 @@ class LocalityController extends Controller
 
     public function show(Locality $locality)
     {
-        //
+        return view('localities.show', compact('locality'));
     }
 
     public function edit(Locality $locality)
