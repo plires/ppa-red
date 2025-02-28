@@ -40,7 +40,7 @@ class ZoneController extends Controller
 
     public function show(Zone $zone)
     {
-        //
+        return view('zones.show', compact('zone'));
     }
 
     public function edit(Zone $zone)
@@ -53,7 +53,7 @@ class ZoneController extends Controller
     {
         $zone->update($request->validated());
 
-        return redirect()->route('zones.index')->with('success', 'La zona ' . $zone->name . ' fue actualizada correctamente.');
+        return redirect()->back()->with('success', 'La zona ' . $zone->name . ' fue actualizada correctamente.');
     }
 
     public function destroy(ZoneRequest $request, Zone $zone)
