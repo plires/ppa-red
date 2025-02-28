@@ -64,6 +64,7 @@
                                             @endif
                                             <th>Estado</th>
                                             <th>Fecha</th>
+                                            <th>#</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,31 +76,40 @@
 
                                             <tr class="align-middle">
 
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['name'] }}</a>
-                                                </td>
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->locality->name }}</a>
+                                                <td>{{ $data['name'] }}</td>
+                                                <td>
+                                                    @if ($user->role === $role_admin)
+                                                        <a title="Editar localidad {{ $formSubmission->locality->name }}"
+                                                            href="{{ route('localities.show', $formSubmission->locality->id) }}">
+                                                            {{ $formSubmission->locality->name }}
+                                                        </a>
+                                                    @else
+                                                        {{ $formSubmission->locality->name }}
+                                                    @endif
                                                 </td>
                                                 @if ($user->role === $role_admin)
-                                                    <td><a
-                                                            href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->user->name }}</a>
+                                                    <td>
+                                                        <a title="Editar partner {{ $formSubmission->user->name }}"
+                                                            href="{{ route('partners.show', $formSubmission->user->id) }}">
+                                                            {{ $formSubmission->user->name }}
+                                                        </a>
                                                     </td>
                                                 @else
-                                                    <td><a
-                                                            href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['email'] }}</a>
-                                                    </td>
+                                                    <td>{{ $data['email'] }}</td>
                                                 @endif
 
                                                 <td>
-                                                    <a href="{{ route('form_submissions.show', $formSubmission->id) }}">
-                                                        <span
-                                                            class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
-                                                        </span>
-                                                    </a>
+                                                    <span
+                                                        class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
+                                                    </span>
                                                 </td>
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->FormattedDate }}</a>
+                                                <td>{{ $formSubmission->FormattedDate }}</td>
+
+                                                <td>
+                                                    <a href="{{ route('form_submissions.show', $formSubmission->id) }}"
+                                                        type="button" class="btn btn-primary btn-sm">
+                                                        Ver Detalle
+                                                    </a>
                                                 </td>
 
                                             </tr>
@@ -117,6 +127,7 @@
                                             @endif
                                             <th>Estado</th>
                                             <th>Fecha</th>
+                                            <th>#</th>
                                         </tr>
                                     </tfoot>
                                 </table>
