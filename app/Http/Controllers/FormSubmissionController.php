@@ -32,8 +32,10 @@ class FormSubmissionController extends Controller
 
         $user = Auth::user();
 
+        $data = json_decode($formSubmission->data, true); // Convierte JSON en array
+
         $role_admin = User::ADMIN_USER;
 
-        return view('form_submissions.show', compact('formSubmission', 'user', 'role_admin'));
+        return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin'));
     }
 }
