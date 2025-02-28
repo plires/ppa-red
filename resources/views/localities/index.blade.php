@@ -68,20 +68,33 @@
                                                 <tr class="align-middle">
 
                                                     <td>
-                                                        <a href="{{ route('localities.edit', $locality->id) }}">
+                                                        <a href="{{ route('localities.show', $locality->id) }}">
                                                             {{ $locality->name }}
                                                         </a>
                                                     </td>
 
                                                     <td>
-                                                        <a href="{{ route('localities.edit', $locality->id) }}">
-                                                            {{ $locality->zone?->name ?? '' }}
+                                                        @if ($locality->zone)
+                                                            <a href="{{ route('zones.show', $locality->zone->id) }}">
+                                                                {{ $locality->zone->name }}
+                                                            </a>
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+
+                                                    <td>
+                                                        <a
+                                                            href="{{ route('provinces.show', $locality->province->id) }}">
+                                                            {{ $locality->province->name }}
                                                         </a>
                                                     </td>
 
-                                                    <td>{{ $locality->province->name }}</td>
-
-                                                    <td>{{ $locality->user->name }}</td>
+                                                    <td>
+                                                        <a href="{{ route('partners.show', $locality->user->id) }}">
+                                                            {{ $locality->user->name }}
+                                                        </a>
+                                                    </td>
 
                                                     <td>
                                                         {{ $locality->FormattedModifiedDate }}
