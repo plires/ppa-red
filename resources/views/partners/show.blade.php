@@ -136,7 +136,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <a class="btn btn-default float-right" href="{{ route('partners.index') }}">
+                                <a class="btn btn-default float-right" href="{{ url()->previous() }}">
                                     Volver
                                 </a>
                             </div>
