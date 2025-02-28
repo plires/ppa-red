@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -37,12 +37,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         $partner = User::create($request->validated());
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('partners.index')->with('success', 'la provincia ' . $partner->name . ' fue agregada correctamente.');
+        return redirect()->route('partners.index')->with('success', 'el partner' . $partner->name . ' fue agregado correctamente.');
     }
 
     /**
@@ -64,7 +64,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $partner)
+    public function update(UserRequest $request, User $partner)
     {
         $partner->update($request->validated());
 
@@ -75,7 +75,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, User $partner)
+    public function destroy(UserRequest $request, User $partner)
     {
 
         $partner->delete();
