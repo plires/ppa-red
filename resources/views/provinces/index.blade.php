@@ -62,8 +62,8 @@
                                             @foreach ($provinces as $province)
                                                 <tr class="align-middle">
                                                     <td>
-                                                        <a href="{{ route('provinces.edit', $province->id) }}">
-                                                            {{ $province['name'] }}
+                                                        <a href="{{ route('provinces.show', $province->id) }}">
+                                                            {{ $province->name }}
                                                         </a>
                                                     </td>
 
