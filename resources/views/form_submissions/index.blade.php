@@ -36,7 +36,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-12">
-                        <h1>Consultas de Formularios</h1>
+                        <h1>Detalle de formularios recibidos</h1>
                     </div>
 
                 </div>
@@ -50,15 +50,11 @@
                     <div class="col-12">
 
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">DataTable with default features</h3>
-                            </div>
-                            <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="tableFormSubmissions" class="table table-bordered table-striped">
+                                <table id="tableFormSubmissions"
+                                    class="table table-hover table-head-fixed table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Nombre</th>
                                             <th>Localidad</th>
                                             @if ($user->role === $role_admin)
@@ -78,9 +74,7 @@
                                             @endphp
 
                                             <tr class="align-middle">
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->id }}</a>
-                                                </td>
+
                                                 <td><a
                                                         href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['name'] }}</a>
                                                 </td>
@@ -98,8 +92,7 @@
                                                 @endif
 
                                                 <td>
-                                                    <a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">
+                                                    <a href="{{ route('form_submissions.show', $formSubmission->id) }}">
                                                         <span
                                                             class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
                                                         </span>
@@ -115,7 +108,6 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Nombre</th>
                                             <th>Localidad</th>
                                             @if ($user->role === $role_admin)
@@ -152,6 +144,9 @@
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
+                    "language": {
+                        url: '/locales/dataTables_es-ES.json',
+                    },
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                 }).buttons().container().appendTo(
                     '#tableFormSubmissions_wrapper .col-md-6:eq(0)');
