@@ -51,7 +51,7 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
-        //
+        return view('provinces.show', compact('province'));
     }
 
     /**
