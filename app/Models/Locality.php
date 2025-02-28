@@ -24,7 +24,7 @@ class Locality extends Model
      */
     public function partner()
     {
-        return $this->belongsTo(Partner::class, 'user_id'); // Especificamos la clave foránea correcta
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -32,7 +32,7 @@ class Locality extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class); // Especificamos la clave foránea correcta
+        return $this->belongsTo(User::class);
     }
 
     public function zone()

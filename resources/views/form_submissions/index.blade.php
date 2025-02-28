@@ -89,7 +89,7 @@
                                                 </td>
                                                 @if ($user->role === $role_admin)
                                                     <td><a
-                                                            href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->partner->name }}</a>
+                                                            href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->user->name }}</a>
                                                     </td>
                                                 @else
                                                     <td><a
@@ -143,120 +143,6 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-    <!--begin::App Content-->
-    {{-- <div class="app-content">
-
-        
-
-        <!--begin::Container-->
-        <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div>
-
-                        <!-- /.card-header -->
-                        <div class="card-body">
-
-                            <table id="formSubmissionTable" class="display table table-striped table-bordered"
-                                style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>Localidad</th>
-                                        @if ($user->role === $role_admin)
-                                            <th>Partner</th>
-                                        @else
-                                            <th>Email</th>
-                                        @endif
-                                        <th>Estado</th>
-                                        <th>Fecha</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach ($formSubmissions as $formSubmission)
-                                        @php
-                                            $data = json_decode($formSubmission->data, true); // Convierte JSON en array
-                                        @endphp
-
-                                        <tr class="align-middle">
-                                            <td><a
-                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->id }}</a>
-                                            </td>
-                                            <td><a
-                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['name'] }}</a>
-                                            </td>
-                                            <td><a
-                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->locality->name }}</a>
-                                            </td>
-                                            @if ($user->role === $role_admin)
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->partner->name }}</a>
-                                                </td>
-                                            @else
-                                                <td><a
-                                                        href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $data['email'] }}</a>
-                                                </td>
-                                            @endif
-
-                                            <td>
-                                                <a href="{{ route('form_submissions.show', $formSubmission->id) }}">
-                                                    <span
-                                                        class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
-                                                    </span>
-                                                </a>
-                                            </td>
-                                            <td><a
-                                                    href="{{ route('form_submissions.show', $formSubmission->id) }}">{{ $formSubmission->FormattedDate }}</a>
-                                            </td>
-
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Position</th>
-                                        <th>Localidad</th>
-                                        @if ($user->role === $role_admin)
-                                            <th>Partner</th>
-                                        @else
-                                            <th>Email</th>
-                                        @endif
-                                        <th>Estado</th>
-                                        <th>Fecha</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            footer
-                        </div>
-                        <!-- /.card-footer -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-            </div>
-            <!--end::Row-->
-        </div>
-        <!--end::Container-->
-
-
-    </div> --}}
-    <!--end::Container-->
-    <!--end::App Content-->
-
-
 
     @section('scripts')
         @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js'])

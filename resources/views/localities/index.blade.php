@@ -81,7 +81,7 @@
 
                                                     <td>{{ $locality->province->name }}</td>
 
-                                                    <td>{{ $locality->partner->name }}</td>
+                                                    <td>{{ $locality->user->name }}</td>
 
                                                     <td>
                                                         {{ $locality->FormattedModifiedDate }}

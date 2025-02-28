@@ -56,7 +56,7 @@ class FormSubmission extends Model
      */
     public function partner()
     {
-        return $this->belongsTo(Partner::class, 'user_id')->withTrashed(); // Especificamos la clave foránea correcta
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function formResponses()
