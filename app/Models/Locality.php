@@ -5,7 +5,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Zone;
-use App\Models\Partner;
 use App\Models\Province;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
