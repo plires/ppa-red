@@ -64,12 +64,16 @@
                                                 <tr class="align-middle">
 
                                                     <td>
-                                                        <a href="{{ route('zones.edit', $zone->id) }}">
+                                                        <a href="{{ route('zones.show', $zone->id) }}">
                                                             {{ $zone['name'] }}
                                                         </a>
                                                     </td>
 
-                                                    <td>{{ $zone->province->name }}</td>
+                                                    <td>
+                                                        <a href="{{ route('provinces.show', $zone->province->id) }}">
+                                                            {{ $zone->province->name }}
+                                                        </a>
+                                                    </td>
 
                                                     <td>
                                                         {{ $zone->FormattedModifiedDate }}
