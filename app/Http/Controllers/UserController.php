@@ -50,7 +50,7 @@ class UserController extends Controller
      */
     public function show(User $partner)
     {
-        return 'show';
+        return view('partners.show', compact('partner'));
     }
 
     /**
@@ -68,8 +68,7 @@ class UserController extends Controller
     {
         $partner->update($request->validated());
 
-        // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('partners.index')->with('success', 'El partner ' . $partner->name . ' fue actualizado correctamente.');
+        return redirect()->back()->with('success', 'El partner ' . $partner->name . ' fue actualizado correctamente.');
     }
 
     /**
