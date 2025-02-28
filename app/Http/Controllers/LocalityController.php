@@ -57,11 +57,7 @@ class LocalityController extends Controller
 
     public function update(LocalityRequest $request, Locality $locality)
     {
-        $locality->update([
-            'name' => $request->name,
-            'province_id' => $request->province_id,
-            'zone_id' => $request->zone_id ?? null, // Si no hay zone_id, se guarda como null
-        ]);
+        $locality->update($request->validated());
 
         return back()->with('success', 'Localidad actualizada correctamente.');
     }
