@@ -68,7 +68,7 @@
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
-                                    @if ($province->zones->isEmpty() && $province->zones->isEmpty())
+                                    @if ($province->zones->isEmpty() && $province->localities->isEmpty())
                                         <div class="card-body">
                                             <p>Esta provincia, no tiene zonas ni localidades</p>
                                         </div>
