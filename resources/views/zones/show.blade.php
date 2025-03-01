@@ -94,7 +94,16 @@
                                                 <tbody>
                                                     @foreach ($zone->localities as $locality)
                                                         <tr>
-                                                            <td>{{ $locality->name ?? '-' }}</td>
+                                                            <td>
+                                                                @if (isset($locality->name))
+                                                                    <a title="Ver localidad {{ $locality->name }}"
+                                                                        href="{{ route('localities.show', $locality->id) }}">
+                                                                        {{ $locality->name }}
+                                                                    </a>
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 <a href="{{ route('localities.edit', $locality->id) }}"
                                                                     type="button" class="btn btn-primary btn-sm">

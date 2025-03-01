@@ -88,8 +88,26 @@
                                                 <tbody>
                                                     @foreach ($province->localities as $locality)
                                                         <tr>
-                                                            <td>{{ $locality->name ?? '-' }}</td>
-                                                            <td>{{ $locality->zone->name ?? '-' }}</td>
+                                                            <td>
+                                                                @if (isset($locality->name))
+                                                                    <a title="Ver localidad {{ $locality->name }}"
+                                                                        href="{{ route('localities.show', $locality->id) }}">
+                                                                        {{ $locality->name }}
+                                                                    </a>
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if (isset($locality->zone->name))
+                                                                    <a title="Ver zona {{ $locality->zone->name }}"
+                                                                        href="{{ route('zones.show', $locality->zone->id) }}">
+                                                                        {{ $locality->zone->name }}
+                                                                    </a>
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 <a href="{{ route('localities.edit', $locality->id) }}"
                                                                     type="button" class="btn btn-primary btn-sm">
