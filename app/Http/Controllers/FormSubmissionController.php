@@ -32,10 +32,17 @@ class FormSubmissionController extends Controller
 
         $user = Auth::user();
 
+        // Si el usuario NO es admin y el formulario no le pertenece, redirigir con error
+        if ($user->role !== User::ADMIN_USER && $formSubmission->user_id !== $user->id) {
+            return back()->with('error', 'No tienes permiso para ver el contenido.');
+        }
+
         $data = json_decode($formSubmission->data, true); // Convierte JSON en array
+
+        $responses = $formSubmission->formResponses;
 
         $role_admin = User::ADMIN_USER;
 
-        return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin'));
+        return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin', 'responses'));
     }
 }
