@@ -76,7 +76,12 @@
 
                                             <tr class="align-middle">
 
-                                                <td>{{ $data['name'] }}</td>
+                                                <td>
+                                                    <a title="ver detalle del formulario"
+                                                        href="{{ route('form_submissions.show', $formSubmission->locality->id) }}">
+                                                        {{ $data['name'] }}
+                                                    </a>
+                                                </td>
                                                 <td>
                                                     @if ($user->role === $role_admin)
                                                         <a title="Editar localidad {{ $formSubmission->locality->name }}"
@@ -84,7 +89,10 @@
                                                             {{ $formSubmission->locality->name }}
                                                         </a>
                                                     @else
-                                                        {{ $formSubmission->locality->name }}
+                                                        <a title="ver detalle del formulario"
+                                                            href="{{ route('form_submissions.show', $formSubmission->locality->id) }}">
+                                                            {{ $formSubmission->locality->name }}
+                                                        </a>
                                                     @endif
                                                 </td>
                                                 @if ($user->role === $role_admin)
@@ -95,15 +103,29 @@
                                                         </a>
                                                     </td>
                                                 @else
-                                                    <td>{{ $data['email'] }}</td>
+                                                    <td>
+                                                        <a title="ver detalle del formulario"
+                                                            href="{{ route('form_submissions.show', $formSubmission->locality->id) }}">
+                                                            {{ $data['email'] }}
+                                                        </a>
+                                                    </td>
                                                 @endif
 
                                                 <td>
-                                                    <span
-                                                        class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
-                                                    </span>
+                                                    <a title="ver detalle del formulario"
+                                                        href="{{ route('form_submissions.show', $formSubmission->locality->id) }}">
+                                                        <span
+                                                            class="badge {{ statusColorClass($formSubmission->status->status) }}">
+                                                            {{ $formSubmission->status->status }}
+                                                        </span>
+                                                    </a>
                                                 </td>
-                                                <td>{{ $formSubmission->FormattedDate }}</td>
+                                                <td>
+                                                    <a title="ver detalle del formulario"
+                                                        href="{{ route('form_submissions.show', $formSubmission->locality->id) }}">
+                                                        {{ $formSubmission->FormattedDate }}
+                                                    </a>
+                                                </td>
 
                                                 <td>
                                                     <a href="{{ route('form_submissions.show', $formSubmission->id) }}"
