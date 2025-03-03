@@ -3,3 +3,9 @@
   justify-content: flex-end;
   align-items: center;
 }
+
+/* Visualizacion de chats */
+.direct-chat-messages {
+  height: auto !important;
+}
+/* Visualizacion de chats end */
