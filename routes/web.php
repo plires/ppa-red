@@ -7,6 +7,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LocalityController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\FormSubmissionController;
 
 Route::get('/', function () {
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'show'])->name('form_submissions.show');
     Route::get('/form_submissions/{formSubmission}/edit', [FormSubmissionController::class, 'edit'])->middleware('can:admin')->name('form_submissions.edit');
     Route::delete('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'destroy'])->middleware('can:admin')->name('form_submissions.destroy');
+
+    // Rutas estándar de Responses
+    Route::post('/form_responses', [FormResponseController::class, 'store'])->name('form_responses.store');
 
     // Rutas protegidas: acceso únicamente para los admin
     Route::middleware(['auth', AdminMiddleware::class])->group(function () {
