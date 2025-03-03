@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('locality_id')->constrained('localities')->onDelete('cascade');
             $table->json('data'); // Contiene nombre, email y teléfono, pero no los comentarios
             $table->foreignId('form_submission_status_id')->constrained('form_submission_statuses')->onDelete('cascade');
+            $table->string('secure_token', 64)->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
