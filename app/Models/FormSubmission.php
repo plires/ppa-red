@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Zone;
 use App\Models\Locality;
 use App\Models\Province;
+use Illuminate\Support\Str;
 use App\Models\FormResponse;
 use App\Models\FormSubmissionStatus;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,17 @@ class FormSubmission extends Model
     /** @use HasFactory<\Database\Factories\FormSubmissionFactory> */
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($formSubmission) {
+            $formSubmission->secure_token = Str::random(32); // Token de 32 caracteres
+        });
+    }
 
     /**
      * Relación muchos a uno: Una Region pertenece a una provincia.
