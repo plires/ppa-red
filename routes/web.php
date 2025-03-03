@@ -9,6 +9,7 @@ use App\Http\Controllers\LocalityController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\FormSubmissionController;
+use App\Http\Controllers\PublicFormSubmissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,11 @@ Route::get('/test', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/public/form_submission/{token}', [PublicFormSubmissionController::class, 'show'])
+    ->name('public.form_submission.show');
+Route::post('/public/form_submission/', [PublicFormSubmissionController::class, 'store'])
+    ->name('public.form_submission.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
