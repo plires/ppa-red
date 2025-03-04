@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
+use App\Models\FormSubmissionStatus;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FormResponseMailToPartner;
 use App\Http\Requests\PublicFormResponseRequest;
@@ -23,7 +24,8 @@ class PublicFormResponseController extends Controller
 
         // Actualizar el estado del FormSubmission
         $formSubmission = FormSubmission::findOrFail($request['form_submission_id']);
-        $formSubmission->form_submission_status_id = 1;
+        $idStatus = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER);
+        $formSubmission->form_submission_status_id = $idStatus;
         $formSubmission->save();
 
         return back()->with('success', 'El mensaje se envió correctamente. En breve será respondido.');
