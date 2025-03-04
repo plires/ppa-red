@@ -66,7 +66,7 @@ class FormResponseRequest extends FormRequest
                 $validator->errors()->add('form_submission_id', 'No tienes permiso para agregar una respuesta a este formulario.');
             }
 
-            // Verificar que el user_id (lo que viene del fron) sea el mismo del user_id asignado en el formSubmission
+            // Verificar que el user_id (lo que viene del front) sea el mismo del user_id asignado en el formSubmission
             if ((int)$formSubmission->user_id !== (int)$this->user_id) {
                 $validator->errors()->add('user_id', 'No tienes permiso para agregar una respuesta a este formulario.');
             }
