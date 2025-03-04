@@ -5,29 +5,7 @@
         @include('parts.msg-success')
         @include('parts.msg-errors')
 
-        <!-- Modal de confirmación -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmModalLabel">Confirmar Envío</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>¿Estás seguro de que deseas enviar el siguiente texto?</p>
-                        <p id="modalText"></p> <!-- Aquí se mostrará el valor del input -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <!-- Botón para enviar el mensaje después de confirmar -->
-                        <button type="submit" class="btn btn-primary" form="message-form">Confirmar Envío</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('parts.modal-confirm-send-response')
 
         @include('parts.statusColorClass')
 
@@ -97,12 +75,6 @@
                                                 {{ $data['phone'] }}
                                             </dd>
                                             <dt>
-                                                Comentario inicial
-                                            </dt>
-                                            <dd>
-                                                {{ $data['comments'] }}
-                                            </dd>
-                                            <dt>
                                                 Fecha de contacto
                                             </dt>
                                             <dd>
@@ -117,7 +89,7 @@
 
                                 <div class="card direct-chat direct-chat-primary">
                                     <div class="card-header ui-sortable-handle" style="cursor: move;">
-                                        <h3 class="card-title">Contactos Posteriores</h3>
+                                        <h3 class="card-title">Conversasiones</h3>
 
                                         <div class="card-tools">
                                             <span title="3 New Messages" class="badge badge-primary">3</span>
@@ -141,9 +113,29 @@
                                             @if ($responses->isEmpty())
                                                 <p>No hay conversasiones</p>
                                             @else
+                                                {{-- Primer Mensaje User --}}
+                                                <div class="direct-chat-msg">
+                                                    <div class="direct-chat-infos clearfix">
+                                                        <span class="direct-chat-name float-left">
+                                                            {{ $data['name'] }}
+                                                        </span>
+                                                        <span class="direct-chat-timestamp float-right">
+                                                            {{ \Carbon\Carbon::parse($formSubmission->created_at)->locale('es')->translatedFormat('d M h:i a') }}
+                                                        </span>
+                                                    </div>
+                                                    <img class="direct-chat-img"
+                                                        src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
+                                                        alt="message user image">
+                                                    <div class="direct-chat-text">
+                                                        {!! nl2br(e($data['comments'])) !!}
+                                                    </div>
+                                                </div>
+                                                {{-- Primer Mensaje User end --}}
+
+
                                                 @foreach ($responses as $response)
                                                     @if ($response->is_system)
-                                                        {{-- Msgs User --}}
+                                                        {{-- Msgs Partner --}}
                                                         <div class="direct-chat-msg right">
                                                             <div class="direct-chat-infos clearfix">
                                                                 <span class="direct-chat-name float-right">
@@ -160,9 +152,9 @@
                                                                 {!! nl2br(e($response->message)) !!}
                                                             </div>
                                                         </div>
-                                                        {{-- Msgs User end --}}
+                                                        {{-- Msgs Partner end --}}
                                                     @else
-                                                        {{-- Msgs Partner --}}
+                                                        {{-- Msgs User --}}
                                                         <div class="direct-chat-msg">
                                                             <div class="direct-chat-infos clearfix">
                                                                 <span class="direct-chat-name float-left">
@@ -179,7 +171,7 @@
                                                                 {!! nl2br(e($response->message)) !!}
                                                             </div>
                                                         </div>
-                                                        {{-- Partner end --}}
+                                                        {{-- Msgs User end --}}
                                                     @endif
                                                 @endforeach
 
