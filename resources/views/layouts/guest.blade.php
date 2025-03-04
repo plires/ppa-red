@@ -8,9 +8,9 @@
 
     <title>{{ config('app.name', 'Aplicación PPA RED') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <!-- css y scripts -->
     @vite(['resources/css/public/app.css', 'resources/js/public/app.js'])
