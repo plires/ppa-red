@@ -1,3 +1,9 @@
 .content-wrapper {
   margin: 0 !important;
 }
+
+/* Visualizacion de chats */
+.direct-chat-messages {
+  height: auto !important;
+}
+/* Visualizacion de chats end */
