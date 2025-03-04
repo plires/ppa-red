@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\FormSubmission;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FormSubmissionStatus extends Model
 {
@@ -24,5 +25,12 @@ class FormSubmissionStatus extends Model
     public function formSubmissions()
     {
         return $this->hasMany(FormSubmission::class);
+    }
+
+    public static function getIdByName($name)
+    {
+        return Cache::rememberForever("form_submission_status_id_{$name}", function () use ($name) {
+            return self::where('status', $name)->value('id');
+        });
     }
 }
