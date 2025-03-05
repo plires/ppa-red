@@ -110,27 +110,8 @@
                                         <!-- Conversations are loaded here -->
                                         <div class="direct-chat-messages">
 
-                                            {{-- Primer Mensaje User --}}
-                                            <div class="direct-chat-msg">
-                                                <div class="direct-chat-infos clearfix">
-                                                    <span class="direct-chat-name float-left">
-                                                        {{ $data['name'] }}
-                                                    </span>
-                                                    <span class="direct-chat-timestamp float-right">
-                                                        {{ \Carbon\Carbon::parse($formSubmission->created_at)->locale('es')->translatedFormat('d M h:i a') }}
-                                                    </span>
-                                                </div>
-                                                <img class="direct-chat-img"
-                                                    src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
-                                                    alt="message user image">
-                                                <div class="direct-chat-text">
-                                                    {!! nl2br(e($data['comments'])) !!}
-                                                </div>
-                                            </div>
-                                            {{-- Primer Mensaje User end --}}
-
                                             @if ($responses->isEmpty())
-                                                <p>No hay conversasiones posteriores</p>
+                                                <p>No hay conversasiones</p>
                                             @else
                                                 @foreach ($responses as $response)
                                                     @if ($response->is_system)
