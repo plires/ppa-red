@@ -29,8 +29,7 @@ class FormSubmissionFactory extends Factory
             'data' => json_encode([
                 'name' => $this->faker->firstName(),
                 'phone' => $this->faker->phoneNumber(),
-                'email' => $this->faker->safeEmail(),
-                'comments' => $this->faker->sentence(),
+                'email' => $this->faker->safeEmail()
             ]),
             'form_submission_status_id' => FormSubmissionStatus::inRandomOrder()->first()->id,
         ];

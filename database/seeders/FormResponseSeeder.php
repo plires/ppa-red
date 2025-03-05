@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\FormResponse;
+use App\Models\FormSubmission;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class FormResponseSeeder extends Seeder
 {
@@ -14,11 +15,18 @@ class FormResponseSeeder extends Seeder
     public function run(): void
     {
 
-        // Crear 10 respuestas aleatorias
-        FormResponse::factory(10)->create();
+        $formSubmissions = FormSubmission::all();
 
-        // Crear 20 respuestas mas, en base a las 10 anteriormente creadas (para que haya mas de 1 consulta respuesta x form_submission)
-        FormResponse::factory(20)
+        foreach ($formSubmissions as $formSubmission) {
+            FormResponse::factory()->create([
+                'form_submission_id' => $formSubmission->id,
+                'user_id' => $formSubmission->user_id,
+                'is_system' => 0, // Dejamos false por defecto para que sea el primer mensaje del usuario de la landing
+            ]);
+        }
+
+        // Crear 60 respuestas mas (para que haya mas de 1 consulta respuesta x form_submission)
+        FormResponse::factory(60)
             ->state(function () {
                 $randomRecord = FormResponse::inRandomOrder()->first();
                 return [
