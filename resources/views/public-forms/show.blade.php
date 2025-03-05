@@ -150,28 +150,28 @@
                                                     <!-- Conversations are loaded here -->
                                                     <div class="direct-chat-messages">
 
-                                                        @if ($responses->isEmpty())
-                                                            <p>No hay conversasiones</p>
-                                                        @else
-                                                            {{-- Primer Msg User --}}
-                                                            <div class="direct-chat-msg right">
-                                                                <div class="direct-chat-infos clearfix">
-                                                                    <span class="direct-chat-name float-right">
-                                                                        {{ $data['name'] }}
-                                                                    </span>
-                                                                    <span class="direct-chat-timestamp float-left">
-                                                                        {{ \Carbon\Carbon::parse($formSubmission->created_at)->locale('es')->translatedFormat('d M h:i a') }}
-                                                                    </span>
-                                                                </div>
-                                                                <img class="direct-chat-img"
-                                                                    src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
-                                                                    alt="message user image">
-                                                                <div class="direct-chat-text">
-                                                                    {!! nl2br(e($data['comments'])) !!}
-                                                                </div>
+                                                        {{-- Primer Msg User --}}
+                                                        <div class="direct-chat-msg right">
+                                                            <div class="direct-chat-infos clearfix">
+                                                                <span class="direct-chat-name float-right">
+                                                                    {{ $data['name'] }}
+                                                                </span>
+                                                                <span class="direct-chat-timestamp float-left">
+                                                                    {{ \Carbon\Carbon::parse($formSubmission->created_at)->locale('es')->translatedFormat('d M h:i a') }}
+                                                                </span>
                                                             </div>
-                                                            {{-- Primer Msg User end --}}
+                                                            <img class="direct-chat-img"
+                                                                src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
+                                                                alt="message user image">
+                                                            <div class="direct-chat-text">
+                                                                {!! nl2br(e($data['comments'])) !!}
+                                                            </div>
+                                                        </div>
+                                                        {{-- Primer Msg User end --}}
 
+                                                        @if ($responses->isEmpty())
+                                                            <p>No hay conversasiones posteriores</p>
+                                                        @else
                                                             @foreach ($responses as $response)
                                                                 @if (!$response->is_system)
                                                                     {{-- Msgs User --}}
