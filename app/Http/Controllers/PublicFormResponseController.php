@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\FormResponseMailToPartner;
+use App\Jobs\SendFormResponseEmailToPartner;
 use App\Http\Requests\PublicFormResponseRequest;
 
 class PublicFormResponseController extends Controller
@@ -18,9 +17,8 @@ class PublicFormResponseController extends Controller
 
         $formSubmission = $formResponse->formSubmission;
 
-        // Enviar el email
-        Mail::to($formResponse->user->email)
-            ->send(new FormResponseMailToPartner($formResponse, $formSubmission));
+        // Enviar el correo en segundo plano
+        SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission);
 
         // Actualizar el estado del FormSubmission
         $formSubmission = FormSubmission::findOrFail($request['form_submission_id']);

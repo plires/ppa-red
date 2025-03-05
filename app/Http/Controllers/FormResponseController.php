@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
-use App\Mail\FormResponseMailToUser;
 use App\Models\FormSubmissionStatus;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendFormResponseEmailToUser;
 use App\Http\Requests\FormResponseRequest;
 
 class FormResponseController extends Controller
@@ -18,9 +17,8 @@ class FormResponseController extends Controller
         $formResponse = FormResponse::create($request->validated());
         $data = json_decode($formResponse->formSubmission->data, true); // Convierte JSON en array
 
-        // Enviar el email
-        Mail::to($data['email'])
-            ->send(new FormResponseMailToUser($formResponse, $data));
+        // Enviar el correo en segundo plano
+        SendFormResponseEmailToUser::dispatch($formResponse, $data);
 
         // Actualizar el estado del FormSubmission
         $formSubmission = FormSubmission::findOrFail($request['form_submission_id']);
