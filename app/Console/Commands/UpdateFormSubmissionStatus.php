@@ -33,27 +33,42 @@ class UpdateFormSubmissionStatus extends Command
     {
         $now = Carbon::now();
 
-        // Obtener los IDs de los estados para evitar consultas repetitivas
-        $pendingId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER);
-        $delayedId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER);
-        $closedByPartnerId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER);
-        $respondedId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_RESPONDIO_PARTNER);
-        $closedByUserId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO);
+        // Obtener IDs de los estados para evitar hardcodear valores
+        $pendientePartnerId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER);
+        $respondidoPartnerId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_RESPONDIO_PARTNER);
+        $demoradoPartnerId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER);
+        $cerradoSinRtaPartnerId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER);
+        $cerradoSinRtaUsuarioId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO);
+        $cerradoSinActividadId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER);
 
-        // 1️⃣ Cambiar a "Demorado - Sin Respuesta Del Partner (48h)" si han pasado más de 48 horas
-        FormSubmission::where('form_submission_status_id', $pendingId)
-            ->where('updated_at', '<=', $now->subHours(48))
-            ->update(['form_submission_status_id' => $delayedId]);
+        // Buscar FormSubmissions con estado "Pendiente de Respuesta Del Partner" y sin cambios en 48h
+        FormSubmission::where('form_submission_status_id', $pendientePartnerId)
+            ->where('updated_at', '<', $now->subHours(48))
+            ->update(['form_submission_status_id' => $demoradoPartnerId]);
 
-        // 2️⃣ Cambiar a "Cerrado - Sin Respuesta Del Partner" si han pasado más de 7 días en estado "Demorado"
-        FormSubmission::whereIn('form_submission_status_id', [$delayedId])
-            ->where('updated_at', '<=', $now->subDays(7))
-            ->update(['form_submission_status_id' => $closedByPartnerId]);
+        // Buscar FormSubmissions "Demorado" sin respuesta del partner en 7 días
+        FormSubmission::whereIn('form_submission_status_id', [$demoradoPartnerId])
+            ->where('updated_at', '<', $now->subDays(7))
+            ->whereDoesntHave('formResponses', function ($query) {
+                $query->where('is_system', true); // Filtrar solo respuestas del partner
+            })
+            ->update(['form_submission_status_id' => $cerradoSinRtaPartnerId]);
 
-        // 3️⃣ Cambiar a "Cerrado - Sin Respuesta Del Usuario" si han pasado más de 7 días en estado "Respondido Por El Partner"
-        FormSubmission::where('form_submission_status_id', $respondedId)
-            ->where('updated_at', '<=', $now->subDays(7))
-            ->update(['form_submission_status_id' => $closedByUserId]);
+        // Buscar FormSubmissions "Respondido por el partner" sin actividad en 7 días
+        FormSubmission::where('form_submission_status_id', $respondidoPartnerId)
+            ->where('updated_at', '<', $now->subDays(7))
+            ->get()
+            ->each(function ($formSubmission) use ($cerradoSinRtaUsuarioId, $cerradoSinActividadId) {
+                $userMessageCount = $formSubmission->formResponses()
+                    ->where('is_system', false) // Filtrar solo respuestas del usuario
+                    ->count();
+
+                if ((int)$userMessageCount === 1) {
+                    $formSubmission->update(['form_submission_status_id' => $cerradoSinRtaUsuarioId]);
+                } elseif ($userMessageCount > 1) {
+                    $formSubmission->update(['form_submission_status_id' => $cerradoSinActividadId]);
+                }
+            });
 
         $this->info('Estados de FormSubmissions actualizados correctamente.');
     }
