@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retrasada la respuesta hace 48 Hs</title>
+    <title>{{ $subject }}</title>
 </head>
 
 <body>
-    <h2>Mensaje para el partner por retraso de rta hace 48 hs</h2>
+    <h2>{{ $msg }}</h2>
     <p><strong>Mensaje para Partner:</strong> {{ $partner->name }}</p>
     <p><strong>Datos para responder al usuario:</strong></p>
     <p><strong>Nombre: </strong>{{ $dataUser['name'] ?? 'Usuario anónimo' }}</p>

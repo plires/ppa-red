@@ -9,22 +9,26 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 
-class FormSubmissionDelayedMailToPartner extends Mailable
+class MailToPartnerFormSubmissionStatusChange extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $partner;
     public $dataUser;
     public $formSubmission;
+    public $subject;
+    public $msg;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($partner, $dataUser, FormSubmission $formSubmission)
+    public function __construct($partner, $dataUser, FormSubmission $formSubmission, $subject, $msg)
     {
         $this->partner = $partner;
         $this->dataUser = $dataUser;
         $this->formSubmission = $formSubmission;
+        $this->subject = $subject;
+        $this->msg = $msg;
     }
 
     /**
@@ -33,7 +37,7 @@ class FormSubmissionDelayedMailToPartner extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Tenés un formulario pendiente de respuesta hace 48 Hs'
+            subject: $this->subject
         );
     }
 
@@ -43,11 +47,13 @@ class FormSubmissionDelayedMailToPartner extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.to_partner.form_submission_delayed_mail_to_partner',
+            view: 'emails.to_partner.email_to_partner_form_submission_status_change',
             with: [
                 'partner' => $this->partner,
                 'dataUser' => $this->dataUser,
-                'formSubmission' => $this->formSubmission
+                'formSubmission' => $this->formSubmission,
+                'subject' => $this->subject,
+                'msg' => $this->msg,
             ]
         );
     }
