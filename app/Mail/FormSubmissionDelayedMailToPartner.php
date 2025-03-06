@@ -8,7 +8,6 @@ use App\Models\FormSubmission;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class FormSubmissionDelayedMailToPartner extends Mailable
 {
