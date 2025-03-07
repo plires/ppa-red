@@ -16,8 +16,6 @@ class SendFormStatusChangeToPartner implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $partner;
-    protected $dataUser;
     protected $formSubmission;
     protected $subject;
     protected $msg;
@@ -25,10 +23,8 @@ class SendFormStatusChangeToPartner implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(User $partner, $dataUser, FormSubmission $formSubmission, $subject, $msg)
+    public function __construct(FormSubmission $formSubmission, $subject, $msg)
     {
-        $this->partner = $partner;
-        $this->dataUser = $dataUser;
         $this->formSubmission = $formSubmission;
         $this->subject = $subject;
         $this->msg = $msg;
@@ -39,6 +35,6 @@ class SendFormStatusChangeToPartner implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->partner->email)->send(new MailToPartnerFormSubmissionStatusChange($this->partner, $this->dataUser, $this->formSubmission, $this->subject, $this->msg));
+        Mail::to($this->formSubmission->user->email)->send(new MailToPartnerFormSubmissionStatusChange($this->formSubmission, $this->subject, $this->msg));
     }
 }

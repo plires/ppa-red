@@ -31,8 +31,6 @@ class UpdateFormSubmissionStatus extends Command
      */
     public function handle()
     {
-        $now = Carbon::now();
-
         // Definir los nombres de los estados que necesitas
         $statuses = [
             FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
@@ -53,7 +51,8 @@ class UpdateFormSubmissionStatus extends Command
         $closedNoReplyPartnerId = $statusIds[FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER] ?? null;
         $closedNoReplyUserId = $statusIds[FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO] ?? null;
 
-        // Buscar FormSubmissions con estado "Pendiente de Respuesta Del Partner" y sin cambios en 48h
+        // Buscar FormSubmissions con estado "Pendiente de Respuesta Del Partner" y sin actividad en 48h -> STATUS_DEMORADO_POR_PARTNER
+        $now = Carbon::now();
         $submissions_pendingPartnerStatus = FormSubmission::where('form_submission_status_id', $pendingPartnerId)
             ->where('updated_at', '<', $now->subHours(48))
             ->get();
@@ -62,7 +61,41 @@ class UpdateFormSubmissionStatus extends Command
             $this->makeUpdates($submissions_pendingPartnerStatus, $delayedPartnerId, 'te atrasaste 48 Hs', 'explicacion de porque te atrasaste 48hs');
         }
 
-        // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días
+        // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días y que no tenga ni una respuesta del partner -> STATUS_CERRADO_SIN_RTA_PARTNER
+        $now = Carbon::now();
+        $submissions_sin_rta_del_partner_mas_de_7_dias = FormSubmission::where('form_submission_status_id', $delayedPartnerId)
+            ->where('updated_at', '<', $now->subDays(7))
+            ->whereDoesntHave('formResponses', function ($query) {
+                $query->where('is_system', true); // Filtra respuestas enviadas por el partner
+            })
+            ->get();
+
+        if ($submissions_sin_rta_del_partner_mas_de_7_dias->isNotEmpty()) {
+            $this->makeUpdates($submissions_sin_rta_del_partner_mas_de_7_dias, $closedNoReplyPartnerId, 'Cerramos el ticket porque el partner no respondio ni una vez', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner NUUUNCAAA CONTESTASTE');
+        }
+
+        // Buscar FormSubmissions "Respondido por el partner", sin respuestas por parte del usuario, excepto la primera que es la que origina el FormSubmission. Sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_USUARIO
+        $now = Carbon::now();
+        $submissions_sin_rta_del_usuario_mas_de_7_dias = FormSubmission::where('form_submission_status_id', $answeredPartnerId)
+            ->where('updated_at', '<', $now->subDays(7))
+            ->withCount([
+                'formResponses as user_responses_count' => function ($query) {
+                    $query->where('is_system', false); // Cuenta solo respuestas del usuario
+                },
+                'formResponses as partner_responses_count' => function ($query) {
+                    $query->where('is_system', true); // Cuenta solo respuestas del partner
+                }
+            ])
+            ->having('user_responses_count', '=', 1) // Usuario tiene solo 1 respuesta
+            ->having('partner_responses_count', '>=', 1) // Partner tiene 1 o más respuestas
+            ->get();
+
+        if ($submissions_sin_rta_del_usuario_mas_de_7_dias->isNotEmpty()) {
+            $this->makeUpdates($submissions_sin_rta_del_usuario_mas_de_7_dias, $closedNoReplyUserId, 'Cerramos el ticket porque el usuario nunca respondio', 'explicacion de porque te se cierra el ticket por falta de respuesta del usuario SABEMOS QUE CONTACTASTE AL TIPO PERO NO RESPONDIO MAS');
+        }
+
+        // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_PARTNER
+        $now = Carbon::now();
         $submissions_delayedPartnerStatus = FormSubmission::where('form_submission_status_id', $delayedPartnerId)
             ->where('updated_at', '<', $now->subDays(7))
             ->get();
@@ -71,7 +104,8 @@ class UpdateFormSubmissionStatus extends Command
             $this->makeUpdates($submissions_delayedPartnerStatus, $closedNoReplyPartnerId, 'Cerramos el ticket por falta de actividad en rta del partner', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner');
         }
 
-        // Buscar FormSubmissions "Respondido Por El Partner" sin actividad en 7 días por parte del usuario
+        // Buscar FormSubmissions "Respondido Por El Partner" sin actividad en 7 días por parte del usuario -> STATUS_CERRADO_SIN_RTA_USUARIO
+        $now = Carbon::now();
         $submissions_answeredByPartner = FormSubmission::where('form_submission_status_id', $answeredPartnerId)
             ->where('updated_at', '<', $now->subDays(7))
             ->get();
@@ -91,11 +125,9 @@ class UpdateFormSubmissionStatus extends Command
     public function makeUpdates($array, $statusId, $subject, $msg)
     {
         foreach ($array as $formSubmission) {
-            $partner = $formSubmission->user;
-            $dataUser = json_decode($formSubmission->data, true); // Convierte JSON en array
 
-            if ($partner && $partner->email) {
-                $this->sendEmailWithChangesToPartner($partner, $dataUser, $formSubmission, $subject, $msg);
+            if ($formSubmission->user->email) {
+                $this->sendEmailWithChangesToPartner($formSubmission, $subject, $msg);
             }
 
             $this->updateFormSubmissionStatus($formSubmission, $statusId);
@@ -108,9 +140,9 @@ class UpdateFormSubmissionStatus extends Command
         $formSubmission->update(['form_submission_status_id' => $statusId]);
     }
 
-    public function sendEmailWithChangesToPartner($partner, $dataUser, $formSubmission, $subject, $msg)
+    public function sendEmailWithChangesToPartner($formSubmission, $subject, $msg)
     {
         // Enviar el correo usando un Job
-        SendFormStatusChangeToPartner::dispatch($partner, $dataUser, $formSubmission, $subject, $msg)->delay(now()->addSeconds(10));
+        SendFormStatusChangeToPartner::dispatch($formSubmission, $subject, $msg)->delay(now()->addSeconds(10));
     }
 }

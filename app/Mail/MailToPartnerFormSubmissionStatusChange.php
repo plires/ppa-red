@@ -18,17 +18,19 @@ class MailToPartnerFormSubmissionStatusChange extends Mailable
     public $formSubmission;
     public $subject;
     public $msg;
+    public $responses;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($partner, $dataUser, FormSubmission $formSubmission, $subject, $msg)
+    public function __construct(FormSubmission $formSubmission, $subject, $msg)
     {
-        $this->partner = $partner;
-        $this->dataUser = $dataUser;
+        $this->partner = $formSubmission->user;
+        $this->dataUser = json_decode($formSubmission->data, true); // Convierte JSON en array;
         $this->formSubmission = $formSubmission;
         $this->subject = $subject;
         $this->msg = $msg;
+        $this->responses = $formSubmission->formResponses;
     }
 
     /**
@@ -54,6 +56,7 @@ class MailToPartnerFormSubmissionStatusChange extends Mailable
                 'formSubmission' => $this->formSubmission,
                 'subject' => $this->subject,
                 'msg' => $this->msg,
+                'responses' => $this->responses,
             ]
         );
     }

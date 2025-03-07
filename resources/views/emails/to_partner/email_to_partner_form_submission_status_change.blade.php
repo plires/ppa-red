@@ -15,6 +15,8 @@
     <p><strong>Email: </strong>{{ $dataUser['email'] ?? '' }}</p>
     <p><strong>Teléfono: </strong>{{ $dataUser['phone'] ?? '' }}</p>
     <p>Fecha de envio de consulta: {{ $formSubmission->created_at->format('d/m/Y H:i') }}</p>
+    <p>ID del FormSubmission: {{ $formSubmission->id }}</p>
+    <p>responses: {{ $responses }}</p>
 </body>
 
 </html>
