@@ -20,7 +20,7 @@ class FormSubmission extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id'];
+    protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id', 'closure_reason'];
 
     protected static function boot()
     {
