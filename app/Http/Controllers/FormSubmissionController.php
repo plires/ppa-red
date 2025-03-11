@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use \App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\FormSubmission;
 use Illuminate\Support\Facades\Auth;
-use \App\Models\User;
+use App\Http\Requests\FormSubmissionRequest;
 
 class FormSubmissionController extends Controller
 {
@@ -44,5 +45,12 @@ class FormSubmissionController extends Controller
         $role_admin = User::ADMIN_USER;
 
         return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin', 'responses'));
+    }
+
+    public function update(FormSubmissionRequest $request, FormSubmission $formSubmission)
+    {
+        $formSubmission->update($request->validated());
+
+        return redirect()->back()->with('success', 'El Formulario fue cerrado exitosamente.');
     }
 }

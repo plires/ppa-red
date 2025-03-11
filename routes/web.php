@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/form_submissions', [FormSubmissionController::class, 'index'])->name('form_submissions.index');
     Route::get('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'show'])->name('form_submissions.show');
     Route::get('/form_submissions/{formSubmission}/edit', [FormSubmissionController::class, 'edit'])->middleware('can:admin')->name('form_submissions.edit');
+    Route::put('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'update'])->name('form_submissions.update');
     Route::delete('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'destroy'])->middleware('can:admin')->name('form_submissions.destroy');
 
     // Rutas estándar de Responses
