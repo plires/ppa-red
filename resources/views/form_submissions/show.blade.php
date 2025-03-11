@@ -6,6 +6,7 @@
         @include('parts.msg-errors')
 
         @include('parts.modal-confirm-send-response')
+        @include('parts.modal-closure-reason')
 
         @include('parts.statusColorClass')
 
@@ -157,7 +158,9 @@
 
                                             @endif
 
-                                            @if ($user->role !== $role_admin)
+                                            @if (
+                                                $user->role !== $role_admin &&
+                                                    $formSubmission->status->status !== App\Models\FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER)
                                                 <div class="card-footer">
                                                     <form id="message-form"
                                                         action="{{ route('form_responses.store') }}" method="POST">
@@ -177,6 +180,23 @@
                                                                     data-target="#confirmModal">Enviar</button>
                                                             </span>
                                                         </div>
+                                                    </form>
+
+                                                    <form id="closure-reason" class="form-horizontal" method="POST"
+                                                        action="{{ route('form_submissions.update', $formSubmission->id) }}">
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <input type="hidden" name="form_submission_id"
+                                                            value="{{ $formSubmission->id }}">
+                                                        <input type="hidden" name="user_id"
+                                                            value="{{ $user->id }}">
+
+                                                        <!-- Botón para abrir el modal -->
+                                                        <button type="button" class="mt-3 float-right btn btn-primary"
+                                                            data-toggle="modal" data-target="#closureReason">cerrar
+                                                            formulario</button>
+
                                                     </form>
                                                 </div>
                                             @endif
@@ -204,8 +224,12 @@
     @section('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Seleccionamos el botón que abre el modal
+                // Seleccionamos los botones que abren los modales
                 const submitButton = document.querySelector('[data-target="#confirmModal"]');
+                const submitButtonclosureReason = document.querySelector('[data-target="#closureReason"]');
+
+                // Seleccionamos el Form de cerrar la consulta
+                const closureReasonForm = document.querySelector(#closureReason);
 
                 // Seleccionamos el input de texto
                 const inputText = document.getElementById('message');
@@ -213,13 +237,18 @@
                 // Seleccionamos el elemento donde se mostrará el texto en el modal
                 const modalText = document.getElementById('modalText');
 
-                // Cuando se hace clic en el botón "Enviar"
+                // Cuando se hace clic en el botón "Enviar consulta"
                 submitButton.addEventListener('click', function() {
                     // Capturamos el valor del input
                     const textValue = inputText.value;
 
                     // Mostramos el valor en el modal
                     modalText.textContent = textValue;
+                });
+
+                // Cuando se hace clic en el botón "cerrar formulario, enviar el submit" 
+                submitButton.addEventListener('click', function() {
+                    closureReasonForm.submit();
                 });
 
             });

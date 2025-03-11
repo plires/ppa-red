@@ -199,28 +199,37 @@
 
                                                         @endif
 
-                                                        <div class="card-footer">
-                                                            <form id="message-form"
-                                                                action="{{ route('public.form_responses.store') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="form_submission_id"
-                                                                    value="{{ $formSubmission->id }}">
-                                                                <input type="hidden" name="user_id"
-                                                                    value="{{ $formSubmission->user->id }}">
-                                                                <div class="input-group">
-                                                                    <input type="text" id="message" name="message"
-                                                                        placeholder="Envia un nuevo mensaje ..."
-                                                                        class="form-control">
-                                                                    <span class="input-group-append">
-                                                                        <!-- Botón para abrir el modal -->
-                                                                        <button type="button" class="btn btn-primary"
-                                                                            data-toggle="modal"
-                                                                            data-target="#confirmModal">Enviar</button>
-                                                                    </span>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+
+                                                        @if ($formSubmission->status->status !== App\Models\FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER)
+                                                            <div class="card-footer">
+                                                                <form id="message-form"
+                                                                    action="{{ route('public.form_responses.store') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="form_submission_id"
+                                                                        value="{{ $formSubmission->id }}">
+                                                                    <input type="hidden" name="user_id"
+                                                                        value="{{ $formSubmission->user->id }}">
+                                                                    <div class="input-group">
+                                                                        <input type="text" id="message"
+                                                                            name="message"
+                                                                            placeholder="Envia un nuevo mensaje ..."
+                                                                            class="form-control">
+                                                                        <span class="input-group-append">
+                                                                            <!-- Botón para abrir el modal -->
+                                                                            <button type="button"
+                                                                                class="btn btn-primary"
+                                                                                data-toggle="modal"
+                                                                                data-target="#confirmModal">Enviar</button>
+                                                                        </span>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        @else
+                                                            <p>Esta consulta se encuentra cerrada.
+                                                                Si necesita hacer mas consultas puede contactar a su
+                                                                partner </p>
+                                                        @endif
 
                                                     </div>
                                                     <!--/.direct-chat-messages-->
