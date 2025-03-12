@@ -20,9 +20,7 @@ return new class extends Migration
                 FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
                 FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
                 FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
-                FormSubmissionStatus::STATUS_CERRADO_SIN_MAS_ACTIVIDAD,
                 FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER
-
             ])->default(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER); // Diferentes estados posibles
             $table->timestamps();
         });

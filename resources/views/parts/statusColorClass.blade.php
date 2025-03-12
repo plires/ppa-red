@@ -12,8 +12,6 @@
                 return 'bg-warning';
             case App\Models\FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO:
                 return 'bg-secondary';
-            case App\Models\FormSubmissionStatus::STATUS_CERRADO_SIN_MAS_ACTIVIDAD:
-                return 'bg-dark';
             case App\Models\FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER:
                 return 'bg-dark';
             default:

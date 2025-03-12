@@ -17,7 +17,6 @@ class FormSubmissionStatus extends Model
     const STATUS_DEMORADO_POR_PARTNER = 'Demorado - Sin Respuesta Del Partner (48h)';
     const STATUS_CERRADO_SIN_RTA_PARTNER = 'Cerrado - Sin Respuesta Del Partner';
     const STATUS_CERRADO_SIN_RTA_USUARIO = 'Cerrado - Sin Respuesta Del Usuario';
-    const STATUS_CERRADO_SIN_MAS_ACTIVIDAD = 'Cerrado - Sin Más Actividad';
     const STATUS_CERRADO_POR_EL_PARTNER = 'Cerrado Por El Partner';
 
     /**

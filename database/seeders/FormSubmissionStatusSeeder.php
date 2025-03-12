@@ -35,10 +35,6 @@ class FormSubmissionStatusSeeder extends Seeder
         ]);
 
         FormSubmissionStatus::factory()->create([
-            'status' => FormSubmissionStatus::STATUS_CERRADO_SIN_MAS_ACTIVIDAD,
-        ]);
-
-        FormSubmissionStatus::factory()->create([
             'status' => FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
         ]);
     }

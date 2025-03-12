@@ -31,7 +31,13 @@ class FormSubmissionFactory extends Factory
                 'phone' => $this->faker->phoneNumber(),
                 'email' => $this->faker->safeEmail()
             ]),
-            'form_submission_status_id' => FormSubmissionStatus::inRandomOrder()->first()->id,
+            'form_submission_status_id' => $statusId = FormSubmissionStatus::inRandomOrder()->first()->id,
+            'closure_reason' => match ($statusId) {
+                4 => 'Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del partner.',
+                5 => 'Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del usuario.',
+                6 => 'Esta consulta fue cerrada por el partner.',
+                default => null, // Puedes colocar otro valor por defecto si es necesario
+            },
         ];
     }
 }
