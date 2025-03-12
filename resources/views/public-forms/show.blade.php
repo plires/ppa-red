@@ -1,3 +1,9 @@
+@php
+    use App\Models\FormSubmissionStatus;
+    $closeStateByPartner = FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER;
+    $closedStatusWithNoReplyFromPartner = FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER;
+    $closedStatusWithNoReplyFromUser = FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO;
+@endphp
 <x-guest-layout>
 
     <!-- Content Wrapper. Contains page content -->
@@ -200,7 +206,10 @@
                                                         @endif
 
 
-                                                        @if ($formSubmission->status->status !== App\Models\FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER)
+                                                        @if (
+                                                            $formSubmission->status->status !== $closeStateByPartner &&
+                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromPartner &&
+                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromUser)
                                                             <div class="card-footer">
                                                                 <form id="message-form"
                                                                     action="{{ route('public.form_responses.store') }}"
@@ -226,9 +235,12 @@
                                                                 </form>
                                                             </div>
                                                         @else
-                                                            <p>Esta consulta se encuentra cerrada.
-                                                                Si necesita hacer mas consultas puede contactar a su
-                                                                partner </p>
+                                                            <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
+                                                            <p>{{ $msg = $formSubmission->status->status !== $closeStateByPartner ? $formSubmission->closure_reason : 'Esta consulta fue cerrada por el partner.' }}
+                                                                <br>
+                                                                Si necesita volver a contactarse, puede hacerlo a los
+                                                                datos de su partner asignado.
+                                                            </p>
                                                         @endif
 
                                                     </div>
