@@ -71,7 +71,7 @@ class UpdateFormSubmissionStatus extends Command
             ->get();
 
         if ($submissions_sin_rta_del_partner_mas_de_7_dias->isNotEmpty()) {
-            $this->makeUpdates($submissions_sin_rta_del_partner_mas_de_7_dias, $closedNoReplyPartnerId, 'Cerramos el ticket porque el partner no respondio ni una vez', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner NUUUNCAAA CONTESTASTE');
+            $this->makeUpdates($submissions_sin_rta_del_partner_mas_de_7_dias, $closedNoReplyPartnerId, 'Cerramos el ticket porque el partner no respondio ni una vez', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner NUUUNCAAA CONTESTASTE', 'Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del partner');
         }
 
         // Buscar FormSubmissions "Respondido por el partner", sin respuestas por parte del usuario, excepto la primera que es la que origina el FormSubmission. Sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_USUARIO
@@ -91,7 +91,7 @@ class UpdateFormSubmissionStatus extends Command
             ->get();
 
         if ($submissions_sin_rta_del_usuario_mas_de_7_dias->isNotEmpty()) {
-            $this->makeUpdates($submissions_sin_rta_del_usuario_mas_de_7_dias, $closedNoReplyUserId, 'Cerramos el ticket porque el usuario nunca respondio', 'explicacion de porque te se cierra el ticket por falta de respuesta del usuario SABEMOS QUE CONTACTASTE AL TIPO PERO NO RESPONDIO MAS');
+            $this->makeUpdates($submissions_sin_rta_del_usuario_mas_de_7_dias, $closedNoReplyUserId, 'Cerramos el ticket porque el usuario nunca respondio', 'explicacion de porque te se cierra el ticket por falta de respuesta del usuario SABEMOS QUE CONTACTASTE AL TIPO PERO NO RESPONDIO MAS', 'Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del usuario');
         }
 
         // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_PARTNER
@@ -101,7 +101,7 @@ class UpdateFormSubmissionStatus extends Command
             ->get();
 
         if ($submissions_delayedPartnerStatus->isNotEmpty()) {
-            $this->makeUpdates($submissions_delayedPartnerStatus, $closedNoReplyPartnerId, 'Cerramos el ticket por falta de actividad en rta del partner', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner');
+            $this->makeUpdates($submissions_delayedPartnerStatus, $closedNoReplyPartnerId, 'Cerramos el ticket por falta de actividad en rta del partner', 'explicacion de porque te se cierra el ticket por falta de respuesta del partner', 'Esta consulta estuvo inactiva durante 7 días, sin más respuestas del partner');
         }
 
         // Buscar FormSubmissions "Respondido Por El Partner" sin actividad en 7 días por parte del usuario -> STATUS_CERRADO_SIN_RTA_USUARIO
@@ -111,7 +111,7 @@ class UpdateFormSubmissionStatus extends Command
             ->get();
 
         if ($submissions_answeredByPartner->isNotEmpty()) {
-            $this->makeUpdates($submissions_answeredByPartner, $closedNoReplyUserId, 'Cerramos el ticket por falta de actividad en rta del ususario', 'explicacion de porque te se cierra el ticket por falta de respuesta del ususario');
+            $this->makeUpdates($submissions_answeredByPartner, $closedNoReplyUserId, 'Cerramos el ticket por falta de actividad en rta del usuario', 'explicacion de porque te se cierra el ticket por falta de respuesta del usuario', 'Esta consulta estuvo inactiva durante 7 días, sin más respuestas del usuario');
         }
 
         $this->info('Estados de FormSubmissions actualizados correctamente.');
@@ -122,7 +122,7 @@ class UpdateFormSubmissionStatus extends Command
         $schedule->command(static::class)->hourly();
     }
 
-    public function makeUpdates($array, $statusId, $subject, $msg)
+    public function makeUpdates($array, $statusId, $subject, $msg, $closure_reason = NULL)
     {
         foreach ($array as $formSubmission) {
 
@@ -130,14 +130,17 @@ class UpdateFormSubmissionStatus extends Command
                 $this->sendEmailWithChangesToPartner($formSubmission, $subject, $msg);
             }
 
-            $this->updateFormSubmissionStatus($formSubmission, $statusId);
+            $this->updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason);
         }
     }
 
-    public function updateFormSubmissionStatus($formSubmission, $statusId)
+    public function updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason)
     {
         // Actualizar el estado del FormSubmission
         $formSubmission->update(['form_submission_status_id' => $statusId]);
+
+        // Actualizar el closure reason
+        $formSubmission->update(['closure_reason' => $closure_reason]);
     }
 
     public function sendEmailWithChangesToPartner($formSubmission, $subject, $msg)
