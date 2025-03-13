@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('form_submission_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', [
+            $table->enum('name', [
                 FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
                 FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,
                 FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
@@ -22,6 +22,7 @@ return new class extends Migration
                 FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
                 FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER
             ])->default(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER); // Diferentes estados posibles
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

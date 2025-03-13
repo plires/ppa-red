@@ -12,6 +12,11 @@ class FormSubmissionStatus extends Model
     /** @use HasFactory<\Database\Factories\FormSubmissionStatusFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description'
+    ];
+
     const STATUS_PENDIENTE_RTA_DE_PARTNER = 'Pendiente de Respuesta Del Partner';
     const STATUS_RESPONDIO_PARTNER = 'Respondido Por El Partner';
     const STATUS_DEMORADO_POR_PARTNER = 'Demorado - Sin Respuesta Del Partner (48h)';
@@ -30,7 +35,7 @@ class FormSubmissionStatus extends Model
     public static function getIdByName($name)
     {
         return Cache::rememberForever("form_submission_status_id_{$name}", function () use ($name) {
-            return self::where('status', $name)->value('id');
+            return self::where('name', $name)->value('id');
         });
     }
 }

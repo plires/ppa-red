@@ -56,7 +56,7 @@
                                                             <p>Fecha contacto: {{ $formSubmission->FormattedDate }}</p>
                                                             <p>Estado actual de esta consulta:
                                                                 <span
-                                                                    class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
+                                                                    class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
                                                                 </span>
                                                             </p>
                                                         </div>
@@ -207,9 +207,9 @@
 
 
                                                         @if (
-                                                            $formSubmission->status->status !== $closeStateByPartner &&
-                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromPartner &&
-                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromUser)
+                                                            $formSubmission->status->name !== $closeStateByPartner &&
+                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromPartner &&
+                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromUser)
                                                             <div class="card-footer">
                                                                 <form id="message-form"
                                                                     action="{{ route('public.form_responses.store') }}"
@@ -236,7 +236,7 @@
                                                             </div>
                                                         @else
                                                             <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
-                                                            <p>{{ $msg = $formSubmission->status->status !== $closeStateByPartner ? $formSubmission->closure_reason : 'Esta consulta fue cerrada por el partner.' }}
+                                                            <p>{{ $msg = $formSubmission->status->name !== $closeStateByPartner ? $formSubmission->closure_reason : 'Esta consulta fue cerrada por el partner.' }}
                                                                 <br>
                                                                 Si necesita volver a contactarse, puede hacerlo a los
                                                                 datos de su partner asignado.

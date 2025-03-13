@@ -95,8 +95,8 @@
                                                     <a title="ver detalle del formulario"
                                                         href="{{ route('form_submissions.show', $formSubmission->id) }}">
                                                         <span
-                                                            class="badge {{ statusColorClass($formSubmission->status->status) }}">
-                                                            {{ $formSubmission->status->status }}
+                                                            class="badge {{ statusColorClass($formSubmission->status->name) }}">
+                                                            {{ $formSubmission->status->name }}
                                                         </span>
                                                     </a>
                                                 </td>

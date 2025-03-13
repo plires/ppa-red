@@ -18,7 +18,7 @@ class FormSubmissionStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => $this->faker->randomElement(
+            'name' => $this->faker->randomElement(
                 [
                     FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
                     FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,

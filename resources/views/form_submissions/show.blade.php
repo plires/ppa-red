@@ -51,7 +51,7 @@
                                                     <p>Fecha contacto: {{ $formSubmission->FormattedDate }}</p>
                                                     <p>Estado actual de esta consulta:
                                                         <span
-                                                            class="badge {{ statusColorClass($formSubmission->status->status) }}">{{ $formSubmission->status->status }}
+                                                            class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
                                                         </span>
                                                     </p>
                                                 </div>
@@ -167,9 +167,9 @@
                                                 <div class="card-footer">
                                                     @if (
                                                         $user->role !== $role_admin &&
-                                                            ($formSubmission->status->status !== $closeStateByPartner &&
-                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromPartner &&
-                                                                $formSubmission->status->status !== $closedStatusWithNoReplyFromUser))
+                                                            ($formSubmission->status->name !== $closeStateByPartner &&
+                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromPartner &&
+                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromUser))
                                                         <form id="message-form"
                                                             action="{{ route('form_responses.store') }}"
                                                             method="POST">
@@ -195,7 +195,9 @@
                                                             cerrar formulario
                                                         </button>
                                                     @else
-                                                        <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
+                                                        @if ($user->role !== $role_admin)
+                                                            <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
+                                                        @endif
                                                         <p>{{ $formSubmission->closure_reason }}</p>
                                                     @endif
 
