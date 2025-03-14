@@ -10,24 +10,24 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Mail\MailToPartnerFormSubmissionStatusChange;
+use App\Mail\MailFormSubmissionStatusChange;
 
-class SendFormStatusChangeToPartner implements ShouldQueue
+class SendFormStatusChange implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $formSubmission;
-    protected $subject;
-    protected $msg;
+    protected $recipent;
+    protected $emailTemplate;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(FormSubmission $formSubmission, $subject, $msg)
+    public function __construct(FormSubmission $formSubmission, $recipent, $emailTemplate)
     {
         $this->formSubmission = $formSubmission;
-        $this->subject = $subject;
-        $this->msg = $msg;
+        $this->recipent = $recipent;
+        $this->emailTemplate = $emailTemplate;
     }
 
     /**
@@ -35,6 +35,6 @@ class SendFormStatusChangeToPartner implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->formSubmission->user->email)->send(new MailToPartnerFormSubmissionStatusChange($this->formSubmission, $this->subject, $this->msg));
+        Mail::to($this->recipent)->send(new MailFormSubmissionStatusChange($this->formSubmission, $this->emailTemplate));
     }
 }
