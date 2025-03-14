@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 
-class MailToPartnerFormSubmissionStatusChange extends Mailable
+class MailFormSubmissionStatusChange extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,19 +17,19 @@ class MailToPartnerFormSubmissionStatusChange extends Mailable
     public $dataUser;
     public $formSubmission;
     public $subject;
-    public $msg;
+    public $body;
     public $responses;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(FormSubmission $formSubmission, $subject, $msg)
+    public function __construct(FormSubmission $formSubmission, $emailTemplate)
     {
         $this->partner = $formSubmission->user;
         $this->dataUser = json_decode($formSubmission->data, true); // Convierte JSON en array;
         $this->formSubmission = $formSubmission;
-        $this->subject = $subject;
-        $this->msg = $msg;
+        $this->subject = $emailTemplate->subject;
+        $this->body = $emailTemplate->body;
         $this->responses = $formSubmission->formResponses;
     }
 
@@ -55,7 +55,7 @@ class MailToPartnerFormSubmissionStatusChange extends Mailable
                 'dataUser' => $this->dataUser,
                 'formSubmission' => $this->formSubmission,
                 'subject' => $this->subject,
-                'msg' => $this->msg,
+                'body' => $this->body,
                 'responses' => $this->responses,
             ]
         );
