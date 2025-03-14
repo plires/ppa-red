@@ -8,8 +8,9 @@
 </head>
 
 <body>
-    <h2>{{ $msg }}</h2>
-    <p><strong>Mensaje para Partner:</strong> {{ $partner->name }}</p>
+    <h2>{{ $subject }}</h2>
+    <h2>{{ $body }}</h2>
+    <p><strong>Nombre del partner:</strong> {{ $partner->name }}</p>
     <p><strong>Datos para responder al usuario:</strong></p>
     <p><strong>Nombre: </strong>{{ $dataUser['name'] ?? 'Usuario anónimo' }}</p>
     <p><strong>Email: </strong>{{ $dataUser['email'] ?? '' }}</p>

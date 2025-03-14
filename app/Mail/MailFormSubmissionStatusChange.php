@@ -49,7 +49,7 @@ class MailFormSubmissionStatusChange extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.to_partner.email_to_partner_form_submission_status_change',
+            view: 'emails.email_form_submission_status_change',
             with: [
                 'partner' => $this->partner,
                 'dataUser' => $this->dataUser,
