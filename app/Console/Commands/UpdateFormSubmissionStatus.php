@@ -7,6 +7,7 @@ use App\Models\FormSubmission;
 use Illuminate\Console\Command;
 use App\Jobs\SendFormStatusChange;
 use App\Models\FormSubmissionStatus;
+use App\Models\FormSubmissionNotification;
 use Illuminate\Support\Facades\Schedule;
 use App\Services\TransactionalEmailService;
 
@@ -142,7 +143,10 @@ class UpdateFormSubmissionStatus extends Command
             $this->makeUpdates(
                 $submissions,
                 $this->statuses['delayedPartner']->id,
-                $this->emailTemplates['delayedNoReplyFromPartnerToPartner']
+                $this->emailTemplates['delayedNoReplyFromPartnerToPartner'],
+                null,
+                null,
+                'Cambio automático por inactividad de 48 horas'
             );
         }
     }
@@ -166,7 +170,8 @@ class UpdateFormSubmissionStatus extends Command
                 $this->statuses['closedNoReplyPartner']->id,
                 $this->emailTemplates['closedPartnerNeverReplyToPartner'],
                 $this->emailTemplates['closedNoReplyFromPartnerToUser'],
-                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_never_partner')
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_never_partner'),
+                'Cerrado automáticamente por falta de respuesta del partner en 7 días'
             );
         }
     }
@@ -197,7 +202,8 @@ class UpdateFormSubmissionStatus extends Command
                 $this->statuses['closedNoReplyUser']->id,
                 $this->emailTemplates['closedUserNeverReplyToPartner'],
                 $this->emailTemplates['closedUserNeverReplyToUser'],
-                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user')
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user'),
+                'Cerrado automáticamente por falta de respuesta del usuario en 7 días después de la respuesta inicial del partner'
             );
         }
     }
@@ -218,7 +224,8 @@ class UpdateFormSubmissionStatus extends Command
                 $this->statuses['closedNoReplyPartner']->id,
                 $this->emailTemplates['closedNoReplyFromPartnerToPartner'],
                 $this->emailTemplates['closedNoReplyFromPartnerToUser'],
-                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_partner')
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_partner'),
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_partner'),
             );
         }
     }
@@ -239,7 +246,8 @@ class UpdateFormSubmissionStatus extends Command
                 $this->statuses['closedNoReplyUser']->id,
                 $this->emailTemplates['closedNoReplyFromUserToPartner'],
                 $this->emailTemplates['closedNoReplyFromUserToUser'],
-                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user')
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user'),
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user'),
             );
         }
     }
@@ -255,7 +263,7 @@ class UpdateFormSubmissionStatus extends Command
     /**
      * Realiza las actualizaciones de estado y envío de emails
      */
-    protected function makeUpdates($submissions, $statusId, $emailTemplateToPartner, $emailTemplateToUser = null, $closure_reason = null): void
+    protected function makeUpdates($submissions, $statusId, $emailTemplateToPartner, $emailTemplateToUser = null, $closure_reason = null, $notificationDetails = null): void
     {
         foreach ($submissions as $formSubmission) {
             // Enviar email al partner
@@ -269,8 +277,20 @@ class UpdateFormSubmissionStatus extends Command
                 $this->sendEmailWithChanges($formSubmission, $userData['email'], $emailTemplateToUser);
             }
 
+            // Guardar el estado anterior antes de actualizarlo
+            $previousStatusId = $formSubmission->form_submission_status_id;
+
             // Actualizar el estado y razón de cierre
             $this->updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason);
+
+            // Registrar la notificación del cambio de estado
+            $this->createStatusChangeNotification(
+                $formSubmission,
+                $previousStatusId,
+                $statusId,
+                $closure_reason,
+                $notificationDetails
+            );
         }
     }
 
@@ -283,6 +303,24 @@ class UpdateFormSubmissionStatus extends Command
             'form_submission_status_id' => $statusId,
             'closure_reason' => $closure_reason
         ]);
+    }
+
+    /**
+     * Crea un registro en la tabla de notificaciones para el cambio de estado
+     */
+    protected function createStatusChangeNotification($formSubmission, $previousStatusId, $newStatusId, $closure_reason, $notificationDetails): void
+    {
+        FormSubmissionNotification::create([
+            'form_submission_id' => $formSubmission->id,
+            'previous_status_id' => $previousStatusId,
+            'new_status_id' => $newStatusId,
+            'is_read' => false,
+            'read_at' => null,
+            'closure_reason' => $closure_reason,
+            'notification_details' => $notificationDetails
+        ]);
+
+        $this->info("Notificación registrada para FormSubmission ID: {$formSubmission->id}");
     }
 
     /**
