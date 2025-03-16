@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\FormResponse;
 use App\Models\FormSubmissionStatus;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FormSubmissionNotification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -82,6 +83,11 @@ class FormSubmission extends Model
     public function status()
     {
         return $this->belongsTo(FormSubmissionStatus::class, 'form_submission_status_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(FormSubmissionNotification::class);
     }
 
     public function getFormattedDateAttribute()
