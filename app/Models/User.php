@@ -107,4 +107,12 @@ class User extends Authenticatable
     {
         return Carbon::parse($this->attributes['deleted_at'])->format('d/m/y');
     }
+
+    public function unreadNotificationsCount()
+    {
+        // Si necesitas contar notificaciones solo para ciertos form submissions
+        return FormSubmissionNotification::whereIn('form_submission_id', $this->formSubmissions->pluck('id'))
+            ->where('is_read', false)
+            ->count();
+    }
 }
