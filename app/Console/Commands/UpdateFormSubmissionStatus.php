@@ -19,7 +19,6 @@ class UpdateFormSubmissionStatus extends Command
      */
     protected $signature = 'formsubmissions:update-status';
 
-
     /**
      * The console command description.
      *
@@ -28,63 +27,158 @@ class UpdateFormSubmissionStatus extends Command
     protected $description = 'Actualizar automáticamente los estados de FormSubmissions según el tiempo transcurrido';
 
     /**
+     * Servicio de emails transaccionales
+     */
+    protected TransactionalEmailService $emailService;
+
+    /**
+     * Colección de estados de FormSubmission
+     */
+    protected array $statuses = [];
+
+    /**
+     * Colección de plantillas de correo
+     */
+    protected array $emailTemplates = [];
+
+    /**
      * Execute the console command.
      */
     public function handle()
     {
-        //TODO: Refactorizare este metodo
+        $this->emailService = new TransactionalEmailService('cambio de estado');
 
-        $emailService = new TransactionalEmailService('cambio de estado');
+        $this->loadStatuses();
+        $this->loadEmailTemplates();
 
-        // Mail para cuando el estado es "Demorado - Sin Respuesta Del Partner (48h)"
-        $delayedNoReplyFromPartnerEmailToPartner = $emailService->getEmail(FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER, 'partner');
+        $this->processPendingSubmissions();
+        $this->processDelayedSubmissionsWithNoPartnerResponse();
+        $this->processAnsweredSubmissionsWithNoUserResponse();
+        $this->processAllDelayedSubmissions();
+        $this->processAllAnsweredSubmissions();
 
-        // Mails para cuando el estado es "Cerrado - Sin Respuesta Del Partner"
-        $closedNoReplyFromPartnerEmailToPartner = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER, 'partner', 'respondio_antes');
-        $closedPartnerNeverReplyEmailToPartner = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER, 'partner', 'nunca_respondio');
-        $closedNoReplyFromPartnerEmailToUser = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER, 'user');
+        $this->info('Estados de FormSubmissions actualizados correctamente.');
+    }
 
-        // Mails para cuando el estado es "Cerrado - Sin Respuesta Del Usuario"
-        $closedNoReplyFromUserEmailToPartner = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO, 'partner', 'respondio_antes');
-        $closedUserNeverReplyEmailToPartner = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO, 'partner', 'nunca_respondio');
-        $closedNoReplyFromUserEmailToUser = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO, 'user', 'respondio_antes');
-        $closedUserNeverReplyEmailToUser = $emailService->getEmail(FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO, 'user', 'nunca_respondio');
+    /**
+     * Carga los estados necesarios desde la base de datos
+     */
+    protected function loadStatuses(): void
+    {
+        $this->statuses = [
+            'pendingPartner' => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)->first(),
+            'answeredPartner' => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_RESPONDIO_PARTNER)->first(),
+            'delayedPartner' => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER)->first(),
+            'closedNoReplyPartner' => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER)->first(),
+            'closedNoReplyUser' => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO)->first(),
+        ];
+    }
 
-        // Obtener los estados necesarios desde la base de datos
-        $pendingPartnerStatus = FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)->first();
-        $answeredPartnerStatus = FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_RESPONDIO_PARTNER)->first();
-        $delayedPartnerStatus = FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER)->first();
-        $closedNoReplyPartnerStatus = FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER)->first();
-        $closedNoReplyUserStatus = FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO)->first();
+    /**
+     * Carga las plantillas de correo electrónico
+     */
+    protected function loadEmailTemplates(): void
+    {
+        $this->emailTemplates = [
+            'delayedNoReplyFromPartnerToPartner' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
+                'partner'
+            ),
 
-        // Buscar FormSubmissions con estado "Pendiente de Respuesta Del Partner" y sin actividad en 48h -> STATUS_DEMORADO_POR_PARTNER
+            'closedNoReplyFromPartnerToPartner' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
+                'partner',
+                'respondio_antes'
+            ),
+
+            'closedPartnerNeverReplyToPartner' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
+                'partner',
+                'nunca_respondio'
+            ),
+
+            'closedNoReplyFromPartnerToUser' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
+                'user'
+            ),
+
+            'closedNoReplyFromUserToPartner' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                'partner',
+                'respondio_antes'
+            ),
+
+            'closedUserNeverReplyToPartner' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                'partner',
+                'nunca_respondio'
+            ),
+
+            'closedNoReplyFromUserToUser' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                'user',
+                'respondio_antes'
+            ),
+
+            'closedUserNeverReplyToUser' => $this->emailService->getEmail(
+                FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
+                'user',
+                'nunca_respondio'
+            ),
+        ];
+    }
+
+    /**
+     * Procesa las submissions pendientes de respuesta del partner sin actividad en 48h
+     */
+    protected function processPendingSubmissions(): void
+    {
         $now = Carbon::now();
-        $submissions_pendingPartnerStatus = FormSubmission::where('form_submission_status_id', $pendingPartnerStatus->id)
-            ->where('updated_at', '<', $now->subHours(48))
+        $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['pendingPartner']->id)
+            ->where('updated_at', '<', $now->copy()->subHours(48))
             ->get();
 
-        if ($submissions_pendingPartnerStatus->isNotEmpty()) {
-            $this->makeUpdates($submissions_pendingPartnerStatus, $delayedPartnerStatus->id, $delayedNoReplyFromPartnerEmailToPartner);
+        if ($submissions->isNotEmpty()) {
+            $this->makeUpdates(
+                $submissions,
+                $this->statuses['delayedPartner']->id,
+                $this->emailTemplates['delayedNoReplyFromPartnerToPartner']
+            );
         }
+    }
 
-
-        // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días y que no tenga ni una respuesta del partner -> STATUS_CERRADO_SIN_RTA_PARTNER
+    /**
+     * Procesa las submissions demoradas sin ninguna respuesta del partner en 7 días
+     */
+    protected function processDelayedSubmissionsWithNoPartnerResponse(): void
+    {
         $now = Carbon::now();
-        $submissions_sin_rta_del_partner_mas_de_7_dias = FormSubmission::where('form_submission_status_id', $delayedPartnerStatus->id)
-            ->where('updated_at', '<', $now->subDays(7))
+        $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['delayedPartner']->id)
+            ->where('updated_at', '<', $now->copy()->subDays(7))
             ->whereDoesntHave('formResponses', function ($query) {
                 $query->where('is_system', true); // Filtra respuestas enviadas por el partner
             })
             ->get();
 
-        if ($submissions_sin_rta_del_partner_mas_de_7_dias->isNotEmpty()) {
-            $this->makeUpdates($submissions_sin_rta_del_partner_mas_de_7_dias, $closedNoReplyPartnerStatus->id, $closedPartnerNeverReplyEmailToPartner, $closedNoReplyFromPartnerEmailToUser, config('form_submission_closure_reasons.closure_reasons.closed_no_reply_never_partner'));
+        if ($submissions->isNotEmpty()) {
+            $this->makeUpdates(
+                $submissions,
+                $this->statuses['closedNoReplyPartner']->id,
+                $this->emailTemplates['closedPartnerNeverReplyToPartner'],
+                $this->emailTemplates['closedNoReplyFromPartnerToUser'],
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_never_partner')
+            );
         }
+    }
 
-        // Buscar FormSubmissions "Respondido por el partner", sin respuestas por parte del usuario, excepto la primera que es la que origina el FormSubmission. Sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_USUARIO
+    /**
+     * Procesa las submissions respondidas por el partner sin respuesta del usuario en 7 días
+     */
+    protected function processAnsweredSubmissionsWithNoUserResponse(): void
+    {
         $now = Carbon::now();
-        $submissions_sin_rta_del_usuario_mas_de_7_dias = FormSubmission::where('form_submission_status_id', $answeredPartnerStatus->id)
-            ->where('updated_at', '<', $now->subDays(7))
+        $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['answeredPartner']->id)
+            ->where('updated_at', '<', $now->copy()->subDays(7))
             ->withCount([
                 'formResponses as user_responses_count' => function ($query) {
                     $query->where('is_system', false); // Cuenta solo respuestas del usuario
@@ -97,68 +191,106 @@ class UpdateFormSubmissionStatus extends Command
             ->having('partner_responses_count', '>=', 1) // Partner tiene 1 o más respuestas
             ->get();
 
-        if ($submissions_sin_rta_del_usuario_mas_de_7_dias->isNotEmpty()) {
-            $this->makeUpdates($submissions_sin_rta_del_usuario_mas_de_7_dias, $closedNoReplyUserStatus->id, $closedUserNeverReplyEmailToPartner, $closedUserNeverReplyEmailToUser, config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user'));
+        if ($submissions->isNotEmpty()) {
+            $this->makeUpdates(
+                $submissions,
+                $this->statuses['closedNoReplyUser']->id,
+                $this->emailTemplates['closedUserNeverReplyToPartner'],
+                $this->emailTemplates['closedUserNeverReplyToUser'],
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user')
+            );
         }
-
-        // Buscar FormSubmissions "Demorado de rta del Partner" sin actividad en 7 días -> STATUS_CERRADO_SIN_RTA_PARTNER
-        $now = Carbon::now();
-        $submissions_delayedPartnerStatus = FormSubmission::where('form_submission_status_id', $delayedPartnerStatus->id)
-            ->where('updated_at', '<', $now->subDays(7))
-            ->get();
-
-        if ($submissions_delayedPartnerStatus->isNotEmpty()) {
-            $this->makeUpdates($submissions_delayedPartnerStatus, $closedNoReplyPartnerStatus->id, $closedNoReplyFromPartnerEmailToPartner, $closedNoReplyFromPartnerEmailToUser, config('form_submission_closure_reasons.closure_reasons.closed_no_reply_partner'));
-        }
-
-        // Buscar FormSubmissions "Respondido Por El Partner" sin actividad en 7 días por parte del usuario -> STATUS_CERRADO_SIN_RTA_USUARIO
-        $now = Carbon::now();
-        $submissions_answeredByPartner = FormSubmission::where('form_submission_status_id', $answeredPartnerStatus->id)
-            ->where('updated_at', '<', $now->subDays(7))
-            ->get();
-
-        if ($submissions_answeredByPartner->isNotEmpty()) {
-            $this->makeUpdates($submissions_answeredByPartner, $closedNoReplyUserStatus->id, $closedNoReplyFromUserEmailToPartner, $closedNoReplyFromUserEmailToUser, config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user'));
-        }
-
-        $this->info('Estados de FormSubmissions actualizados correctamente.');
     }
 
-    public function schedule(Schedule $schedule)
+    /**
+     * Procesa todas las submissions demoradas sin actividad en 7 días
+     */
+    protected function processAllDelayedSubmissions(): void
+    {
+        $now = Carbon::now();
+        $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['delayedPartner']->id)
+            ->where('updated_at', '<', $now->copy()->subDays(7))
+            ->get();
+
+        if ($submissions->isNotEmpty()) {
+            $this->makeUpdates(
+                $submissions,
+                $this->statuses['closedNoReplyPartner']->id,
+                $this->emailTemplates['closedNoReplyFromPartnerToPartner'],
+                $this->emailTemplates['closedNoReplyFromPartnerToUser'],
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_partner')
+            );
+        }
+    }
+
+    /**
+     * Procesa todas las submissions respondidas por el partner sin actividad en 7 días
+     */
+    protected function processAllAnsweredSubmissions(): void
+    {
+        $now = Carbon::now();
+        $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['answeredPartner']->id)
+            ->where('updated_at', '<', $now->copy()->subDays(7))
+            ->get();
+
+        if ($submissions->isNotEmpty()) {
+            $this->makeUpdates(
+                $submissions,
+                $this->statuses['closedNoReplyUser']->id,
+                $this->emailTemplates['closedNoReplyFromUserToPartner'],
+                $this->emailTemplates['closedNoReplyFromUserToUser'],
+                config('form_submission_closure_reasons.closure_reasons.closed_no_reply_user')
+            );
+        }
+    }
+
+    /**
+     * Programa la ejecución del comando
+     */
+    public function schedule(Schedule $schedule): void
     {
         $schedule->command(static::class)->hourly();
     }
 
-    public function makeUpdates($array, $statusId, $emailTemplateToPartner, $emailTemplateToUser = NULL, $closure_reason = NULL)
+    /**
+     * Realiza las actualizaciones de estado y envío de emails
+     */
+    protected function makeUpdates($submissions, $statusId, $emailTemplateToPartner, $emailTemplateToUser = null, $closure_reason = null): void
     {
-
-        foreach ($array as $formSubmission) {
-
-            if ($formSubmission->user->email) {
+        foreach ($submissions as $formSubmission) {
+            // Enviar email al partner
+            if ($formSubmission->user && $formSubmission->user->email) {
                 $this->sendEmailWithChanges($formSubmission, $formSubmission->user->email, $emailTemplateToPartner);
             }
 
+            // Enviar email al usuario si existe plantilla
             if ($emailTemplateToUser) {
-                $user = json_decode($formSubmission->data, true);
-                $this->sendEmailWithChanges($formSubmission, $user['email'],  $emailTemplateToUser);
+                $userData = json_decode($formSubmission->data, true);
+                $this->sendEmailWithChanges($formSubmission, $userData['email'], $emailTemplateToUser);
             }
 
+            // Actualizar el estado y razón de cierre
             $this->updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason);
         }
     }
 
-    public function updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason)
+    /**
+     * Actualiza el estado y razón de cierre de una submission
+     */
+    protected function updateFormSubmissionStatus($formSubmission, $statusId, $closure_reason): void
     {
-        // Actualizar el estado del FormSubmission
-        $formSubmission->update(['form_submission_status_id' => $statusId]);
-
-        // Actualizar el closure reason
-        $formSubmission->update(['closure_reason' => $closure_reason]);
+        $formSubmission->update([
+            'form_submission_status_id' => $statusId,
+            'closure_reason' => $closure_reason
+        ]);
     }
 
-    public function sendEmailWithChanges($formSubmission, $recipent, $emailTemplate)
+    /**
+     * Envía un email con los cambios realizados
+     */
+    protected function sendEmailWithChanges($formSubmission, $recipient, $emailTemplate): void
     {
-        // Enviar el correo usando un Job
-        SendFormStatusChange::dispatch($formSubmission, $recipent, $emailTemplate)->delay(now()->addSeconds(10));
+        SendFormStatusChange::dispatch($formSubmission, $recipient, $emailTemplate)
+            ->delay(now()->addSeconds(10));
     }
 }
