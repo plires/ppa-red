@@ -87,7 +87,7 @@ class FormSubmission extends Model
 
     public function notifications()
     {
-        return $this->hasMany(FormSubmissionNotification::class);
+        return $this->hasMany(FormSubmissionNotification::class, 'form_submission_id');
     }
 
     public function getFormattedDateAttribute()
