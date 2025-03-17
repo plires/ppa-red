@@ -9,6 +9,7 @@ use App\Http\Controllers\LocalityController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\FormSubmissionController;
+use App\Http\Controllers\FormNotificationController;
 use App\Http\Controllers\PublicFormResponseController;
 use App\Http\Controllers\PublicFormSubmissionController;
 
@@ -36,6 +37,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Rutas para interactuar con las notificaciones
+    Route::get(
+        '/notification/{notification}/{formSubmission}',
+        [FormNotificationController::class, 'markAsReadAndRedirect']
+    )->name('notification.read');
+
+    Route::post(
+        '/notification',
+        [FormNotificationController::class, 'markAsReadAllNotifications']
+    )->name('notification.mark_as_read_all_notifications');
 
     // Rutas para interactuar con los formularios enviados por los clientes
     Route::get('/form_submissions', [FormSubmissionController::class, 'index'])->name('form_submissions.index');
