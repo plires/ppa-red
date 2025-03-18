@@ -55,7 +55,7 @@
                                             </h3>
                                             <p class="text-sm">{{ $lastResponseFromUser->message }}.</p>
                                             <p class="text-sm text-muted"><i
-                                                    class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($lastResponseFromUser->created_at)->diffForHumans() }}
+                                                    class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($lastResponseFromUser->created_at)->diffForHumans(['short' => true]) }}
                                             </p>
                                         </div>
                                     </div>
@@ -87,33 +87,65 @@
                 </div>
             </li>
         @endif
+
+
         <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
+        @if (auth()->user()->isPartner() && auth()->user()->unreadNotificationsCount() > 0)
+
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-bell"></i>
+                    <span
+                        class="badge badge-warning navbar-badge">{{ auth()->user()->unreadNotificationsCount() }}</span>
                 </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span class="dropdown-item dropdown-header">{{ auth()->user()->unreadNotificationsCount() }}
+                        Notificaciones</span>
+                    <div class="dropdown-divider"></div>
+
+
+                    @foreach (auth()->user()->formSubmissions as $formSubmission)
+                        @foreach ($formSubmission->notifications as $notification)
+                            @if (!$notification->is_read)
+                                <a title="{{ $notification->notification_details }}"
+                                    href="{{ route('notification.read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
+                                    class="dropdown-item">
+                                    <div>
+                                        <i class="fas fa-envelope mr-2"></i>
+                                        <span class="float-left text-muted text-sm">
+                                            {{ $notification->notification_details }}
+                                        </span>
+                                    </div>
+                                    <span
+                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($lastResponseFromUser->created_at)->diffForHumans(['short' => true]) }}
+                                    </span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            @endif
+                        @endforeach
+                    @endforeach
+
+                    <form method="POST" action="{{ route('notification.mark_as_read_all_notifications') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item dropdown-footer">Marcar todas como leídas</button>
+                    </form>
+
+                </div>
+            </li>
+        @else
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-bell"></i>
+                    <span class="badge badge-warning navbar-badge">0</span>
                 </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-            </div>
-        </li>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span class="dropdown-item dropdown-header">Sin Notificaciones</span>
+                    <div class="dropdown-divider"></div>
+                </div>
+            </li>
+        @endif
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
