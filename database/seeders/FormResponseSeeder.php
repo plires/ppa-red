@@ -38,6 +38,9 @@ class FormResponseSeeder extends Seeder
                 'is_system' => function () {
                     return rand(0, 1);
                 },
+                'is_read' => function () {
+                    return rand(0, 1);
+                }
             ]);
     }
 }

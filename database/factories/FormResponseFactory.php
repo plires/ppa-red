@@ -25,6 +25,8 @@ class FormResponseFactory extends Factory
             'user_id' => $formSubmission->user_id, // Asegurar que el user_id sea el mismo
             'message' => $this->faker->sentence(12),
             'is_system' => false, // Dejamos como false por defecto
+            'is_read' => false,
+            'read_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

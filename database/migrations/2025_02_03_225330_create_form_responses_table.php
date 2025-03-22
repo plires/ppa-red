@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete(); // Quién envió el mensaje (puede ser NULL si es un mensaje automático del sistema).
             $table->text('message'); // Contenido de la respuesta
             $table->boolean('is_system')->default(false); // Para diferenciar si es un mensaje del usuario (0) o una respuesta automática del sistema (1).
+            $table->boolean('is_read')->default(false); // Nuevo campo
+            $table->timestamp('read_at')->nullable(); // Opcionalmente, añadir cuándo fue leída
             $table->timestamps();
             $table->softDeletes();
         });
