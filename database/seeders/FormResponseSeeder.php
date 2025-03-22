@@ -22,6 +22,7 @@ class FormResponseSeeder extends Seeder
                 'form_submission_id' => $formSubmission->id,
                 'user_id' => $formSubmission->user_id,
                 'is_system' => 0, // Dejamos false por defecto para que sea el primer mensaje del usuario de la landing
+                'is_read' => 0,
             ]);
         }
 
@@ -29,18 +30,19 @@ class FormResponseSeeder extends Seeder
         FormResponse::factory(60)
             ->state(function () {
                 $randomRecord = FormResponse::inRandomOrder()->first();
+
+                // Generar el valor de is_system
+                $isSystem = rand(0, 1);
+                // Determinar el valor de is_read basado en is_system
+                $isRead = $isSystem === 0 ? 0 : 1;
+
                 return [
                     'form_submission_id' => $randomRecord->form_submission_id,
                     'user_id'            => $randomRecord->user_id,
+                    'is_system'          => $isSystem,
+                    'is_read'            => $isRead,
                 ];
             })
-            ->create([
-                'is_system' => function () {
-                    return rand(0, 1);
-                },
-                'is_read' => function () {
-                    return rand(0, 1);
-                }
-            ]);
+            ->create();
     }
 }
