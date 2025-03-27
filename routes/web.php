@@ -42,12 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::get(
         '/notification/{notification}/{formSubmission}',
         [FormNotificationController::class, 'markAsReadAndRedirect']
-    )->name('notification.read');
+    )->name('notification.mark_as_read');
 
     Route::post(
         '/notification',
         [FormNotificationController::class, 'markAsReadAllNotifications']
-    )->name('notification.mark_as_read_all_notifications');
+    )->name('notification.mark_as_all_read');
 
     // Rutas para interactuar con los formularios enviados por los clientes
     Route::get('/form_submissions', [FormSubmissionController::class, 'index'])->name('form_submissions.index');
@@ -58,6 +58,15 @@ Route::middleware('auth')->group(function () {
 
     // Rutas estándar de Responses
     Route::post('/form_responses', [FormResponseController::class, 'store'])->name('form_responses.store');
+    Route::get(
+        '/form_responses/{formResponse}',
+        [FormResponseController::class, 'markAsReadAndRedirect']
+    )->name('responses.mark_as_read');
+
+    Route::post(
+        '/form_responses/mark_as_all_read/{user}',
+        [FormResponseController::class, 'markAsReadAllResponses']
+    )->name('responses.mark_as_all_read');
 
     // Rutas protegidas: acceso únicamente para los admin
     Route::middleware(['auth', AdminMiddleware::class])->group(function () {
