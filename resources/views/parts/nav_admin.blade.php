@@ -17,20 +17,20 @@
     <ul class="navbar-nav ml-auto">
 
         <!-- Messages Dropdown Menu -->
-        @if (auth()->user()->isPartner() && auth()->user()->unreadNotificationsCount() > 0)
+        @if (auth()->user()->isPartner() && auth()->user()->unreadCommentsCount() > 0)
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
                     <i class="far fa-comments"></i>
                     <span class="badge badge-danger navbar-badge">
-                        {{ auth()->user()->unreadNotificationsCount() }}
+                        {{ auth()->user()->unreadCommentsCount() }}
                     </span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
                     @foreach (auth()->user()->formSubmissions as $formSubmission)
-                        @foreach ($formSubmission->notifications as $notification)
-                            @if (!$notification->is_read)
+                        @foreach ($formSubmission->formResponses as $formResponse)
+                            @if (!$formResponse->is_read && !$formResponse->is_system)
                                 @php
                                     $data = json_decode($formSubmission->data, true); // Convierte JSON en array
                                     $lastResponseFromUser = $formSubmission
@@ -40,8 +40,7 @@
                                         ->first();
                                 @endphp
 
-
-                                <a href="{{ route('notification.read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
+                                <a href="{{ route('responses.mark_as_read', $formResponse->id) }}"
                                     class="dropdown-item">
                                     <!-- Message Start -->
                                     <div class="media">
@@ -50,6 +49,7 @@
                                         <div class="media-body">
                                             <h3 class="dropdown-item-title">
                                                 {{ $data['name'] }}
+                                                {{ $formResponse->id }}
                                                 <span class="float-right text-sm text-danger"><i
                                                         class="fas fa-star"></i></span>
                                             </h3>
@@ -66,9 +66,9 @@
                     @endforeach
 
                     <div class="dropdown-divider"></div>
-                    <form method="POST" action="{{ route('notification.mark_as_read_all_notifications') }}">
+                    <form method="POST" action="{{ route('responses.mark_as_all_read', $formResponse->user_id) }}">
                         @csrf
-                        <button type="submit" class="dropdown-item dropdown-footer">Marcar todas como leídas</button>
+                        <button type="submit" class="dropdown-item dropdown-footer">Marcar todos como leídos</button>
                     </form>
                 </div>
             </li>
@@ -83,11 +83,10 @@
 
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <div class="dropdown-divider"></div>
-                    <div class="dropdown-item dropdown-footer">Todas las notificaciones leídas</div>
+                    <div class="dropdown-item dropdown-footer">Todas los comentarios leídos</div>
                 </div>
             </li>
         @endif
-
 
         <!-- Notifications Dropdown Menu -->
         @if (auth()->user()->isPartner() && auth()->user()->unreadNotificationsCount() > 0)
@@ -110,7 +109,7 @@
                         @foreach ($formSubmission->notifications as $notification)
                             @if (!$notification->is_read)
                                 <a title="{{ $notification->notification_details }}"
-                                    href="{{ route('notification.read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
+                                    href="{{ route('notification.mark_as_read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
                                     class="dropdown-item">
                                     <div>
                                         <i class="fas fa-envelope mr-2"></i>
@@ -127,7 +126,7 @@
                         @endforeach
                     @endforeach
 
-                    <form method="POST" action="{{ route('notification.mark_as_read_all_notifications') }}">
+                    <form method="POST" action="{{ route('notification.mark_as_all_read') }}">
                         @csrf
                         <button type="submit" class="dropdown-item dropdown-footer">Marcar todas como leídas</button>
                     </form>
