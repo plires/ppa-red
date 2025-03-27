@@ -115,4 +115,13 @@ class User extends Authenticatable
             ->where('is_read', false)
             ->count();
     }
+
+    public function unreadCommentsCount()
+    {
+        // contar mensajes para ciertos form submissions
+        return FormResponse::whereIn('form_submission_id', $this->formSubmissions->pluck('id'))
+            ->where('is_read', false)
+            ->where('is_system', false)
+            ->count();
+    }
 }
