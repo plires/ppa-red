@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
+use Illuminate\Support\Facades\Auth;
 use App\Jobs\SendFormResponseEmailToUser;
 use App\Http\Requests\FormResponseRequest;
+use App\Models\FormSubmissionNotification;
 
 class FormResponseController extends Controller
 {
@@ -27,5 +30,38 @@ class FormResponseController extends Controller
         $formSubmission->save();
 
         return back()->with('success', 'El mensaje se envió correctamente.');
+    }
+
+    public function markAsReadAndRedirect(FormResponse $formResponse)
+    {
+
+        // Obtengo las respuestas asociadas de un formsubmission a partir de un FormResponse
+        $responses = $formResponse->formSubmission->formResponses->where('is_system', 0);;
+
+        // Marcar todas como leídas
+        foreach ($responses as $response) {
+            $response->markAsRead();
+        }
+
+        return redirect()->route('form_submissions.show', $formResponse->formSubmission->id);
+    }
+
+    public function markAsReadAllResponses(User $user)
+    {
+
+        dd($user);
+        $unread_responses = FormSubmissionNotification::whereHas('formSubmission', function ($query) {
+            // Filtra los form submissions del usuario autenticado
+            $query->where('user_id', Auth::id());
+        })
+            ->where('is_read', 0) // Filtra las notificaciones no leídas
+            ->get();
+
+        // Marcar todas como leídas
+        foreach ($unread_responses as $response) {
+            $response->markAsRead();
+        }
+
+        return back()->with('success', 'Todas las notificaciones fueron marcadas como leídas.');
     }
 }
