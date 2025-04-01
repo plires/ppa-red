@@ -49,19 +49,18 @@ class FormResponseController extends Controller
     public function markAsReadAllResponses(User $user)
     {
 
-        dd($user);
-        $unread_responses = FormSubmissionNotification::whereHas('formSubmission', function ($query) {
+        $unread_responses = FormResponse::whereHas('formSubmission', function ($query) {
             // Filtra los form submissions del usuario autenticado
             $query->where('user_id', Auth::id());
         })
-            ->where('is_read', 0) // Filtra las notificaciones no leídas
+            ->where('is_read', 0) // Filtra los comentarios no leídos
             ->get();
 
-        // Marcar todas como leídas
+        // Marcar todos como leídos
         foreach ($unread_responses as $response) {
             $response->markAsRead();
         }
 
-        return back()->with('success', 'Todas las notificaciones fueron marcadas como leídas.');
+        return back()->with('success', 'Todas los comentarios fueron marcadas como leídos.');
     }
 }
