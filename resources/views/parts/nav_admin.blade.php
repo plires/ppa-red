@@ -77,16 +77,13 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item dropdown-footer">Todas los comentarios leídos</div>
+                    <span class="dropdown-item dropdown-header">Todas los comentarios leídos</span>
                 </div>
             </li>
         @endif
 
         <!-- Notifications Dropdown Menu -->
         @if (auth()->user()->isPartner() && auth()->user()->unreadNotificationsCount() > 0)
-
-
 
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
@@ -113,7 +110,7 @@
                                         </span>
                                     </div>
                                     <span
-                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($formResponse->created_at)->diffForHumans(['short' => true]) }}
+                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans(['short' => true]) }}
                                     </span>
                                 </a>
                                 <div class="dropdown-divider"></div>
@@ -136,7 +133,6 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-item dropdown-header">Sin Notificaciones</span>
-                    <div class="dropdown-divider"></div>
                 </div>
             </li>
         @endif
