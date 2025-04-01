@@ -42,6 +42,14 @@ class FormSubmissionController extends Controller
 
         $responses = $formSubmission->formResponses;
 
+        $unread_responses = $responses
+            ->filter(fn($response) => $response->is_read == 0 && $response->is_system == 0);
+
+        $unread_responses->each(function ($response) {
+            $response->is_read = 1;
+            $response->save();
+        });
+
         $role_admin = User::ADMIN_USER;
 
         return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin', 'responses'));
