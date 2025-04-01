@@ -33,11 +33,6 @@
                             @if (!$formResponse->is_read && !$formResponse->is_system)
                                 @php
                                     $data = json_decode($formSubmission->data, true); // Convierte JSON en array
-                                    $lastResponseFromUser = $formSubmission
-                                        ->formResponses()
-                                        ->where('is_system', 0)
-                                        ->latest()
-                                        ->first();
                                 @endphp
 
                                 <a href="{{ route('responses.mark_as_read', $formResponse->id) }}"
@@ -53,9 +48,9 @@
                                                 <span class="float-right text-sm text-danger"><i
                                                         class="fas fa-star"></i></span>
                                             </h3>
-                                            <p class="text-sm">{{ $lastResponseFromUser->message }}.</p>
+                                            <p class="text-sm">{{ $formResponse->message }}.</p>
                                             <p class="text-sm text-muted"><i
-                                                    class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($lastResponseFromUser->created_at)->diffForHumans(['short' => true]) }}
+                                                    class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($formResponse->created_at)->diffForHumans(['short' => true]) }}
                                             </p>
                                         </div>
                                     </div>
@@ -118,7 +113,7 @@
                                         </span>
                                     </div>
                                     <span
-                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($lastResponseFromUser->created_at)->diffForHumans(['short' => true]) }}
+                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($formResponse->created_at)->diffForHumans(['short' => true]) }}
                                     </span>
                                 </a>
                                 <div class="dropdown-divider"></div>
