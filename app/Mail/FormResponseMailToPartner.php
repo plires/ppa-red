@@ -16,14 +16,16 @@ class FormResponseMailToPartner extends Mailable
 
     public $formResponse;
     public $formSubmission;
+    public $data;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(FormResponse $formResponse, $formSubmission)
+    public function __construct(FormResponse $formResponse, $formSubmission, $data)
     {
         $this->formResponse = $formResponse;
         $this->formSubmission = $formSubmission;
+        $this->data = $data;
     }
 
     /**
@@ -46,6 +48,7 @@ class FormResponseMailToPartner extends Mailable
             with: [
                 'formResponse' => $this->formResponse,
                 'formSubmission' => $this->formSubmission,
+                'data' => $this->data,
             ]
         );
     }

@@ -16,9 +16,10 @@ class PublicFormResponseController extends Controller
         $formResponse = FormResponse::create($request->validated());
 
         $formSubmission = $formResponse->formSubmission;
+        $data = json_decode($formResponse->formSubmission->data, true); // Convierte JSON en array
 
         // Enviar el correo en segundo plano
-        SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission);
+        SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission, $data);
 
         // Actualizar el estado del FormSubmission
         $formSubmission = FormSubmission::findOrFail($request['form_submission_id']);

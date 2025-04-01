@@ -10,7 +10,7 @@
 <body>
     <h2>Mensaje para el partner</h2>
     <p><strong>Mensaje:</strong> {{ $formResponse->message }}</p>
-    <p><strong>Enviado por:</strong> {{ $formResponse->user->name ?? 'Usuario anónimo' }}</p>
+    <p><strong>Enviado por:</strong> {{ $data['name'] }}</p>
     <p>Fecha: {{ $formResponse->created_at->format('d/m/Y H:i') }}</p>
 </body>
 

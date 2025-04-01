@@ -17,14 +17,16 @@ class SendFormResponseEmailToPartner implements ShouldQueue
 
     protected $formResponse;
     protected $formSubmission;
+    protected $data;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(FormResponse $formResponse, $formSubmission)
+    public function __construct(FormResponse $formResponse, $formSubmission, $data)
     {
         $this->formResponse = $formResponse;
         $this->formSubmission = $formSubmission;
+        $this->data = $data;
     }
 
     /**
@@ -32,6 +34,6 @@ class SendFormResponseEmailToPartner implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->formResponse->user->email)->send(new FormResponseMailToPartner($this->formResponse, $this->formSubmission));
+        Mail::to($this->formResponse->user->email)->send(new FormResponseMailToPartner($this->formResponse, $this->formSubmission, $this->data));
     }
 }
