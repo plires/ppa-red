@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LocalityController;
 use App\Http\Controllers\ProvinceController;
@@ -121,6 +122,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
         Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
         Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
+
+        // Rutas para interactuar con los reportes
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/forms-by-partner', [ReportController::class, 'getFormSubmissionByPartner'])
+            ->name('reports.form_submissions_by_partner');
+        Route::get('/reports/form_submissions/{user_id}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
+            ->name('reportes.form_submissionsDetail');
     });
 });
 
