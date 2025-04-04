@@ -45,13 +45,15 @@ class ReportController extends Controller
         ]);
     }
 
-    public function getFormSubmissionByPartnerDetail($user_id)
+    public function getFormSubmissionByPartnerDetail($user_id, $start, $end)
     {
-        $FormSubmissions = FormSubmission::where('user_id', $user_id)
-            ->with(['province']) // Cargar la provincia relacionada
+
+        $formSubmissions = FormSubmission::where('user_id', $user_id)
+            ->with(['locality']) // Cargar la localidad relacionada
+            ->whereBetween('created_at', [$start, $end])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($FormSubmissions);
+        return response()->json($formSubmissions);
     }
 }
