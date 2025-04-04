@@ -18,7 +18,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-12">
-                        <h1>Reportes</h1>
+                        <h1>Reporte - Formularios por Partners</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -55,8 +55,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary mt-3" id="apply-filters">Aplicar
-                                        Filtros</button>
                                 </form>
                             </div>
                         </div>
@@ -80,14 +78,15 @@
                                 <h3 class="card-title">Detalle de Formularios por Partner</h3>
                             </div>
                             <div class="card-body">
-                                <table id="tablaFormularios" class="table table-striped" style="display: none;">
+                                <table id="tableFormSubmissions"
+                                    class="table table-hover table-head-fixed table-bordered table-striped"
+                                    style="display: none;">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Email</th>
                                             <th>Teléfono</th>
-                                            <th>Provincia</th>
+                                            <th>Localidad</th>
                                             <th>Fecha</th>
                                         </tr>
                                     </thead>
@@ -111,27 +110,27 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                jQuery("#tableLocalities").DataTable({
-                    "responsive": true,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "language": {
-                        url: '/locales/dataTables_es-ES.json',
-                    },
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo(
-                    '#tableLocalities_wrapper .col-md-6:eq(0)');
 
-                const ctx = document.getElementById("chartFormsByPartner");
+                const startDate = document.getElementById("start_date");
+                const endDate = document.getElementById("end_date");
+                const partnerId = document.getElementById("partner_id");
 
-                if (ctx) {
-                    const chart = new Chart(ctx, {
+                let chart = null; // Variable global para el gráfico
+                const ctx = document.getElementById("chartFormsByPartner").getContext("2d");
+
+                function createChart(data) {
+                    if (chart) {
+                        chart.destroy(); // Destruir el gráfico existente antes de crear uno nuevo
+                    }
+
+                    chart = new Chart(ctx, {
                         type: "bar",
                         data: {
-                            labels: [], // Se llenará con AJAX
+                            labels: data.labels,
+                            id: data.id,
                             datasets: [{
                                 label: "Cantidad de Formularios",
-                                data: [],
+                                data: data.data,
                                 backgroundColor: "rgba(54, 162, 235, 0.5)",
                                 borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1
@@ -148,52 +147,115 @@
                             onClick: (event, elements) => {
                                 if (elements.length > 0) {
                                     const index = elements[0].index;
-                                    const partnerId = chart.data.id[index]; // Obtener el ID del partner
-                                    loadFormulariosTable(partnerId);
+                                    const partnerId = chart.data.id[
+                                        index];
+                                    loadFormSubmissionsTable(partnerId);
                                 }
                             }
                         }
                     });
+                }
 
-                    // Cargar datos iniciales del gráfico
-                    fetch(`{{ route('reports.form_submissions_by_partner') }}`)
+                function fetchChartData() {
+
+                    const {
+                        start,
+                        end
+                    } = getStartAndEndDate(startDate, endDate);
+
+                    const params = new URLSearchParams({
+                        start_date: start,
+                        end_date: end,
+                        partner_id: partnerId.value
+                    });
+
+                    resetTable("#tableFormSubmissions"); // Llamamos a la función de limpieza
+
+                    fetch(`{{ route('reports.form_submissions_by_partner') }}?${params.toString()}`)
                         .then(response => response.json())
                         .then(data => {
-                            chart.data.id = data.id;
-                            chart.data.labels = data.labels;
-                            chart.data.datasets[0].data = data.data;
-                            chart.update();
+                            createChart(data); // Llamamos a la función para crear el gráfico con los nuevos datos
                         });
                 }
 
-                // Función para cargar formularios en la tabla
-                function loadFormulariosTable(partnerId) {
-                    $("#tablaFormularios tbody").empty(); // Limpiar datos anteriores
+                function resetTable(tableId) {
+                    if ($.fn.DataTable.isDataTable(tableId)) {
+                        $(tableId).DataTable().clear().destroy(); // Limpia y destruye la instancia de DataTables
+                    }
+                    $(tableId + " tbody").empty(); // Vacía el contenido de la tabla
+                }
 
-                    fetch(`/reports/form_submissions/${partnerId}`)
+                function getStartAndEndDate(startDate, endDate) {
+                    const today = new Date().toISOString().split('T')[
+                        0]; // Obtener la fecha actual en formato 'YYYY-MM-DD'
+
+                    startDate.setAttribute("max", today); // Restringir fecha máxima
+                    endDate.setAttribute("max", today); // Restringir fecha máxima
+
+                    let start = startDate.value || '1900-01-01'; // Si no hay valor, usar fecha por defecto
+                    let end = endDate.value || today; // Si no hay valor, usar la fecha de hoy
+
+                    return {
+                        start,
+                        end
+                    };
+                }
+
+                function loadFormSubmissionsTable(partnerId) {
+
+                    const {
+                        start,
+                        end
+                    } = getStartAndEndDate(startDate, endDate);
+
+                    resetTable("#tableFormSubmissions"); // Llamamos a la función de limpieza
+
+                    fetch(`/reports/form_submissions/${partnerId}/${start}/${end}`)
                         .then(response => response.json())
                         .then(formularios => {
                             if (formularios.length > 0) {
-                                formularios.forEach(f => {
-                                    $("#tablaFormularios tbody").append(`
-                        <tr>
-                            <td>${f.id}</td>
-                            <td>${f.data.nombre}</td>
-                            <td>${f.data.mail}</td>
-                            <td>${f.data.cel}</td>
-                            <td>${f.province?.name || 'N/A'}</td>
-                            <td>${new Date(f.created_at).toLocaleDateString()}</td>
-                        </tr>
-                    `);
+                                let table = $("#tableFormSubmissions").DataTable({
+                                    "responsive": true,
+                                    "lengthChange": false,
+                                    "autoWidth": false,
+                                    "destroy": true,
+                                    order: [
+                                        [4, "desc"]
+                                    ],
+                                    "language": {
+                                        url: '/locales/dataTables_es-ES.json',
+                                    },
+                                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                                 });
 
-                                $("#tablaFormularios").show();
-                                $("#tablaFormularios").DataTable(); // Activar DataTables
+                                formularios.forEach(f => {
+                                    let data = JSON.parse(f.data);
+                                    table.row.add([
+                                        `<a href="/form_submissions/${f.id}">${data.name}</a>`,
+                                        `<a href="/form_submissions/${f.id}">${data.email}</a>`,
+                                        `<a href="/form_submissions/${f.id}">${data.phone}</a>`,
+                                        `<a href="/form_submissions/${f.id}">${f.locality?.name || 'N/A'}</a>`,
+                                        `<a href="/form_submissions/${f.id}">${new Date(f.created_at).toLocaleDateString()}</a>`
+                                    ]);
+                                });
+
+                                table.draw();
+                                $("#tableFormSubmissions").show();
+                                table.buttons().container().appendTo(
+                                    '#tableFormSubmissions_wrapper .col-md-6:eq(0)');
                             } else {
-                                $("#tablaFormularios").hide();
+                                $("#tableFormSubmissions").hide();
                             }
                         });
                 }
+
+                // Cargar gráfico inicial sin filtros
+                fetchChartData();
+
+                // Aplicar filtros al cambiar los inputs
+                document.getElementById("start_date").addEventListener("change", fetchChartData);
+                document.getElementById("end_date").addEventListener("change", fetchChartData);
+                document.getElementById("partner_id").addEventListener("change", fetchChartData);
             });
         </script>
     @endsection
