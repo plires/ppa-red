@@ -127,7 +127,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/forms-by-partner', [ReportController::class, 'getFormSubmissionByPartner'])
             ->name('reports.form_submissions_by_partner');
-        Route::get('/reports/form_submissions/{user_id}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
+        Route::get('/reports/form_submissions/{user_id}/{start}/{end}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
             ->name('reportes.form_submissionsDetail');
     });
 });
