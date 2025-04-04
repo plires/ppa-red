@@ -192,6 +192,29 @@
                         </ul>
                     </li>
                     {{-- Partners end --}}
+
+                    {{-- Reportes --}}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link {{ Route::is('reports.index') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-chart-column"></i>
+                            <p>
+                                Reportes
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="{{ route('reports.index') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-square-poll-vertical"></i>
+                                    <p>
+                                        Forms por Partner
+                                    </p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    {{-- Reportes end --}}
                 @endif
 
                 @auth
