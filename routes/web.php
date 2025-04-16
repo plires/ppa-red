@@ -129,6 +129,12 @@ Route::middleware('auth')->group(function () {
             ->name('reports.form_submissions_by_partner');
         Route::get('/reports/form_submissions/{user_id}/{start}/{end}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
             ->name('reportes.form_submissionsDetail');
+
+        Route::get('/reports/status-chart', [ReportController::class, 'statusChart'])
+            ->name('reports.status_chart');
+        Route::get('/reports/form_status_chart', [ReportController::class, 'formStatusChart'])->name('reports.form_status_chart');
+
+        Route::get('/reports/form_submissions_by_status/{user_id}/{status_id}/{start}/{end}', [ReportController::class, 'getFormulariosByStatus'])->name('reports.form_status_chart_detail');
     });
 });
 
