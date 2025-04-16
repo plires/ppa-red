@@ -21,7 +21,13 @@ export function loadFormSubmissionsTableBase({
           destroy: true,
           order: [[4, 'desc']],
           language: { url: '/locales/dataTables_es-ES.json' },
-          buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+          buttons: ['excel', 'pdf', 'print', 'colvis'],
+          initComplete: function () {
+            this.api()
+              .buttons()
+              .container()
+              .appendTo('#tableFormSubmissions_wrapper .col-md-6:eq(0)')
+          },
         })
 
         formularios.forEach(f => {

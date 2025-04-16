@@ -136,15 +136,18 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 jQuery("#tableZones").DataTable({
-                    "responsive": true,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "language": {
+                    responsive: true,
+                    lengthChange: false,
+                    autoWidth: false,
+                    language: {
                         url: '/locales/dataTables_es-ES.json',
                     },
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo(
-                    '#tableZones_wrapper .col-md-6:eq(0)');
+                    buttons: ["excel", "pdf", "print", "colvis"],
+                    initComplete: function() {
+                        this.api().buttons().container()
+                            .appendTo('#tableZones_wrapper .col-md-6:eq(0)');
+                    }
+                })
             });
         </script>
     @endsection
