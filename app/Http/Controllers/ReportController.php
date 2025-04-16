@@ -115,20 +115,13 @@ class ReportController extends Controller
         ]);
     }
 
-    public function getFormulariosByStatus(Request $request, $user_id, $status_id)
+    public function getFormulariosByStatus($user_id, $status_id, $start, $end)
     {
 
-
         $query = FormSubmission::with(['status']) // Añadí relaciones que necesites
-            ->where('form_submission_status_id', $status_id);
-
-        if ($request->filled('start_date')) {
-            $query->whereDate('created_at', '>=', $request->start_date);
-        }
-
-        if ($request->filled('end_date')) {
-            $query->whereDate('created_at', '<=', $request->end_date);
-        }
+            ->where('form_submission_status_id', (int)$status_id)
+            ->whereBetween('created_at', [$start, $end])
+            ->orderBy('created_at', 'desc');
 
         if ($user_id != "null") {
             $query->where('user_id', $user_id);
