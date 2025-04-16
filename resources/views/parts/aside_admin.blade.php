@@ -211,7 +211,14 @@
                                     </p>
                                 </a>
                             </li>
-
+                            <li class="nav-item">
+                                <a href="{{ route('reports.status_chart') }}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-square-poll-vertical"></i>
+                                    <p>
+                                        Estado de Forms por Partner
+                                    </p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     {{-- Reportes end --}}
