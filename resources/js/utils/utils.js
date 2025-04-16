@@ -26,3 +26,23 @@ export function getStartAndEndDate(startDate, endDate) {
 
   return { start, end }
 }
+
+window.initDataTableWithButtons = function (tableId) {
+  const selector = `#${tableId}`
+  const wrapper = `#${tableId}_wrapper .col-md-6:eq(0)`
+
+  if (!document.querySelector(selector)) return
+
+  jQuery(selector).DataTable({
+    responsive: true,
+    lengthChange: false,
+    autoWidth: false,
+    language: {
+      url: '/locales/dataTables_es-ES.json',
+    },
+    buttons: ['excel', 'pdf', 'print', 'colvis'],
+    initComplete: function () {
+      this.api().buttons().container().appendTo(wrapper)
+    },
+  })
+}

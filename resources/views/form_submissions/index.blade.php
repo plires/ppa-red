@@ -150,22 +150,10 @@
     <!-- /.content-wrapper -->
 
     @section('scripts')
-        @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js'])
+        @vite(['resources/js/jquery.dataTables.min.js', 'resources/js/dataTables.bootstrap4.min.js', 'resources/js/dataTables.responsive.min.js', 'resources/js/responsive.bootstrap4.min.js', 'resources/js/dataTables.buttons.min.js', 'resources/js/buttons.bootstrap4.min.js', 'resources/js/jszip.min.js', 'resources/js/pdfmake.min.js', 'resources/js/vfs_fonts.js', 'resources/js/buttons.html5.min.js', 'resources/js/buttons.print.min.js', 'resources/js/buttons.colVis.min.js', 'resources/js/utils/utils.js'])
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                jQuery('#tableFormSubmissions').DataTable({
-                    responsive: true,
-                    lengthChange: false,
-                    autoWidth: false,
-                    language: {
-                        url: '/locales/dataTables_es-ES.json',
-                    },
-                    buttons: ["excel", "pdf", "print", "colvis"],
-                    initComplete: function() {
-                        this.api().buttons().container()
-                            .appendTo('#tableFormSubmissions_wrapper .col-md-6:eq(0)');
-                    }
-                });
+                initDataTableWithButtons('tableFormSubmissions');
             });
         </script>
     @endsection
