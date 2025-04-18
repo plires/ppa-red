@@ -2,7 +2,7 @@
 
     @section('css')
         <!-- DataTables -->
-        @vite(['resources/css/login.css'])
+        @vite(['resources/css/auth/login.css'])
     @endsection
 
     <!-- Session Status -->
