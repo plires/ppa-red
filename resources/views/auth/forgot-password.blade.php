@@ -13,7 +13,7 @@
         <div class="lockscreen-item">
             <!-- lockscreen image -->
             <div class="lockscreen-image">
-                <img src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}" alt="User Image">
+                <img src="{{ Vite::asset('resources/images/circle-logo-partner.webp') }}" alt="User Image">
             </div>
             <!-- /.lockscreen-image -->
 
