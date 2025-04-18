@@ -1,4 +1,10 @@
 <x-guest-layout>
+
+    @section('css')
+        <!-- DataTables -->
+        @vite(['resources/css/login.css'])
+    @endsection
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -6,7 +12,7 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="../../index2.html" class="h1"><b>PPA </b>RED</a>
+                <a href="./login" class="h1"><b>PPA </b>RED</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Login para iniciar tu sesión</p>
@@ -57,8 +63,7 @@
 
                 @if (Route::has('password.request'))
                     <p class="mb-1">
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            href="{{ route('password.request') }}">
+                        <a class="forgotPass" href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
                     </p>

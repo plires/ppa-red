@@ -1,0 +1,7 @@
+.login-box .card-primary.card-outline {
+  border-top: 3px solid var(--primary-color);
+}
+
+.login-box .forgotPass {
+  color: var(--primary-color);
+}
