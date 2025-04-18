@@ -6,7 +6,7 @@
     @endsection
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-4 messageStatus" :status="session('status')" />
 
     <div class="login-box">
         <!-- /.login-logo -->

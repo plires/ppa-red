@@ -13,3 +13,7 @@
 .login-box ul li {
   text-align: left;
 }
+
+.login-page .messageStatus {
+  color: green;
+}
