@@ -28,7 +28,6 @@
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
                     <div class="input-group mb-3">
@@ -39,17 +38,15 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
                                 <label for="remember_me" class="inline-flex items-center">
-                                    <input id="remember_me" type="checkbox"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                                        name="remember">
-                                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                                    <input id="remember_me" type="checkbox" z name="remember">
+                                    <span class="ms-2 text-sm">{{ __('Remember me') }}</span>
                                 </label>
                             </div>
                         </div>
