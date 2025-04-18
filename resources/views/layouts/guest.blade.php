@@ -13,7 +13,7 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <!-- css y scripts -->
-    @vite(['resources/css/public/app.css', 'resources/js/public/app.js'])
+    @vite(['resources/css/public/app.css', 'resources/js/public/app.js', 'resources/css/app.css'])
 
     @yield('css') <!-- Sección específica para CSS extra -->
 </head>
