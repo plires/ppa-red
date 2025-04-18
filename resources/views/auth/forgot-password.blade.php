@@ -1,10 +1,14 @@
 <x-guest-layout>
 
+    @section('css')
+        <!-- DataTables -->
+        @vite(['resources/css/auth/forgot-password.css'])
+    @endsection
+
     <!-- Session Status -->
     <div class="lockscreen-wrapper">
-        <x-auth-session-status class="mb-4" :status="session('status')" />
         <div class="lockscreen-logo">
-            <a href="../../index2.html"><b>PPA</b>RED</a>
+            <a href="./forgot-password"><b>PPA</b>RED</a>
         </div>
         <!-- User name -->
         <div class="lockscreen-name">usuario</div>
@@ -36,6 +40,9 @@
         </div>
         <x-input-error :messages="$errors->get('email')" class="mt-2" />
         <!-- /.lockscreen-item -->
+
+        <x-auth-session-status class="mb-4 messageSuccess" :status="session('status')" />
+
         <div class="help-block mb-4 text-sm text-center">
             {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
         </div>
