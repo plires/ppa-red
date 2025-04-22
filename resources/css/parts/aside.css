@@ -1,0 +1,25 @@
+aside a {
+  color: white !important;
+}
+
+aside .nav-link.active {
+  background-color: var(--primary-color) !important;
+}
+
+aside .nav-link.active:hover {
+  color: white !important;
+}
+
+aside .nav-treeview > .nav-item > .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--primary-color) !important;
+}
+
+aside .nav-treeview > .nav-item > .nav-link .nav-icon {
+  font-size: 0.8rem !important;
+}
+
+aside .sidebarDivider {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* o el color que combine con tu tema */
+  margin: 0.5rem 0;
+}
