@@ -28,6 +28,7 @@
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
                     <div class="input-group mb-3">
@@ -38,7 +39,7 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
                     <div class="row">
