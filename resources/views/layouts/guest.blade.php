@@ -21,6 +21,7 @@
 @php
     $bodyClass = match (Route::currentRouteName()) {
         'login' => 'login-page',
+        'register' => 'login-page',
         'password.request' => 'lockscreen',
         default => '',
     };
