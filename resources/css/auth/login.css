@@ -17,3 +17,11 @@
 .login-page .messageStatus {
   color: green;
 }
+
+.login-page a {
+  color: var(--primary-color) !important;
+}
+
+.login-page a:hover {
+  opacity: 0.6;
+}
