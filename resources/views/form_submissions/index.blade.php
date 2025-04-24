@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-12">
 
-                        <div class="card">
+                        <div class="card card-outline card-primary">
                             <div class="card-body">
                                 <table id="tableFormSubmissions"
                                     class="table table-hover table-head-fixed table-bordered table-striped">
