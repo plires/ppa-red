@@ -22,7 +22,7 @@ class AdminMiddleware
             return $next($request);
         }
 
-        // Si no es admin, redirigir al dashboard o a la página principal
+        // Si no es admin, redirigir a la raiz del sitio
         return redirect('/')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 }

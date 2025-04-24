@@ -9,22 +9,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LocalityController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\FormResponseController;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\FormNotificationController;
 use App\Http\Controllers\PublicFormResponseController;
 use App\Http\Controllers\PublicFormSubmissionController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/test', function () {
-    return "Funciona!";
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    // No necesita lógica, el middleware maneja la redirección
+})->middleware(RedirectIfAuthenticated::class);
 
 // mostrar formulario con sus datos
 Route::get('/public/form_submission/{token}', [PublicFormSubmissionController::class, 'show'])
