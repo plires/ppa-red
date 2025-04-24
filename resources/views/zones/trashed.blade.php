@@ -29,8 +29,8 @@
                 <div class="row">
                     <div class="col-12">
 
-                        <div class="card">
-                            <div class="card-header  header-index">
+                        <div class="card card-outline card-primary">
+                            <div class="card-header header-index">
                                 <div class="content-buttons">
                                     <a href="{{ route('zones.create') }}" type="button"
                                         class="btn btn-primary btn-sm">Agregar Zona</a>
