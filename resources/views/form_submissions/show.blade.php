@@ -6,6 +6,10 @@
     @endphp
     <x-app-layout>
 
+        @section('css')
+            @vite(['resources/css/form-submissions-show.css'])
+        @endsection
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @include('parts.msg-success')
@@ -27,7 +31,7 @@
             </section>
 
             <!-- Main content -->
-            <section class="content">
+            <section class="content formSubmissionsShow">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
@@ -40,22 +44,21 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h3 class="card-title d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <i class="fa-solid fa-user"></i>
-                                                    <span class="ml-2">
-                                                        <strong>Consulta del cliente: {{ $data['name'] }}</strong>
-                                                    </span>
-                                                </div>
-
-                                                <div class="fecha">
-                                                    <p>Fecha contacto: {{ $formSubmission->FormattedDate }}</p>
-                                                    <p>Estado actual de esta consulta:
-                                                        <span
-                                                            class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
-                                                        </span>
-                                                    </p>
-                                                </div>
+                                                <i class="fa-solid fa-user"></i>
+                                                <span class="ml-2">
+                                                    <strong>Consulta del cliente: {{ $data['name'] }}</strong>
+                                                </span>
                                             </h3>
+                                            <div class="content">
+                                                <p class="date">Fecha contacto: {{ $formSubmission->FormattedDate }}
+                                                </p>
+                                                <p class="status">Estado actual de esta consulta:
+                                                    <span
+                                                        class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
+                                                    </span>
+                                                </p>
+                                            </div>
+
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
