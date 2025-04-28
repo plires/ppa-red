@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto'
-import { resetTable, getStartAndEndDate } from '@/utils/utils'
-import { loadFormSubmissionsTableBase } from '@/utils/loaders'
+import { resetTable, getStartAndEndDate } from '@/js/utils/utils'
+import { loadFormSubmissionsTableBase } from '@/js/utils/loaders'
 
 document.addEventListener('DOMContentLoaded', function () {
   const routeChartData = window.routeChartData

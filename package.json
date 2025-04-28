@@ -27,6 +27,7 @@
     "admin-lte": "^3.2.0",
     "bootstrap": "^4.6.0",
     "bootstrap-icons": "^1.11.3",
+    "chart.js": "^4.4.9",
     "datatables.net": "^2.2.1",
     "datatables.net-dt": "^2.2.1",
     "jquery": "^3.7.1"
