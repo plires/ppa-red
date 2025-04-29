@@ -25,6 +25,11 @@
 
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
+                    <span class="dropdown-item dropdown-header">{{ auth()->user()->unreadCommentsCount() }}
+                        Comentarios
+                    </span>
+                    <div class="dropdown-divider"></div>
+
                     @foreach (auth()->user()->formSubmissions as $formSubmission)
                         @foreach ($formSubmission->formResponses as $formResponse)
                             @if (!$formResponse->is_read && !$formResponse->is_system)
@@ -40,8 +45,7 @@
                                             alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                         <div class="media-body">
                                             <h3 class="dropdown-item-title">
-                                                {{ $data['name'] }}
-                                                {{ $formResponse->id }}
+                                                <strong>{{ $data['name'] }}</strong>
                                                 <span class="float-right text-sm text-danger"><i
                                                         class="fas fa-star"></i></span>
                                             </h3>
@@ -90,25 +94,27 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-item dropdown-header">{{ auth()->user()->unreadNotificationsCount() }}
-                        Notificaciones</span>
+                        Notificaciones
+                    </span>
                     <div class="dropdown-divider"></div>
-
 
                     @foreach (auth()->user()->formSubmissions as $formSubmission)
                         @foreach ($formSubmission->notifications as $notification)
                             @if (!$notification->is_read)
                                 <a title="{{ $notification->notification_details }}"
                                     href="{{ route('notification.mark_as_read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
-                                    class="dropdown-item">
+                                    class="dropdown-item notificationLink">
                                     <div>
                                         <i class="fas fa-envelope mr-2"></i>
                                         <span class="float-left text-muted text-sm">
                                             {{ $notification->notification_details }}
                                         </span>
                                     </div>
-                                    <span
-                                        class="float-right text-muted text-sm">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans(['short' => true]) }}
-                                    </span>
+                                    <p class="text-sm text-muted">
+                                        <i class="far fa-clock mr-1"></i>
+                                        {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans(['short' => true]) }}
+                                    </p>
+
                                 </a>
                                 <div class="dropdown-divider"></div>
                             @endif
