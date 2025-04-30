@@ -6,6 +6,10 @@
 @endphp
 <x-guest-layout>
 
+    @section('css')
+        @vite(['resources/css/form-submissions-show.css'])
+    @endsection
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         @include('parts.msg-success')
@@ -30,7 +34,7 @@
                     </section>
 
                     <!-- Main content -->
-                    <section class="content">
+                    <section class="content formSubmissionsShow">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-12">
@@ -44,83 +48,153 @@
                                                 <div class="card-header">
                                                     <h3
                                                         class="card-title d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            <i class="fa-solid fa-user"></i>
-                                                            <span class="ml-2">
-                                                                <strong>Consulta del usuario:
-                                                                    {{ $data['name'] }}</strong>
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="fecha">
-                                                            <p>Fecha contacto: {{ $formSubmission->FormattedDate }}</p>
-                                                            <p>Estado actual de esta consulta:
-                                                                <span
-                                                                    class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
-                                                                </span>
-                                                            </p>
-                                                        </div>
+                                                        <i class="fa-solid fa-user"></i>
+                                                        <span class="ml-2">
+                                                            <strong>Consulta del cliente: {{ $data['name'] }}</strong>
+                                                        </span>
                                                     </h3>
+                                                    <div class="content">
+                                                        <p class="date">Fecha contacto:
+                                                            {{ $formSubmission->FormattedDate }}
+                                                        </p>
+                                                        <p class="status">Estado actual de esta consulta:
+                                                            <span
+                                                                class="badge {{ statusColorClass($formSubmission->status->name) }}">{{ $formSubmission->status->name }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+
                                                 </div>
                                                 <!-- /.card-header -->
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <dl>
-                                                                <dt class="mb-3">
-                                                                </dt>
 
-                                                                <dt>
-                                                                    Nombre Usuario
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $data['name'] }}
-                                                                </dd>
-                                                                <dt>
-                                                                    Email Usuario
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $data['email'] }}
-                                                                </dd>
-                                                                <dt>
-                                                                    Teléfono Usuario
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $data['phone'] }}
-                                                                </dd>
-                                                                <dt>
-                                                                    Fecha de contacto
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $formSubmission->FormattedDate }}
-                                                                </dd>
-                                                            </dl>
+                                                            {{-- Profile User --}}
+                                                            <div class="card bg-light d-flex flex-fill contentProfile">
+                                                                <div class="card-header text-muted border-bottom-0">
+                                                                    <h2 class="lead">
+                                                                        <b> Usuario:</b> {{ $data['name'] }}
+                                                                    </h2>
+                                                                </div>
+                                                                <div class="card-body pt-0">
+                                                                    <div class="row">
+                                                                        <div class="col-7">
+
+                                                                            <p class="text-muted text-sm"><b>Localidad:
+                                                                                </b>
+                                                                                {{ $formSubmission->locality->name }}
+                                                                            </p>
+                                                                            @if ($formSubmission->zone)
+                                                                                <p class="text-muted text-sm">
+                                                                                    <b>Zona:
+                                                                                    </b>
+                                                                                    {{ $formSubmission->zone->name }}
+                                                                                </p>
+                                                                            @endif
+                                                                            <p class="text-muted text-sm"><b>Provincia:
+                                                                                </b>
+                                                                                {{ $formSubmission->province->name }}
+                                                                            </p>
+                                                                            <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                                                <li class="small">
+                                                                                    <span class="fa-li">
+                                                                                        <i
+                                                                                            class="fa-solid fa-envelope"></i>
+                                                                                    </span>
+                                                                                    Email: {{ $data['email'] }}
+                                                                                </li>
+                                                                                <li class="small"><span
+                                                                                        class="fa-li"><i
+                                                                                            class="fas fa-lg fa-phone"></i></span>
+                                                                                    Teléfono: {{ $data['phone'] }}
+                                                                                </li>
+                                                                                <li class="small"><span
+                                                                                        class="fa-li"><i
+                                                                                            class="fa-solid fa-calendar"></i></span>
+                                                                                    Fecha de contacto:
+                                                                                    {{ $formSubmission->FormattedDate }}
+                                                                                </li>
+
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-5 text-center">
+                                                                            <img src="{{ Vite::asset('resources/images/user.webp') }}"
+                                                                                alt="user-avatar"
+                                                                                class="img-circle img-fluid">
+                                                                            <br>
+                                                                            <span
+                                                                                class="text-muted text-sm">{{ $data['name'] }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            {{-- Profile User end --}}
+
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <dl>
-                                                                <dt class="mb-3">
-                                                                </dt>
 
-                                                                <dt>
-                                                                    Partner Asignado
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $formSubmission->user->name }}
-                                                                </dd>
-                                                                <dt>
-                                                                    Email Partner
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $formSubmission->user->email }}
-                                                                </dd>
-                                                                <dt>
-                                                                    Teléfono Partner
-                                                                </dt>
-                                                                <dd>
-                                                                    {{ $formSubmission->user->phone }}
-                                                                </dd>
+                                                            {{-- Profile Partner --}}
+                                                            <div class="card bg-light d-flex flex-fill contentProfile">
+                                                                <div class="card-header text-muted border-bottom-0">
+                                                                    <h2 class="lead">
+                                                                        <b>Partner PPA RED:</b>
+                                                                        {{ $formSubmission->user->name }}
+                                                                    </h2>
+                                                                </div>
+                                                                <div class="card-body pt-0">
+                                                                    <div class="row">
+                                                                        <div class="col-7">
 
-                                                            </dl>
+                                                                            <p class="text-muted text-sm"><b>Localidad:
+                                                                                </b>
+                                                                                {{ $formSubmission->locality->name }}
+                                                                            </p>
+                                                                            @if ($formSubmission->zone)
+                                                                                <p class="text-muted text-sm">
+                                                                                    <b>Zona:
+                                                                                    </b>
+                                                                                    {{ $formSubmission->zone->name }}
+                                                                                </p>
+                                                                            @endif
+                                                                            <p class="text-muted text-sm"><b>Provincia:
+                                                                                </b>
+                                                                                {{ $formSubmission->province->name }}
+                                                                            </p>
+                                                                            <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                                                <li class="small">
+                                                                                    <span class="fa-li">
+                                                                                        <i
+                                                                                            class="fa-solid fa-envelope"></i>
+                                                                                    </span>
+                                                                                    Email:
+                                                                                    {{ $formSubmission->user->name }}
+                                                                                </li>
+                                                                                <li class="small"><span
+                                                                                        class="fa-li"><i
+                                                                                            class="fas fa-lg fa-phone"></i></span>
+                                                                                    Teléfono:
+                                                                                    {{ $formSubmission->user->phone }}
+                                                                                </li>
+
+
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-5 text-center">
+                                                                            <img src="{{ Vite::asset('resources/images/circle-logo-partner.webp') }}"
+                                                                                alt="user-avatar-partner"
+                                                                                class="img-circle img-fluid">
+                                                                            <br>
+                                                                            <span
+                                                                                class="text-muted text-sm">{{ $formSubmission->user->name }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            {{-- Profile Partner end --}}
+
                                                         </div>
                                                     </div>
 
@@ -167,8 +241,8 @@
                                                                             </span>
                                                                         </div>
                                                                         <img class="direct-chat-img"
-                                                                            src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
-                                                                            alt="message user image">
+                                                                            src="{{ Vite::asset('resources/images/user.webp') }}"
+                                                                            alt="message user {{ $response->id }}">
                                                                         <div class="direct-chat-text">
                                                                             {!! nl2br(e($response->message)) !!}
                                                                         </div>
@@ -187,8 +261,8 @@
                                                                             </span>
                                                                         </div>
                                                                         <img class="direct-chat-img"
-                                                                            src="{{ Vite::asset('resources/images/user3-128x128.jpg') }}"
-                                                                            alt="message user image">
+                                                                            src="{{ Vite::asset('resources/images/circle-logo-partner.webp') }}"
+                                                                            alt="message partner {{ $response->id }}">
                                                                         <div class="direct-chat-text">
                                                                             {!! nl2br(e($response->message)) !!}
                                                                         </div>
@@ -199,12 +273,11 @@
 
                                                         @endif
 
-
-                                                        @if (
-                                                            $formSubmission->status->name !== $closeStateByPartner &&
-                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromPartner &&
-                                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromUser)
-                                                            <div class="card-footer">
+                                                        <div class="card-footer">
+                                                            @if (
+                                                                $formSubmission->status->name !== $closeStateByPartner &&
+                                                                    $formSubmission->status->name !== $closedStatusWithNoReplyFromPartner &&
+                                                                    $formSubmission->status->name !== $closedStatusWithNoReplyFromUser)
                                                                 <form id="message-form"
                                                                     action="{{ route('public.form_responses.store') }}"
                                                                     method="POST">
@@ -227,15 +300,17 @@
                                                                         </span>
                                                                     </div>
                                                                 </form>
-                                                            </div>
-                                                        @else
-                                                            <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
-                                                            <p>{{ $msg = $formSubmission->status->name !== $closeStateByPartner ? $formSubmission->closure_reason : 'Esta consulta fue cerrada por el partner.' }}
-                                                                <br>
-                                                                Si necesita volver a contactarse, puede hacerlo a los
-                                                                datos de su partner asignado.
-                                                            </p>
-                                                        @endif
+                                                            @else
+                                                                <h5>Esta consulta fue cerrada por el siguiente motivo:
+                                                                </h5>
+                                                                <p>{{ $msg = $formSubmission->status->name !== $closeStateByPartner ? $formSubmission->closure_reason : 'Esta consulta fue cerrada por el partner.' }}
+                                                                    <br>
+                                                                    Si necesita volver a contactarse, puede hacerlo a
+                                                                    los
+                                                                    datos de su partner asignado.
+                                                                </p>
+                                                            @endif
+                                                        </div>
 
                                                     </div>
                                                     <!--/.direct-chat-messages-->
@@ -259,28 +334,7 @@
     </div>
 
     @section('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Seleccionamos el botón que abre el modal
-                const submitButton = document.querySelector('[data-target="#confirmModal"]');
-
-                // Seleccionamos el input de texto
-                const inputText = document.getElementById('message');
-
-                // Seleccionamos el elemento donde se mostrará el texto en el modal
-                const modalText = document.getElementById('modalText');
-
-                // Cuando se hace clic en el botón "Enviar"
-                submitButton.addEventListener('click', function() {
-                    // Capturamos el valor del input
-                    const textValue = inputText.value;
-
-                    // Mostramos el valor en el modal
-                    modalText.textContent = textValue;
-                });
-
-            });
-        </script>
+        @vite(['resources/js/pages/show-submissions/send-messages.js'])
     @endsection
 
 </x-guest-layout>

@@ -62,35 +62,68 @@
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
-                                            <dl>
-                                                <dt class="mb-3">
-                                                </dt>
+                                            <div class="row">
+                                                <div class="col-md-4 offset-md-4">
+                                                    {{-- Profile User --}}
+                                                    <div class="card bg-light d-flex flex-fill contentProfile">
+                                                        <div class="card-header text-muted border-bottom-0">
+                                                            <h2 class="lead">
+                                                                <b> Usuario:</b> {{ $data['name'] }}
+                                                            </h2>
+                                                        </div>
+                                                        <div class="card-body pt-0">
+                                                            <div class="row">
+                                                                <div class="col-7">
 
-                                                <dt>
-                                                    Nombre Completo
-                                                </dt>
-                                                <dd>
-                                                    {{ $data['name'] }}
-                                                </dd>
-                                                <dt>
-                                                    Email
-                                                </dt>
-                                                <dd>
-                                                    {{ $data['email'] }}
-                                                </dd>
-                                                <dt>
-                                                    Teléfono
-                                                </dt>
-                                                <dd>
-                                                    {{ $data['phone'] }}
-                                                </dd>
-                                                <dt>
-                                                    Fecha de contacto
-                                                </dt>
-                                                <dd>
-                                                    {{ $formSubmission->FormattedDate }}
-                                                </dd>
-                                            </dl>
+                                                                    <p class="text-muted text-sm"><b>Localidad:
+                                                                        </b>
+                                                                        {{ $formSubmission->locality->name }}
+                                                                    </p>
+                                                                    @if ($formSubmission->zone)
+                                                                        <p class="text-muted text-sm">
+                                                                            <b>Zona:
+                                                                            </b>
+                                                                            {{ $formSubmission->zone->name }}
+                                                                        </p>
+                                                                    @endif
+                                                                    <p class="text-muted text-sm"><b>Provincia:
+                                                                        </b>
+                                                                        {{ $formSubmission->province->name }}
+                                                                    </p>
+                                                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                                        <li class="small">
+                                                                            <span class="fa-li">
+                                                                                <i class="fa-solid fa-envelope"></i>
+                                                                            </span>
+                                                                            Email: {{ $data['email'] }}
+                                                                        </li>
+                                                                        <li class="small"><span class="fa-li"><i
+                                                                                    class="fas fa-lg fa-phone"></i></span>
+                                                                            Teléfono: {{ $data['phone'] }}
+                                                                        </li>
+                                                                        <li class="small"><span class="fa-li"><i
+                                                                                    class="fa-solid fa-calendar"></i></span>
+                                                                            Fecha de contacto:
+                                                                            {{ $formSubmission->FormattedDate }}
+                                                                        </li>
+
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="col-5 text-center">
+                                                                    <img src="{{ Vite::asset('resources/images/user.webp') }}"
+                                                                        alt="user-avatar" class="img-circle img-fluid">
+                                                                    <br>
+                                                                    <span
+                                                                        class="text-muted text-sm">{{ $data['name'] }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    {{-- Profile User end --}}
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <!-- /.card-body -->
 
@@ -130,8 +163,8 @@
                                                                     </span>
                                                                 </div>
                                                                 <img class="direct-chat-img"
-                                                                    src="{{ Vite::asset('resources/images/user3-128x128.jpg') }}"
-                                                                    alt="message user image">
+                                                                    src="{{ Vite::asset('resources/images/circle-logo-partner.webp') }}"
+                                                                    alt="response {{ $response->id }}">
                                                                 <div class="direct-chat-text">
                                                                     {!! nl2br(e($response->message)) !!}
                                                                 </div>
@@ -149,8 +182,8 @@
                                                                     </span>
                                                                 </div>
                                                                 <img class="direct-chat-img"
-                                                                    src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
-                                                                    alt="message user image">
+                                                                    src="{{ Vite::asset('resources/images/user.webp') }}"
+                                                                    alt="response user {{ $response->id }}">
                                                                 <div class="direct-chat-text">
                                                                     {!! nl2br(e($response->message)) !!}
                                                                 </div>
@@ -187,10 +220,6 @@
                                                                 </span>
                                                             </div>
                                                         </form>
-                                                        <button type="button" class="mt-3 float-right btn btn-primary"
-                                                            data-toggle="modal" data-target="#closureReason">
-                                                            cerrar formulario
-                                                        </button>
                                                     @else
                                                         @if ($user->role !== $role_admin)
                                                             <h5>Esta consulta fue cerrada por el siguiente motivo:</h5>
@@ -208,10 +237,20 @@
                                     </div>
 
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer footerClose">
                                     <a class="btn btn-default float-right" href="{{ url()->previous() }}">
                                         Volver
                                     </a>
+                                    @if (
+                                        $user->role !== $role_admin &&
+                                            ($formSubmission->status->name !== $closeStateByPartner &&
+                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromPartner &&
+                                                $formSubmission->status->name !== $closedStatusWithNoReplyFromUser))
+                                        <button type="button" class="mt-3 float-right btn btn-primary"
+                                            data-toggle="modal" data-target="#closureReason">
+                                            Cerrar Formulario
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -221,31 +260,7 @@
         </div>
 
         @section('scripts')
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Seleccionamos el botón que abre el modal de confirmacion de envio de respuesta
-                    const submitButton = document.querySelector('[data-target="#confirmModal"]');
-
-                    if (submitButton) {
-                        // El botón existe, puedes trabajar con él sin problemas
-                        // Cuando se hace clic en el botón "Enviar consulta"
-                        submitButton.addEventListener('click', function() {
-                            // Capturamos el valor del input
-                            const textValue = inputText.value;
-
-                            // Mostramos el valor en el modal
-                            modalText.textContent = textValue;
-                        });
-                    }
-
-                    // Seleccionamos el input de texto
-                    const inputText = document.getElementById('message');
-
-                    // Seleccionamos el elemento donde se mostrará el texto en el modal
-                    const modalText = document.getElementById('modalText');
-
-                });
-            </script>
+            @vite(['resources/js/pages/show-submissions/send-messages.js'])
         @endsection
 
     </x-app-layout>

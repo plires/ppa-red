@@ -19,8 +19,110 @@
   margin-bottom: 0;
 }
 
+.formSubmissionsShow .direct-chat-messages {
+  background: #f5f2eb;
+}
+
+.formSubmissionsShow .direct-chat-msg {
+  margin-right: 5%;
+  margin-bottom: 30px;
+}
+
+.formSubmissionsShow .direct-chat-msg.right {
+  margin-left: 5%;
+  margin-right: 0;
+}
+
+.formSubmissionsShow .direct-chat-msg .direct-chat-text {
+  margin-bottom: 30px;
+  background: #fff;
+  border-color: rgb(240, 240, 240);
+}
+
+.formSubmissionsShow .direct-chat-msg.right .direct-chat-text {
+  background: #d8fdd4;
+  color: #444;
+  border-color: rgb(230, 230, 230);
+}
+
+.formSubmissionsShow .direct-chat-text::after {
+  border-right-color: #fff !important;
+}
+
+.formSubmissionsShow .direct-chat-primary .right > .direct-chat-text::after {
+  border-left-color: #d8fdd4 !important;
+}
+
+.formSubmissionsShow .direct-chat-primary .right > .direct-chat-text::before {
+  border-left-color: rgb(230, 230, 230) !important;
+}
+
+.formSubmissionsShow .direct-chat-text::before {
+  border-right-color: transparent !important;
+}
+
+.formSubmissionsShow .direct-chat-img {
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+#confirmModal .btn-primary,
+#closureReason .btn-primary {
+  width: auto;
+}
+
+#confirmModal .modal-header,
+#closureReason .modal-header {
+  background: var(--primary-color);
+  color: white;
+}
+
+.formSubmissionsShow .card-footer p {
+  margin-bottom: 0;
+  color: grey;
+}
+
+.formSubmissionsShow .direct-chat {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.formSubmissionsShow .footerClose {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.formSubmissionsShow .footerClose .btn-primary {
+  width: auto;
+  margin: 0 !important;
+  margin-left: 16px !important;
+  background: red !important;
+  border-color: red !important;
+}
+
+.formSubmissionsShow .footerClose .btn-primary:hover {
+  background: white !important;
+  background-color: white !important;
+  color: red !important;
+}
+
+.contentProfile ul {
+  margin-top: 16px;
+}
+
+.contentProfile p {
+  margin-bottom: 0;
+}
+
 /* MEDIA QUERIES */
 @media (min-width: 576px) {
+  .formSubmissionsShow .direct-chat-msg {
+    margin-right: 15%;
+  }
+
+  .formSubmissionsShow .direct-chat-msg.right {
+    margin-left: 15%;
+    margin-right: 0;
+  }
 }
 
 @media (min-width: 768px) {
@@ -59,6 +161,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
+  }
+
+  .formSubmissionsShow .direct-chat-msg {
+    margin-right: 25%;
+  }
+
+  .formSubmissionsShow .direct-chat-msg.right {
+    margin-left: 25%;
+    margin-right: 0;
   }
 }
 
