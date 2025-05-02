@@ -37,7 +37,7 @@
                                     <div class="form-group row">
                                         <label for="name" class="col-sm-2 col-form-label">Nombre</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="name" placeholder="Nombre"
+                                            <input required class="form-control" id="name" placeholder="Nombre"
                                                 type="text" name="name" value="{{ old('name') }}">
                                         </div>
                                     </div>
@@ -47,7 +47,7 @@
                                     <div class="form-group row">
                                         <label for="name" class="col-sm-2 col-form-label">Email</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="name" placeholder="Email"
+                                            <input required class="form-control" id="name" placeholder="Email"
                                                 type="email" name="email" value="{{ old('email') }}">
                                         </div>
                                     </div>
@@ -57,7 +57,7 @@
                                     <div class="form-group row">
                                         <label for="name" class="col-sm-2 col-form-label">Teléfono</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="name" placeholder="Teléfono"
+                                            <input required class="form-control" id="name" placeholder="Teléfono"
                                                 type="text" name="phone" value="{{ old('phone') }}">
                                         </div>
                                     </div>
@@ -68,8 +68,9 @@
                                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                                         <div class="col-sm-10">
                                             <div class="input-group input-group-sm">
-                                                <input class="form-control" id="password" placeholder="Contraseña"
-                                                    type="password" name="password" value="{{ old('password') }}">
+                                                <input required class="form-control" id="password"
+                                                    placeholder="Contraseña" type="password" name="password"
+                                                    value="{{ old('password') }}">
                                                 <span type="button" id="togglePassword" class="input-group-append">
                                                     <button type="button" class="btn btn-info btn-flat">
                                                         <i class="fas fa-eye-slash" id="passwordIcon"></i>
@@ -86,7 +87,7 @@
                                             Password</label>
                                         <div class="col-sm-10">
                                             <div class="input-group input-group-sm">
-                                                <input class="form-control" id="password_confirmation"
+                                                <input required class="form-control" id="password_confirmation"
                                                     placeholder="Repetir la Contraseña" type="password"
                                                     name="password_confirmation"
                                                     value="{{ old('password_confirmation') }}">
