@@ -122,6 +122,12 @@ a:hover {
 }
 /* Visualizacion de chats end */
 
+/* Alertas */
+.alert ul {
+  margin: 0;
+}
+/* Alertas end */
+
 /* MEDIA QUERIES */
 @media (min-width: 576px) {
 }
