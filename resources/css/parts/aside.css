@@ -1,4 +1,5 @@
-aside a {
+aside a,
+aside span {
   color: white !important;
 }
 
