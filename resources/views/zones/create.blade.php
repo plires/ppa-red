@@ -34,14 +34,14 @@
                                     <div class="form-group row">
                                         <label for="name" class="col-sm-2 col-form-label">Nombre</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="name" placeholder="Nombre"
+                                            <input required class="form-control" id="name" placeholder="Nombre"
                                                 type="text" name="name" value="{{ old('name') }}">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="name" class="col-sm-2 col-form-label">Provincia</label>
                                         <div class="col-sm-10">
-                                            <select name="province_id" class="form-control">
+                                            <select required name="province_id" class="form-control">
 
                                                 @if ($provinces->isEmpty())
                                                     <option>No existen provincias</option>
