@@ -13,6 +13,7 @@
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
                 <a href="./login" class="h1"><b>PPA </b>RED</a>
+                <img src="{{ Vite::asset('resources/images/ppa-red-auth.webp') }}" alt="ppa red">
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Login para iniciar tu sesión</p>
