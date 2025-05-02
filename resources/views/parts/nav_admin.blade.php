@@ -46,7 +46,7 @@
                             <a href="{{ route('responses.mark_as_read', $formResponse->id) }}" class="dropdown-item">
                                 <!-- Message Start -->
                                 <div class="media">
-                                    <img src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}" alt="User Avatar"
+                                    <img src="{{ Vite::asset('resources/images/user.webp') }}" alt="User Avatar"
                                         class="img-size-50 mr-3 img-circle">
                                     <div class="media-body">
                                         <h3 class="dropdown-item-title">
