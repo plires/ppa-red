@@ -30,35 +30,39 @@
                     </span>
                     <div class="dropdown-divider"></div>
 
-                    @foreach (auth()->user()->formSubmissions as $formSubmission)
-                        @foreach ($formSubmission->formResponses as $formResponse)
-                            @if (!$formResponse->is_read && !$formResponse->is_system)
-                                @php
-                                    $data = json_decode($formSubmission->data, true); // Convierte JSON en array
-                                @endphp
+                    @php
+                        $allResponses = auth()
+                            ->user()
+                            ->formSubmissions->flatMap(fn($submission) => $submission->formResponses)
+                            ->sortByDesc('created_at');
+                    @endphp
 
-                                <a href="{{ route('responses.mark_as_read', $formResponse->id) }}"
-                                    class="dropdown-item">
-                                    <!-- Message Start -->
-                                    <div class="media">
-                                        <img src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}"
-                                            alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                        <div class="media-body">
-                                            <h3 class="dropdown-item-title">
-                                                <strong>{{ $data['name'] }}</strong>
-                                                <span class="float-right text-sm text-danger"><i
-                                                        class="fas fa-star"></i></span>
-                                            </h3>
-                                            <p class="text-sm">{{ $formResponse->message }}.</p>
-                                            <p class="text-sm text-muted"><i
-                                                    class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($formResponse->created_at)->diffForHumans(['short' => true]) }}
-                                            </p>
-                                        </div>
+                    @foreach ($allResponses as $formResponse)
+                        @if (!$formResponse->is_read && !$formResponse->is_system)
+                            @php
+                                $data = json_decode($formResponse->formSubmission->data, true); // Convierte JSON en array
+                            @endphp
+
+                            <a href="{{ route('responses.mark_as_read', $formResponse->id) }}" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="{{ Vite::asset('resources/images/user1-128x128.jpg') }}" alt="User Avatar"
+                                        class="img-size-50 mr-3 img-circle">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            <strong>{{ $data['name'] }}</strong>
+                                            <span class="float-right text-sm text-danger"><i
+                                                    class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">{{ $formResponse->message }}.</p>
+                                        <p class="text-sm text-muted"><i
+                                                class="far fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($formResponse->created_at)->diffForHumans(['short' => true]) }}
+                                        </p>
                                     </div>
-                                    <!-- Message End -->
-                                </a>
-                            @endif
-                        @endforeach
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                        @endif
                     @endforeach
 
                     <div class="dropdown-divider"></div>
@@ -98,27 +102,32 @@
                     </span>
                     <div class="dropdown-divider"></div>
 
-                    @foreach (auth()->user()->formSubmissions as $formSubmission)
-                        @foreach ($formSubmission->notifications as $notification)
-                            @if (!$notification->is_read)
-                                <a title="{{ $notification->notification_details }}"
-                                    href="{{ route('notification.mark_as_read', ['notification' => $notification->id, 'formSubmission' => $formSubmission->id]) }}"
-                                    class="dropdown-item notificationLink">
-                                    <div>
-                                        <i class="fas fa-envelope mr-2"></i>
-                                        <span class="float-left text-muted text-sm">
-                                            {{ $notification->notification_details }}
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-muted">
-                                        <i class="far fa-clock mr-1"></i>
-                                        {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans(['short' => true]) }}
-                                    </p>
+                    @php
+                        $allNotifications = auth()
+                            ->user()
+                            ->formSubmissions->flatMap(fn($submission) => $submission->notifications)
+                            ->sortByDesc('created_at');
+                    @endphp
 
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            @endif
-                        @endforeach
+                    @foreach ($allNotifications as $notification)
+                        @if (!$notification->is_read)
+                            <a title="{{ $notification->notification_details }}"
+                                href="{{ route('notification.mark_as_read', ['notification' => $notification->id, 'formSubmission' => $notification->formSubmission->id]) }}"
+                                class="dropdown-item notificationLink">
+                                <div>
+                                    <i class="fas fa-envelope mr-2"></i>
+                                    <span class="float-left text-muted text-sm">
+                                        {{ $notification->notification_details }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-muted">
+                                    <i class="far fa-clock mr-1"></i>
+                                    {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans(['short' => true]) }}
+                                </p>
+
+                            </a>
+                            <div class="dropdown-divider"></div>
+                        @endif
                     @endforeach
 
                     <form method="POST" action="{{ route('notification.mark_as_all_read') }}">
