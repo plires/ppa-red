@@ -63,7 +63,7 @@
                                         <!-- /.card-header -->
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-4 offset-md-4">
+                                                <div class="col-sm-12 col-md-8 offset-md-2 col-lg-4 offset-lg-4">
                                                     {{-- Profile User --}}
                                                     <div class="card bg-light d-flex flex-fill contentProfile">
                                                         <div class="card-header text-muted border-bottom-0">
