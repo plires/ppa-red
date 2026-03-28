@@ -12,7 +12,7 @@ const ProvincesSelect = () => {
   useEffect(() => {
     // Cargar provincias al montar el componente
     axios
-      .get('http://127.0.0.1:8000/api/provinces')
+      .get('/api/provinces')
       .then(response => setProvinces(response.data))
       .catch(error => console.error('Error cargando provincias:', error))
   }, [])
@@ -24,16 +24,14 @@ const ProvincesSelect = () => {
 
     // Cargar zonas de la provincia seleccionada
     axios
-      .get(`http://127.0.0.1:8000/api/zones?province_id=${provinceId}`)
+      .get(`/api/zones?province_id=${provinceId}`)
       .then(response => {
         setZones(response.data)
 
         if (response.data.length === 0) {
           // Si la provincia no tiene zonas, cargar directamente sus localidades
           axios
-            .get(
-              `http://127.0.0.1:8000/api/localities?province_id=${provinceId}`,
-            )
+            .get(`/api/localities?province_id=${provinceId}`)
             .then(res => setLocalities(res.data))
             .catch(err => console.error('Error cargando localidades:', err))
         } else {
@@ -48,7 +46,7 @@ const ProvincesSelect = () => {
 
     // Cargar localidades de la zona seleccionada
     axios
-      .get(`http://127.0.0.1:8000/api/localities?zone_id=${zoneId}`)
+      .get(`/api/localities?zone_id=${zoneId}`)
       .then(response => setLocalities(response.data))
       .catch(error => console.error('Error cargando localidades:', error))
   }
@@ -58,7 +56,7 @@ const ProvincesSelect = () => {
       {/* Select de Provincias */}
       <label>Provincia:</label>
       <select onChange={e => handleProvinceChange(e.target.value)}>
-        <option value=''>Seleccione una provincia</option>
+        <option value="">Seleccione una provincia</option>
         {provinces.map(province => (
           <option key={province.id} value={province.id}>
             {province.name}
@@ -71,7 +69,7 @@ const ProvincesSelect = () => {
         <>
           <label>Zona:</label>
           <select onChange={e => handleZoneChange(e.target.value)}>
-            <option value=''>Seleccione una zona</option>
+            <option value="">Seleccione una zona</option>
             {zones.map(zone => (
               <option key={zone.id} value={zone.id}>
                 {zone.name}
@@ -86,7 +84,7 @@ const ProvincesSelect = () => {
         <>
           <label>Localidad:</label>
           <select>
-            <option value=''>Seleccione una localidad</option>
+            <option value="">Seleccione una localidad</option>
             {localities.map(locality => (
               <option key={locality.id} value={locality.id}>
                 {locality.name}

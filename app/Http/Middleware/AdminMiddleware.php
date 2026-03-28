@@ -23,6 +23,6 @@ class AdminMiddleware
         }
 
         // Si no es admin, redirigir a la raiz del sitio
-        return redirect('/')->with('error', 'No tienes permisos para acceder a esta página.');
+        return redirect()->route('landing')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 }
