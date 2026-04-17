@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ZoneRequest extends FormRequest
 {
@@ -37,12 +39,23 @@ class ZoneRequest extends FormRequest
     {
         if ($this->isMethod('delete')) {
             $validator->after(function ($validator) {
-                $zone = $this->route('zone'); // Obtiene la provincia de la ruta
+                $zone = $this->route('zone');
 
                 if ($zone->localities()->exists()) {
                     $validator->errors()->add('zone', 'No puedes eliminar esta zona porque tiene localidades asociadas.');
                 }
             });
         }
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        if ($this->isMethod('delete')) {
+            throw new HttpResponseException(
+                redirect()->back()->with('error', $validator->errors()->first())
+            );
+        }
+
+        parent::failedValidation($validator);
     }
 }

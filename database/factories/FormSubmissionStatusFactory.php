@@ -25,7 +25,7 @@ class FormSubmissionStatusFactory extends Factory
                     FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
                     FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
                     FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
-                    FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER
+                    FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
                 ]
             ),
         ];

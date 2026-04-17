@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Province;
-use Illuminate\Support\Facades\Auth;
-use \App\Models\User;
 use App\Http\Requests\ProvinceRequest;
+use App\Models\Province;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ProvinceController extends Controller
 {
@@ -24,7 +25,7 @@ class ProvinceController extends Controller
 
         $role_admin = User::ADMIN_USER;
 
-        return view('provinces.index', compact('provinces', 'user', 'role_admin'));
+        return Inertia::render('Provinces/Index', ['provinces' => $provinces]);
     }
 
     /**
@@ -32,7 +33,7 @@ class ProvinceController extends Controller
      */
     public function create()
     {
-        return view('provinces.create');
+        return Inertia::render('Provinces/Create');
     }
 
     /**
@@ -43,7 +44,7 @@ class ProvinceController extends Controller
         $province = Province::create($request->validated());
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('provinces.index')->with('success', 'la provincia ' . $province->name . ' fue agregada correctamente.');
+        return redirect()->route('provinces.index')->with('success', 'la provincia '.$province->name.' fue agregada correctamente.');
     }
 
     /**
@@ -51,7 +52,9 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
-        return view('provinces.show', compact('province'));
+        $province->load(['zones', 'localities.user']);
+
+        return Inertia::render('Provinces/Show', ['province' => $province]);
     }
 
     /**
@@ -59,7 +62,7 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
-        return view('provinces.edit', compact('province'));
+        return Inertia::render('Provinces/Edit', ['province' => $province]);
     }
 
     /**
@@ -70,7 +73,7 @@ class ProvinceController extends Controller
         $province->update($request->validated());
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('provinces.index')->with('success', 'la provincia ' . $province->name . ' fue actualizada correctamente.');
+        return redirect()->route('provinces.index')->with('success', 'la provincia '.$province->name.' fue actualizada correctamente.');
     }
 
     /**
@@ -78,18 +81,18 @@ class ProvinceController extends Controller
      */
     public function destroy(ProvinceRequest $request, Province $province)
     {
-
         $province->delete();
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('provinces.index')->with('success', 'La provincia ' . $province->name . ' fue eliminada correctamente.');
+        return redirect()->route('provinces.index')->with('success', 'La provincia '.$province->name.' fue eliminada correctamente.');
     }
 
     // Método para listar provincias eliminadas
     public function trashed()
     {
         $provinces = Province::onlyTrashed()->get();
-        return view('provinces.trashed', compact('provinces'));
+
+        return Inertia::render('Provinces/Trashed', ['provinces' => $provinces]);
     }
 
     // Método para restaurar una provincia
@@ -99,6 +102,6 @@ class ProvinceController extends Controller
         $province = Province::withTrashed()->findOrFail($id);
         $province->restore();
 
-        return redirect()->route('provinces.trashed')->with('success', 'La provincia ' . $province->name . ' fue restaurada correctamente.');
+        return redirect()->route('provinces.trashed')->with('success', 'La provincia '.$province->name.' fue restaurada correctamente.');
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class PartnerSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class PartnerSeeder extends Seeder
             'email' => 'pablo@partner.com',
             'phone' => '115-049-7501',
             'role' => 'partner', // Definir que es admin
-            'email_verified_at' => NULL,
+            'email_verified_at' => null,
             'remember_token' => User::generateVerificationToken(),
             'password' => Hash::make('123123123'),
         ]);

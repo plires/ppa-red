@@ -1,22 +1,27 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FormNotificationController;
+use App\Http\Controllers\FormResponseController;
+use App\Http\Controllers\FormSubmissionController;
+use App\Http\Controllers\LocalityController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\PublicFormResponseController;
+use App\Http\Controllers\PublicFormSubmissionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\LocalityController;
-use App\Http\Controllers\ProvinceController;
-use App\Http\Controllers\FormResponseController;
-use App\Http\Controllers\FormSubmissionController;
-use App\Http\Controllers\FormNotificationController;
-use App\Http\Controllers\PublicFormResponseController;
-use App\Http\Controllers\PublicFormSubmissionController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('landing.index');
+    return Inertia::render('Landing');
 })->name('landing');
+
+// crear nueva consulta desde la landing
+Route::post('/public/form_submission', [PublicFormSubmissionController::class, 'store'])
+    ->name('public.form_submission.store');
 
 // mostrar formulario con sus datos
 Route::get('/public/form_submission/{token}', [PublicFormSubmissionController::class, 'show'])
@@ -28,6 +33,10 @@ Route::post('/public/form_responses/', [PublicFormResponseController::class, 'st
 
 // Dashboard: protegido por autenticación y rol admin
 Route::prefix('dashboard')->middleware(['auth', AdminMiddleware::class])->group(function () {
+
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -121,4 +130,4 @@ Route::prefix('dashboard')->middleware(['auth', AdminMiddleware::class])->group(
         ->name('reports.form_status_chart_detail');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

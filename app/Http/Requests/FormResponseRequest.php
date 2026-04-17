@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use App\Models\FormSubmission;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FormResponseRequest extends FormRequest
 {
@@ -57,17 +57,17 @@ class FormResponseRequest extends FormRequest
             $formSubmission = FormSubmission::find($this->form_submission_id);
 
             // Si el formSubmission no existe (por algún error en las reglas de validación)
-            if (!$formSubmission) {
+            if (! $formSubmission) {
                 return;
             }
 
             // Si el usuario es "partner", verificar que el FormSubmission le pertenezca
-            if ($user->role === User::PARTNER_USER && (int)$formSubmission->user_id !== (int)$user->id) {
+            if ($user->role === User::PARTNER_USER && (int) $formSubmission->user_id !== (int) $user->id) {
                 $validator->errors()->add('form_submission_id', 'No tienes permiso para agregar una respuesta a este formulario.');
             }
 
             // Verificar que el user_id (lo que viene del front) sea el mismo del user_id asignado en el formSubmission
-            if ((int)$formSubmission->user_id !== (int)$this->user_id) {
+            if ((int) $formSubmission->user_id !== (int) $this->user_id) {
                 $validator->errors()->add('user_id', 'No tienes permiso para agregar una respuesta a este formulario.');
             }
         });

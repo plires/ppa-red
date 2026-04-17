@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class FormResponseSeeder extends Seeder
 {
@@ -38,9 +37,9 @@ class FormResponseSeeder extends Seeder
 
                 return [
                     'form_submission_id' => $randomRecord->form_submission_id,
-                    'user_id'            => $randomRecord->user_id,
-                    'is_system'          => $isSystem,
-                    'is_read'            => $isRead,
+                    'user_id' => $randomRecord->user_id,
+                    'is_system' => $isSystem,
+                    'is_read' => $isRead,
                 ];
             })
             ->create();

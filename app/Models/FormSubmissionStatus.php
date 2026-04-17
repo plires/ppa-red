@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\FormSubmission;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class FormSubmissionStatus extends Model
 {
@@ -14,14 +13,19 @@ class FormSubmissionStatus extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     const STATUS_PENDIENTE_RTA_DE_PARTNER = 'Pendiente de Respuesta Del Partner';
+
     const STATUS_RESPONDIO_PARTNER = 'Respondido Por El Partner';
+
     const STATUS_DEMORADO_POR_PARTNER = 'Demorado - Sin Respuesta Del Partner (48h)';
+
     const STATUS_CERRADO_SIN_RTA_PARTNER = 'Cerrado - Sin Respuesta Del Partner';
+
     const STATUS_CERRADO_SIN_RTA_USUARIO = 'Cerrado - Sin Respuesta Del Usuario';
+
     const STATUS_CERRADO_POR_EL_PARTNER = 'Cerrado Por El Partner';
 
     /**

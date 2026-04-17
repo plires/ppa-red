@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserRequest extends FormRequest
 {
@@ -31,11 +33,10 @@ class UserRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $userId,
+            'email' => 'required|email|max:255|unique:users,email,'.$userId,
             'phone' => 'required|string|max:255',
-            'change_password' => 'nullable|boolean',
-            'password' => 'sometimes|required_if:change_password,1|string|min:8|confirmed',
-            'password_confirmation' => 'sometimes|required_if:change_password,1|string|min:8',
+            'password' => 'nullable|string|min:8|confirmed',
+            'password_confirmation' => 'nullable|string|min:8',
         ];
     }
 
@@ -50,5 +51,16 @@ class UserRequest extends FormRequest
                 }
             });
         }
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        if ($this->isMethod('delete')) {
+            throw new HttpResponseException(
+                redirect()->back()->with('error', $validator->errors()->first())
+            );
+        }
+
+        parent::failedValidation($validator);
     }
 }

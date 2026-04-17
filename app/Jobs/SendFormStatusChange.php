@@ -2,22 +2,23 @@
 
 namespace App\Jobs;
 
-use App\Models\User;
-use Illuminate\Bus\Queueable;
+use App\Mail\MailFormSubmissionStatusChange;
 use App\Models\FormSubmission;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Mail\MailFormSubmissionStatusChange;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 
 class SendFormStatusChange implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $formSubmission;
+
     protected $recipent;
+
     protected $emailTemplate;
 
     /**

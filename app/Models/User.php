@@ -4,25 +4,24 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
-use App\Models\Locality;
-use Illuminate\Support\Str;
-use App\Models\FormResponse;
-use App\Models\FormSubmission;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
     use SoftDeletes;
 
     const ADMIN_USER = 'admin';
+
     const PARTNER_USER = 'partner';
 
-    const UNVERIFIED_USER = NULL;
+    const UNVERIFIED_USER = null;
 
     /**
      * The attributes that are mass assignable.
@@ -36,7 +35,7 @@ class User extends Authenticatable
         'password',
         'role',
         'email_verified_at',
-        'remember_token'
+        'remember_token',
     ];
 
     /**

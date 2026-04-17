@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
 
         $role_admin = User::ADMIN_USER;
 
-        return view('partners.index', compact('partners', 'user', 'role_admin'));
+        return Inertia::render('Partners/Index', ['partners' => $partners]);
     }
 
     /**
@@ -31,7 +32,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('partners.create');
+        return Inertia::render('Partners/Create');
     }
 
     /**
@@ -42,7 +43,7 @@ class UserController extends Controller
         $partner = User::create($request->validated());
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('partners.index')->with('success', 'el partner' . $partner->name . ' fue agregado correctamente.');
+        return redirect()->route('partners.index')->with('success', 'el partner'.$partner->name.' fue agregado correctamente.');
     }
 
     /**
@@ -50,7 +51,25 @@ class UserController extends Controller
      */
     public function show(User $partner)
     {
-        return view('partners.show', compact('partner'));
+        $partner->load(['localities.zone', 'localities.province']);
+
+        $recentSubmissions = $partner->formSubmissions()
+            ->with(['locality', 'status'])
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(fn ($s) => [
+                'id' => $s->id,
+                'end_user_name' => data_get(json_decode($s->data, true), 'name', '—'),
+                'locality' => $s->locality?->name,
+                'status' => $s->status?->name,
+                'date' => $s->created_at->format('d/m/Y'),
+            ]);
+
+        return Inertia::render('Partners/Show', [
+            'partner' => $partner,
+            'recentSubmissions' => $recentSubmissions,
+        ]);
     }
 
     /**
@@ -58,7 +77,7 @@ class UserController extends Controller
      */
     public function edit(User $partner)
     {
-        return view('partners.edit', compact('partner'));
+        return Inertia::render('Partners/Edit', ['partner' => $partner]);
     }
 
     /**
@@ -66,9 +85,16 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $partner)
     {
-        $partner->update($request->validated());
+        $data = $request->validated();
 
-        return redirect()->back()->with('success', 'El partner ' . $partner->name . ' fue actualizado correctamente.');
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+        unset($data['password_confirmation']);
+
+        $partner->update($data);
+
+        return redirect()->back()->with('success', 'El partner '.$partner->name.' fue actualizado correctamente.');
     }
 
     /**
@@ -80,14 +106,15 @@ class UserController extends Controller
         $partner->delete();
 
         // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('partners.index')->with('success', 'El partner ' . $partner->name . ' fue eliminado correctamente.');
+        return redirect()->route('partners.index')->with('success', 'El partner '.$partner->name.' fue eliminado correctamente.');
     }
 
     // Método para listar provincias eliminadas
     public function trashed()
     {
         $partners = User::onlyTrashed()->get();
-        return view('partners.trashed', compact('partners'));
+
+        return Inertia::render('Partners/Trashed', ['partners' => $partners]);
     }
 
     // Método para restaurar una provincia
@@ -97,6 +124,6 @@ class UserController extends Controller
         $partner = User::withTrashed()->findOrFail($id);
         $partner->restore();
 
-        return redirect()->route('partners.trashed')->with('success', 'El partner ' . $partner->name . ' fue restaurado correctamente.');
+        return redirect()->route('partners.trashed')->with('success', 'El partner '.$partner->name.' fue restaurado correctamente.');
     }
 }

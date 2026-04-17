@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Zone;
-use App\Models\Locality;
-use App\Models\FormSubmission;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 
 class Province extends Model
 {
     /** @use HasFactory<\Database\Factories\ProvinceFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = ['name'];

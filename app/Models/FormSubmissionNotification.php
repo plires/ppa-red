@@ -14,7 +14,7 @@ class FormSubmissionNotification extends Model
         'closure_reason',
         'notification_details',
         'is_read',
-        'read_at'
+        'read_at',
     ];
 
     protected $casts = [

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PublicFormResponseRequest;
+use App\Jobs\SendFormResponseEmailToPartner;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
-use App\Jobs\SendFormResponseEmailToPartner;
-use App\Http\Requests\PublicFormResponseRequest;
 
 class PublicFormResponseController extends Controller
 {

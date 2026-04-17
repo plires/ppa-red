@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LocalityController;
 use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\Api\ZoneController;
-use App\Http\Controllers\Api\LocalityController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\LocalityController;
 // Route::get('/provinces', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
-
 
 // Obtener provincias (pública con cache y throttle)
 Route::middleware('throttle:60,1')->get('/provinces', [ProvinceController::class, 'index']);

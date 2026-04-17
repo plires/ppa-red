@@ -3,22 +3,16 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Zone;
-use App\Models\Locality;
-use App\Models\Province;
-use Illuminate\Support\Str;
-use App\Models\FormResponse;
-use App\Models\FormSubmissionStatus;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\FormSubmissionNotification;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class FormSubmission extends Model
 {
     /** @use HasFactory<\Database\Factories\FormSubmissionFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id', 'closure_reason'];

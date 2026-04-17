@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\FormSubmissionStatus;
+use Illuminate\Database\Seeder;
 
 class FormSubmissionStatusSeeder extends Seeder
 {
@@ -27,7 +26,6 @@ class FormSubmissionStatusSeeder extends Seeder
             'name' => FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
             'description' => 'La contestación del partner a la última consulta del usuario tiene un retraso de 48 Hs.',
         ]);
-
 
         FormSubmissionStatus::factory()->create([
             'name' => FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,

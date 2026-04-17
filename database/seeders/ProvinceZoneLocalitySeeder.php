@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use App\Models\Locality;
 use App\Models\Province;
 use App\Models\Zone;
-use App\Models\Locality;
+use Illuminate\Database\Seeder;
 
 class ProvinceZoneLocalitySeeder extends Seeder
 {

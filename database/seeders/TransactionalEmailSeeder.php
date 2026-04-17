@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\TransactionalEmail;
 use App\Models\FormSubmissionStatus;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\TransactionalEmail;
+use Illuminate\Database\Seeder;
 
 class TransactionalEmailSeeder extends Seeder
 {

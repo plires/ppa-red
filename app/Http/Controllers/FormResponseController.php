@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\FormResponseRequest;
+use App\Jobs\SendFormResponseEmailToUser;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Jobs\SendFormResponseEmailToUser;
-use App\Http\Requests\FormResponseRequest;
-use App\Models\FormSubmissionNotification;
 
 class FormResponseController extends Controller
 {
-
     public function store(FormResponseRequest $request)
     {
 
@@ -36,7 +34,7 @@ class FormResponseController extends Controller
     {
 
         // Obtengo las respuestas asociadas de un formsubmission a partir de un FormResponse
-        $responses = $formResponse->formSubmission->formResponses->where('is_system', 0);;
+        $responses = $formResponse->formSubmission->formResponses->where('is_system', 0);
 
         // Marcar todas como leídas
         foreach ($responses as $response) {

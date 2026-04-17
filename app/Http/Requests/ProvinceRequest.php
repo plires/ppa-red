@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProvinceRequest extends FormRequest
 {
@@ -30,7 +32,7 @@ class ProvinceRequest extends FormRequest
         $provinceId = $this->route('province')?->id ?? null;
 
         return [
-            'name' => 'required|string|max:255|unique:provinces,name,' . $provinceId,
+            'name' => 'required|string|max:255|unique:provinces,name,'.$provinceId,
         ];
     }
 
@@ -38,12 +40,23 @@ class ProvinceRequest extends FormRequest
     {
         if ($this->isMethod('delete')) {
             $validator->after(function ($validator) {
-                $province = $this->route('province'); // Obtiene la provincia de la ruta
+                $province = $this->route('province');
 
                 if ($province->localities()->exists() || $province->zones()->exists()) {
                     $validator->errors()->add('province', 'No puedes eliminar esta provincia porque tiene zonas o localidades asociadas.');
                 }
             });
         }
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        if ($this->isMethod('delete')) {
+            throw new HttpResponseException(
+                redirect()->back()->with('error', $validator->errors()->first())
+            );
+        }
+
+        parent::failedValidation($validator);
     }
 }

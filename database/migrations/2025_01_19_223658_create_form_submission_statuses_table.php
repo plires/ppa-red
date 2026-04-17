@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\FormSubmissionStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\FormSubmissionStatus;
 
 return new class extends Migration
 {
@@ -20,13 +20,12 @@ return new class extends Migration
                 FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
                 FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
                 FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
-                FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER
+                FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
             ])->default(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER); // Diferentes estados posibles
             $table->text('description')->nullable();
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.

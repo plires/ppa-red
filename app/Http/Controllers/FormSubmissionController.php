@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use \App\Models\User;
-use Illuminate\Http\Request;
-use App\Models\FormSubmission;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\FormSubmissionRequest;
+use App\Models\FormSubmission;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class FormSubmissionController extends Controller
 {
@@ -23,9 +24,9 @@ class FormSubmissionController extends Controller
         // Obtener resultados
         $formSubmissions = $query->get();
 
-        $role_admin = User::ADMIN_USER;
-
-        return view('form_submissions.index', compact('formSubmissions', 'user', 'role_admin'));
+        return Inertia::render('FormSubmissions/Index', [
+            'formSubmissions' => $formSubmissions->load(['status', 'locality', 'user']),
+        ]);
     }
 
     public function show(FormSubmission $formSubmission)
@@ -43,16 +44,18 @@ class FormSubmissionController extends Controller
         $responses = $formSubmission->formResponses;
 
         $unread_responses = $responses
-            ->filter(fn($response) => $response->is_read == 0 && $response->is_system == 0);
+            ->filter(fn ($response) => $response->is_read == 0 && $response->is_system == 0);
 
         $unread_responses->each(function ($response) {
             $response->is_read = 1;
             $response->save();
         });
 
-        $role_admin = User::ADMIN_USER;
-
-        return view('form_submissions.show', compact('formSubmission', 'user', 'data', 'role_admin', 'responses'));
+        return Inertia::render('FormSubmissions/Show', [
+            'formSubmission' => $formSubmission->load(['status', 'locality.zone', 'locality.province', 'user']),
+            'formData' => $data,
+            'responses' => $responses->load('user'),
+        ]);
     }
 
     public function update(FormSubmissionRequest $request, FormSubmission $formSubmission)

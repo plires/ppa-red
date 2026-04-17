@@ -2,22 +2,27 @@
 
 namespace App\Mail;
 
+use App\Models\FormSubmission;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use App\Models\FormSubmission;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
 
 class MailFormSubmissionStatusChange extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $partner;
+
     public $dataUser;
+
     public $formSubmission;
+
     public $subject;
+
     public $body;
+
     public $responses;
 
     /**

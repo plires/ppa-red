@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Zone;
+use App\Http\Requests\LocalityRequest;
 use App\Models\Locality;
 use App\Models\Province;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\LocalityRequest;
+use Inertia\Inertia;
 
 class LocalityController extends Controller
 {
@@ -19,31 +18,34 @@ class LocalityController extends Controller
 
         // Si el usuario es 'admin', se listan las zonas
         if ($user->role === User::ADMIN_USER) {
-            $localities = Locality::all();
+            $localities = Locality::with(['zone', 'province', 'user'])->get();
         }
 
         $role_admin = User::ADMIN_USER;
 
-        return view('localities.index', compact('localities', 'user', 'role_admin'));
+        return Inertia::render('Localities/Index', ['localities' => $localities]);
     }
 
     public function create()
     {
-        $provinces = Province::all();
+        $provinces = Province::with('zones')->get();
         $partners = User::where('role', 'partner')->get();
-        return view('localities.create', compact('provinces', 'partners'));
+
+        return Inertia::render('Localities/Create', ['provinces' => $provinces, 'partners' => $partners]);
     }
 
     public function store(LocalityRequest $request)
     {
         $locality = Locality::create($request->validated());
 
-        return back()->with('success', 'La localidad ' . $locality->name . ' fue agregada correctamente.');
+        return back()->with('success', 'La localidad '.$locality->name.' fue agregada correctamente.');
     }
 
     public function show(Locality $locality)
     {
-        return view('localities.show', compact('locality'));
+        return Inertia::render('Localities/Show', [
+            'locality' => $locality->load(['zone', 'province', 'user']),
+        ]);
     }
 
     public function edit(Locality $locality)
@@ -52,7 +54,11 @@ class LocalityController extends Controller
         $provinces = Province::with('zones')->get(); // Cargamos las zonas para usarlas en el front
         $partners = User::where('role', 'partner')->get();
 
-        return view('localities.edit', compact('locality', 'provinces', 'partners'));
+        return Inertia::render('Localities/Edit', [
+            'locality' => $locality->load('zone'),
+            'provinces' => $provinces,
+            'partners' => $partners,
+        ]);
     }
 
     public function update(LocalityRequest $request, Locality $locality)
@@ -66,13 +72,14 @@ class LocalityController extends Controller
     {
         $locality->delete();
 
-        return back()->with('success', 'La localidad ' . $locality->name . ' fue eliminada correctamente.');
+        return back()->with('success', 'La localidad '.$locality->name.' fue eliminada correctamente.');
     }
 
     public function trashed()
     {
         $localities = Locality::onlyTrashed()->get();
-        return view('localities.trashed', compact('localities'));
+
+        return Inertia::render('Localities/Trashed', ['localities' => $localities]);
     }
 
     public function restore($id)
@@ -81,6 +88,6 @@ class LocalityController extends Controller
         $locality = Locality::withTrashed()->findOrFail($id);
         $locality->restore();
 
-        return back()->with('success', 'La localidad ' . $locality->name . ' fue restaurada correctamente.');
+        return back()->with('success', 'La localidad '.$locality->name.' fue restaurada correctamente.');
     }
 }

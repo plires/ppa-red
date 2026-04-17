@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Models\FormSubmission;
-use Illuminate\Support\Facades\Auth;
 use App\Models\FormSubmissionNotification;
-use Illuminate\Notifications\DatabaseNotification;
-
+use Illuminate\Support\Facades\Auth;
 
 class FormNotificationController extends Controller
 {

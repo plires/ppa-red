@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use App\Models\FormSubmission;
-use Illuminate\Console\Command;
 use App\Jobs\SendFormStatusChange;
-use App\Models\FormSubmissionStatus;
+use App\Models\FormSubmission;
 use App\Models\FormSubmissionNotification;
-use Illuminate\Support\Facades\Schedule;
+use App\Models\FormSubmissionStatus;
 use App\Services\TransactionalEmailService;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schedule;
 
 class UpdateFormSubmissionStatus extends Command
 {
@@ -190,7 +190,7 @@ class UpdateFormSubmissionStatus extends Command
                 },
                 'formResponses as partner_responses_count' => function ($query) {
                     $query->where('is_system', true); // Cuenta solo respuestas del partner
-                }
+                },
             ])
             ->having('user_responses_count', '=', 1) // Usuario tiene solo 1 respuesta
             ->having('partner_responses_count', '>=', 1) // Partner tiene 1 o más respuestas
@@ -301,7 +301,7 @@ class UpdateFormSubmissionStatus extends Command
     {
         $formSubmission->update([
             'form_submission_status_id' => $statusId,
-            'closure_reason' => $closure_reason
+            'closure_reason' => $closure_reason,
         ]);
     }
 
@@ -317,7 +317,7 @@ class UpdateFormSubmissionStatus extends Command
             'is_read' => false,
             'read_at' => null,
             'closure_reason' => $closure_reason,
-            'notification_details' => $notificationDetails
+            'notification_details' => $notificationDetails,
         ]);
 
         $this->info("Notificación registrada para FormSubmission ID: {$formSubmission->id}");

@@ -3,17 +3,15 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Zone;
-use App\Models\Province;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Locality extends Model
 {
     /** @use HasFactory<\Database\Factories\LocalityFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = ['name', 'zone_id', 'province_id', 'user_id'];

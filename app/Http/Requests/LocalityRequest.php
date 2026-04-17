@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\Zone;
-use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class LocalityRequest extends FormRequest
 {
@@ -39,7 +39,7 @@ class LocalityRequest extends FormRequest
             if ($provinceId) {
                 $provinceHasZones = Zone::where('province_id', $provinceId)->exists();
 
-                if ($provinceHasZones && !$this->input('zone_id')) {
+                if ($provinceHasZones && ! $this->input('zone_id')) {
                     $validator->errors()->add('zone_id', 'El campo zona es obligatorio para la provincia seleccionada.');
                 }
             }

@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FormSubmission;
+use App\Models\FormSubmissionStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\FormSubmission;
 use Illuminate\Support\Facades\DB;
-use App\Models\FormSubmissionStatus;
+use Inertia\Inertia;
 
 class ReportController extends Controller
 {
     public function index()
     {
         $partners = User::where('role', User::PARTNER_USER)->get(); // Filtramos solo partners
-        return view('reports.index', compact('partners'));
+
+        return Inertia::render('Reports/Index', ['partners' => $partners]);
     }
 
     public function getFormSubmissionByPartner(Request $request)
@@ -36,9 +38,9 @@ class ReportController extends Controller
             ->with('user')
             ->get();
 
-        $id = $data->map(fn($d) => $d->user->id);
-        $labels = $data->map(fn($d) => $d->user->name);
-        $counts = $data->map(fn($d) => $d->total);
+        $id = $data->map(fn ($d) => $d->user->id);
+        $labels = $data->map(fn ($d) => $d->user->name);
+        $counts = $data->map(fn ($d) => $d->total);
 
         return response()->json([
             'id' => $id,
@@ -49,12 +51,19 @@ class ReportController extends Controller
 
     public function getFormSubmissionByPartnerDetail($user_id, $start, $end)
     {
-
         $formSubmissions = FormSubmission::where('user_id', $user_id)
-            ->with(['locality']) // Cargar la localidad relacionada
-            ->whereBetween('created_at', [$start, $end])
+            ->with(['locality', 'status'])
+            ->whereDate('created_at', '>=', $start)
+            ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(fn ($s) => [
+                'id'            => $s->id,
+                'end_user_name' => data_get(json_decode($s->data, true), 'name', '—'),
+                'locality'      => $s->locality?->name,
+                'status'        => $s->status?->name,
+                'created_at'    => $s->created_at,
+            ]);
 
         return response()->json($formSubmissions);
     }
@@ -64,15 +73,18 @@ class ReportController extends Controller
         $partners = User::where('role', User::PARTNER_USER)->get(); // Ajustá esto a tu lógica de roles
 
         $statuses = [
-            FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER => "#007bff",
-            FormSubmissionStatus::STATUS_RESPONDIO_PARTNER => "#28a745",
-            FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER => "#dc3545",
-            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER => "#ffc107",
-            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO => "#6c757d",
-            FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER => "#343a40",
+            FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER => '#007bff',
+            FormSubmissionStatus::STATUS_RESPONDIO_PARTNER => '#28a745',
+            FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER => '#dc3545',
+            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER => '#ffc107',
+            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO => '#6c757d',
+            FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER => '#343a40',
         ];
 
-        return view('reports.status_chart', compact('partners', 'statuses'));
+        return Inertia::render('Reports/StatusChart', [
+            'partners' => $partners,
+            'statuses' => $statuses,
+        ]);
     }
 
     public function formStatusChart(Request $request)
@@ -117,16 +129,25 @@ class ReportController extends Controller
 
     public function getFormulariosByStatus($user_id, $status_id, $start, $end)
     {
-
-        $query = FormSubmission::with(['status']) // Añadí relaciones que necesites
-            ->where('form_submission_status_id', (int)$status_id)
-            ->whereBetween('created_at', [$start, $end])
+        $query = FormSubmission::with(['status', 'locality', 'user'])
+            ->where('form_submission_status_id', (int) $status_id)
+            ->whereDate('created_at', '>=', $start)
+            ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc');
 
-        if ($user_id != "null") {
+        if ($user_id !== 'null') {
             $query->where('user_id', $user_id);
         }
 
-        return response()->json($query->get());
+        return response()->json(
+            $query->get()->map(fn ($s) => [
+                'id'            => $s->id,
+                'end_user_name' => data_get(json_decode($s->data, true), 'name', '—'),
+                'locality'      => $s->locality?->name,
+                'partner'       => $s->user?->name,
+                'status'        => $s->status?->name,
+                'created_at'    => $s->created_at,
+            ])
+        );
     }
 }
