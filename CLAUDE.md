@@ -6,18 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 PPA RED — sistema de gestión de formularios construido con Laravel 11. Permite gestionar envíos de formularios con jerarquía geográfica (provincias/zonas/localidades), administración de partners y sistema de notificaciones. Dos roles de usuario: `admin` y `partner`.
 
-## Refactor en curso
+## Migración de Frontend
 
-El proyecto está en proceso de migración del frontend. Ver plan detallado en `.claude/plans/cozy-toasting-hollerith.md`.
+Migración de Blade + AdminLTE + jQuery a Inertia.js + React 18 + Tailwind CSS **completada**.
 
-**Estado:** Fase 1 completada. Fases 2-7 pendientes.
+- Todos los controladores usan `Inertia::render()` — no quedan `view()` en el flujo principal
+- Todas las páginas React en `resources/js/pages/` (auth, dashboard, CRUD, reportes, formularios públicos)
+- Las vistas Blade legacy en `resources/views/` se conservan pero no se usan en el flujo principal
 
-- **Antes**: Blade + AdminLTE + jQuery + DataTables + Alpine.js
-- **Después**: Inertia.js + React 18 + Tailwind CSS (+ shadcn/ui opcional)
-- **Backend**: No se toca — modelos, migraciones, form requests, jobs, mail, services, API están todos intactos
-- **Lo completado**: Breeze React instalado, auth views en React, landing en Inertia, rutas migradas
-- **Lo pendiente**: Adaptar controladores (`view()` → `Inertia::render()`), crear páginas React para CRUD y vistas complejas, limpieza
-- **Las vistas Blade legacy siguen en `resources/views/`** pero ya no se usan para auth/profile/landing
+## Diseño y Marca
+
+Style guide de páginas públicas en `.claude/style-guide.md` — colores institucionales, tipografía (Noto Sans) y reglas de uso en Tailwind.
+
+**Jerarquía de diseño — SIEMPRE respetar este orden:**
+1. `.claude/style-guide.md` — colores y tipografía de marca. Tienen prioridad absoluta. Nunca sobreescribir con valores externos.
+2. Skill `web-design-guidelines` (`.agents/skills/web-design-guidelines/SKILL.md`) — auditoría de buenas prácticas UI (accesibilidad, contraste, UX). Usar para revisar páginas, no para definir marca.
 
 ## Stack Tecnológico
 
