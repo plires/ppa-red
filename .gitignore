@@ -22,5 +22,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.claude/worktrees/
 **/.DS_Store into
 .DS_Store
