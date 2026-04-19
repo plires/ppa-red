@@ -1,0 +1,273 @@
+/* Hero — base mobile-first */
+
+.hero {
+    min-height: 100svh;
+    background-size: cover;
+    background-position: left center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: stretch;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
+}
+
+/* ── Columna izquierda ── */
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.logo {
+    width: 110px;
+}
+
+.headlines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.headline {
+    font-family: var(--text-font);
+    font-weight: 900;
+    font-size: 1.65rem;
+    color: white;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.subtext {
+    font-family: var(--text-font);
+    font-size: 0.9rem;
+    color: white;
+    margin: 0;
+}
+
+/* ── Tarjeta de formulario ── */
+
+.formCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.formTitle {
+    font-family: var(--text-font);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    text-align: center;
+    line-height: 1.3;
+    margin: 0 0 0.3rem;
+}
+
+.formSubtitle {
+    font-family: var(--text-font);
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+    margin: 0 0 1.1rem;
+}
+
+.field {
+    margin-bottom: 0.6rem;
+}
+
+.input,
+.select,
+.textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.6rem 0.875rem;
+    font-family: var(--text-font);
+    font-size: 0.875rem;
+    color: #555;
+    background: white;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: #bbb;
+}
+
+.select {
+    color: #aaa;
+    cursor: pointer;
+}
+
+.select:has(option:checked:not([value=''])) {
+    color: #555;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 117, 0, 0.1);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 68px;
+}
+
+.error {
+    font-family: var(--text-font);
+    font-size: 0.75rem;
+    color: #e53e3e;
+    margin-top: 0.2rem;
+}
+
+.submitBtn {
+    width: 100%;
+    background: var(--secondary-color);
+    color: white;
+    font-family: var(--text-font);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    margin-top: 0.4rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: var(--primary-color);
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Columna derecha: beneficios (oculta en mobile) ── */
+
+.right {
+    display: none;
+}
+
+/* sm - Small devices (≥576px) */
+@media (min-width: 576px) {
+    .formCard {
+        max-width: 420px;
+    }
+}
+
+/* md - Medium devices (≥768px) */
+@media (min-width: 768px) {
+    .hero {
+        background-position: center;
+    }
+
+    .container {
+        flex-direction: row;
+        align-items: stretch;
+        padding: 3rem 4rem;
+        gap: 0;
+    }
+
+    .left {
+        flex: 0 0 52%;
+        gap: 1.5rem;
+        padding-right: 2rem;
+    }
+
+    .logo {
+        width: 140px;
+    }
+
+    .headline {
+        font-size: 2rem;
+    }
+
+    .subtext {
+        font-size: 0.95rem;
+    }
+
+    .formCard {
+        max-width: 100%;
+        padding: 1.75rem 2rem;
+    }
+
+    .right {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding-bottom: 0.5rem;
+    }
+}
+
+/* lg - Large devices (≥992px) */
+@media (min-width: 992px) {
+    .container {
+        padding: 3.5rem 5rem;
+        max-width: 1300px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .headline {
+        font-size: 2.25rem;
+    }
+}
+
+/* xl - Extra large devices (≥1200px) */
+@media (min-width: 1200px) {
+    .container {
+        padding: 4rem 6rem;
+        max-width: 1400px;
+    }
+
+    .headline {
+        font-size: 2.5rem;
+    }
+}
+
+/* ── Badges ── */
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--primary-color);
+    color: white;
+    font-family: var(--text-font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.badgeIcon {
+    width: 22px;
+    height: 22px;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    line-height: 1;
+}
