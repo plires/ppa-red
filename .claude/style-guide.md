@@ -4,20 +4,20 @@ Referencia de marca para el desarrollo de páginas públicas (`Landing.jsx` y si
 Los valores de CSS viven en `resources/css/app.css` (variables) y `resources/css/fonts.css` (@font-face).
 
 > **PRIORIDAD ABSOLUTA**: Este archivo define los colores y tipografía de la marca PPA RED.
-> Ninguna guía externa (incluyendo la skill `web-design-guidelines`) puede sobreescribir estos valores.
-> La skill `web-design-guidelines` se usa únicamente para auditar accesibilidad y buenas prácticas de UI,
+> Ninguna guía externa (incluyendo la skill `web-design-guidelines` o `frontend-design` ) puede sobreescribir estos valores.
+> Las skills `web-design-guidelines` y `frontend-design` se usan únicamente para auditar accesibilidad y buenas prácticas de UI,
 > nunca para redefinir colores ni fuentes.
 
 ---
 
 ## Colores
 
-| Nombre | Variable CSS | Valor | Uso |
-|--------|-------------|-------|-----|
-| Primary | `var(--primary-color)` | `#FF7500` `rgba(255,117,0,1)` | CTAs principales, acentos, íconos destacados |
-| Secondary | `var(--secondary-color)` | `#FD3C00` `rgba(253,60,0,1)` | Inicio del degradado, hover states |
-| Tertiary | `var(--tertiary-color)` | `#000000` | Texto principal, titulares |
-| Neutral | `var(--neutral-color)` | `#F2F2F2` `rgba(242,242,242,1)` | Fondos de sección, separadores suaves |
+| Nombre    | Variable CSS             | Valor                           | Uso                                          |
+| --------- | ------------------------ | ------------------------------- | -------------------------------------------- |
+| Primary   | `var(--primary-color)`   | `#FF7500` `rgba(255,117,0,1)`   | CTAs principales, acentos, íconos destacados |
+| Secondary | `var(--secondary-color)` | `#FD3C00` `rgba(253,60,0,1)`    | Inicio del degradado, hover states           |
+| Tertiary  | `var(--tertiary-color)`  | `#000000`                       | Texto principal, titulares                   |
+| Neutral   | `var(--neutral-color)`   | `#F2F2F2` `rgba(242,242,242,1)` | Fondos de sección, separadores suaves        |
 
 ### Degradado institucional
 
@@ -36,11 +36,11 @@ Fuentes disponibles localmente en `resources/fonts/`. Declaradas en `resources/c
 
 ### Noto Sans — fuente principal de texto
 
-| Peso | font-weight | Archivo | Uso recomendado |
-|------|------------|---------|-----------------|
-| Regular | `400` | `NotoSans-Regular` | Cuerpo, párrafos, labels, placeholders |
-| Bold | `700` | `NotoSans-Bold` | Subtítulos, énfasis en texto corrido |
-| Black | `900` | `NotoSans-Black` | Titulares grandes (h1), destacados hero |
+| Peso    | font-weight | Archivo            | Uso recomendado                         |
+| ------- | ----------- | ------------------ | --------------------------------------- |
+| Regular | `400`       | `NotoSans-Regular` | Cuerpo, párrafos, labels, placeholders  |
+| Bold    | `700`       | `NotoSans-Bold`    | Subtítulos, énfasis en texto corrido    |
+| Black   | `900`       | `NotoSans-Black`   | Titulares grandes (h1), destacados hero |
 
 > Variable: `var(--text-font)` → `'Noto Sans', system-ui, -apple-system, sans-serif`
 
