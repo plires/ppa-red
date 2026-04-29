@@ -1,0 +1,150 @@
+.features {
+  background-color: var(--neutral-color);
+  padding: 2.75rem 0 3rem;
+}
+
+.featuresInner {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-family: var(--text-font);
+  font-weight: 900;
+  font-size: 1.6rem;
+  color: var(--secondary-color);
+  margin: 0 0 0.75rem;
+  line-height: 1.15;
+}
+
+.subtitle {
+  font-family: var(--text-font);
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin: 0 auto;
+  max-width: 36ch;
+  line-height: 1.6;
+}
+
+.item {
+  flex-shrink: 0;
+  width: 78vw;
+  max-width: 290px;
+  scroll-snap-align: center;
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem 1.75rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+}
+
+.iconWrap {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: var(--neutral-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: block;
+}
+
+.itemTitle {
+  font-family: var(--text-font);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--tertiary-color);
+  margin: 0 0 0.4rem;
+}
+
+.itemText {
+  font-family: var(--text-font);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* sm */
+@media (min-width: 576px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    max-width: 44ch;
+    font-size: 1rem;
+  }
+
+  .item {
+    width: 60vw;
+  }
+}
+
+@media (min-width: 640px) {
+  .item {
+    width: fit-content;
+    padding: 1rem;
+  }
+
+  .itemTitle {
+    font-size: 0.85rem;
+  }
+
+  .itemText {
+    font-size: 0.7rem;
+    min-height: 35px;
+  }
+}
+
+/* md: grid de 3 columnas, elimina el scroll */
+@media (min-width: 768px) {
+  .features {
+    padding: 4rem 0 4.5rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .itemTitle {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .itemText {
+    font-size: 0.95rem;
+    min-height: 50px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .features {
+    margin-top: 325px;
+    padding: 4rem 0 4.5rem;
+    padding-bottom: 350px;
+  }
+
+  .header {
+    margin-top: -325px;
+  }
+}

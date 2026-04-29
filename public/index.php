@@ -9,6 +9,9 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
     require $maintenance;
 }
 
+// Suppress PHP 8.5 deprecation notices from vendor/laravel/framework until upstream fix lands
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
