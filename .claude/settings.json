@@ -1,6 +1,6 @@
 {
   "worktree": {
-    "symlinkDirectories": ["vendor", "node_modules"]
+    "symlinkDirectories": ["vendor", "node_modules", "public/build"]
   },
   "hooks": {
     "WorktreeCreate": [
@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "find /Users/pablolires/Desktop/Code/app-ppa/.claude/worktrees -maxdepth 1 -mindepth 1 -type d | while read -r wt; do [ ! -e \"$wt/.env\" ] && ln -sf /Users/pablolires/Desktop/Code/app-ppa/.env \"$wt/.env\"; [ ! -e \"$wt/resources/images\" ] && ln -sf /Users/pablolires/Desktop/Code/app-ppa/resources/images \"$wt/resources/images\"; done",
+            "command": "MAIN=/Users/pablolires/Desktop/Code/app-ppa; find \"$MAIN/.claude/worktrees\" -maxdepth 1 -mindepth 1 -type d | while read -r wt; do [ ! -L \"$wt/vendor\" ] && rm -rf \"$wt/vendor\" && ln -sf \"$MAIN/vendor\" \"$wt/vendor\"; [ ! -L \"$wt/node_modules\" ] && rm -rf \"$wt/node_modules\" && ln -sf \"$MAIN/node_modules\" \"$wt/node_modules\"; [ ! -L \"$wt/public/build\" ] && rm -rf \"$wt/public/build\" && ln -sf \"$MAIN/public/build\" \"$wt/public/build\"; [ ! -e \"$wt/.env\" ] && ln -sf \"$MAIN/.env\" \"$wt/.env\"; [ ! -e \"$wt/resources/images\" ] && ln -sf \"$MAIN/resources/images\" \"$wt/resources/images\"; done",
             "statusMessage": "Configurando worktree (symlinks)..."
           }
         ]
