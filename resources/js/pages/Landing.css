@@ -1,0 +1,12 @@
+.landing .features {
+}
+/* sm */
+@media (min-width: 576px) {
+}
+
+@media (min-width: 640px) {
+}
+
+/* md: grid de 3 columnas, elimina el scroll */
+@media (min-width: 768px) {
+}
