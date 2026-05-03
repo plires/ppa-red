@@ -10,6 +10,7 @@ import ProcesosSection from '@/Components/ProcesosSection'
 import TiposPortonSection from '@/Components/TiposPortonSection'
 import CtaPresupuestoSection from '@/Components/CtaPresupuestoSection'
 import TestimoniosSection from '@/Components/TestimoniosSection'
+import FaqSection from '@/Components/FaqSection'
 
 export default function Landing() {
   const [provinces, setProvinces] = useState([])
@@ -112,6 +113,7 @@ export default function Landing() {
       <TiposPortonSection />
       <CtaPresupuestoSection />
       <TestimoniosSection />
+      <FaqSection />
     </section>
   )
 }
