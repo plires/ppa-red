@@ -29,6 +29,8 @@
     },
     "dependencies": {
         "@tanstack/react-table": "^8.21.3",
+        "embla-carousel-autoplay": "^8.6.0",
+        "embla-carousel-react": "^8.6.0",
         "lucide-react": "^1.7.0",
         "recharts": "^3.8.1"
     }
