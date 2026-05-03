@@ -1,0 +1,84 @@
+.footer {
+  background: #000000;
+  padding: 3rem 1.5rem;
+}
+
+.inner {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.logo {
+  width: 90px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.brand {
+  font-family: var(--text-font);
+  font-weight: 900;
+  font-size: 1rem;
+  color: #ffffff;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+.importador {
+  font-family: var(--text-font);
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: #ffffff;
+  letter-spacing: 0.18em;
+  margin: 0 0 1rem;
+}
+
+.tagline {
+  font-family: var(--text-font);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.contact p {
+  font-family: var(--text-font);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin: 0;
+}
+
+.link {
+  color: #d1d5db;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--primary-color);
+}
+
+/* md */
+@media (min-width: 768px) {
+  .logo {
+    width: 100px;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+  }
+
+  .contact p {
+    font-size: 0.925rem;
+  }
+}
