@@ -9,6 +9,7 @@ import AniversarioSection from '@/Components/AniversarioSection'
 import ProcesosSection from '@/Components/ProcesosSection'
 import TiposPortonSection from '@/Components/TiposPortonSection'
 import CtaPresupuestoSection from '@/Components/CtaPresupuestoSection'
+import TestimoniosSection from '@/Components/TestimoniosSection'
 
 export default function Landing() {
   const [provinces, setProvinces] = useState([])
@@ -110,6 +111,7 @@ export default function Landing() {
       <ProcesosSection />
       <TiposPortonSection />
       <CtaPresupuestoSection />
+      <TestimoniosSection />
     </section>
   )
 }
