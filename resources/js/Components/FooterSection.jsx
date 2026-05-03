@@ -14,12 +14,6 @@ export default function FooterSection() {
 
         <div className={styles.contact}>
           <p>
-            WhatsApp:{' '}
-            <a href='https://wa.me/5491136643484' className={styles.link}>
-              +54 9 11 3664 3484
-            </a>
-          </p>
-          <p>
             <a href='mailto:contacto@ppared.com.ar' className={styles.link}>
               contacto@ppared.com.ar
             </a>
