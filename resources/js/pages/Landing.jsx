@@ -7,6 +7,7 @@ import FeaturesSection from '@/Components/FeaturesSection'
 import BannerSection from '@/Components/BannerSection'
 import AniversarioSection from '@/Components/AniversarioSection'
 import ProcesosSection from '@/Components/ProcesosSection'
+import TiposPortonSection from '@/Components/TiposPortonSection'
 
 export default function Landing() {
   const [provinces, setProvinces] = useState([])
@@ -104,6 +105,7 @@ export default function Landing() {
       <BannerSection />
       <AniversarioSection />
       <ProcesosSection />
+      <TiposPortonSection />
     </section>
   )
 }
