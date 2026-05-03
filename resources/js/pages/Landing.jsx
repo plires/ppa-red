@@ -8,6 +8,7 @@ import BannerSection from '@/Components/BannerSection'
 import AniversarioSection from '@/Components/AniversarioSection'
 import ProcesosSection from '@/Components/ProcesosSection'
 import TiposPortonSection from '@/Components/TiposPortonSection'
+import CtaPresupuestoSection from '@/Components/CtaPresupuestoSection'
 
 export default function Landing() {
   const [provinces, setProvinces] = useState([])
@@ -87,25 +88,28 @@ export default function Landing() {
   return (
     <section className='landing'>
       <Head title='PPA RED — Presupuesto Gratis' />
-      <Hero
-        data={data}
-        setData={setData}
-        errors={errors}
-        processing={processing}
-        provinces={provinces}
-        zones={zones}
-        localities={localities}
-        loadingZones={loadingZones}
-        loadingLocalities={loadingLocalities}
-        handleProvinceChange={handleProvinceChange}
-        handleZoneChange={handleZoneChange}
-        onSubmit={submit}
-      />
+      <div id='presupuesto'>
+        <Hero
+          data={data}
+          setData={setData}
+          errors={errors}
+          processing={processing}
+          provinces={provinces}
+          zones={zones}
+          localities={localities}
+          loadingZones={loadingZones}
+          loadingLocalities={loadingLocalities}
+          handleProvinceChange={handleProvinceChange}
+          handleZoneChange={handleZoneChange}
+          onSubmit={submit}
+        />
+      </div>
       <FeaturesSection />
       <BannerSection />
       <AniversarioSection />
       <ProcesosSection />
       <TiposPortonSection />
+      <CtaPresupuestoSection />
     </section>
   )
 }
