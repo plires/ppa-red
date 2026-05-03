@@ -1,0 +1,256 @@
+/* ── Sección exterior ── */
+.section {
+  background: #ffffff;
+  padding: 0 1rem 3rem;
+}
+
+/* ── Tarjeta con degradado institucional ── */
+.card {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--degrade);
+  border-radius: 1.25rem;
+  padding: 2rem 1.25rem 2rem;
+}
+
+/* ── Encabezado ── */
+.heading {
+  font-family: var(--text-font);
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 0 2rem;
+}
+
+/* ════════════════════════════
+   MOBILE: 2×2 grid
+════════════════════════════ */
+.mobileStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.mobileIcon {
+  width: 72px;
+  height: auto;
+  display: block;
+}
+
+.mobileDot {
+  /* width: 18px;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease, opacity 0.5s ease; */
+  display: none;
+}
+
+.mobileLabel {
+  font-family: var(--text-font);
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ════════════════════════════
+   DESKTOP: 3 filas
+════════════════════════════ */
+
+/* Fila 1 — iconos */
+.iconsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconUnit {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  position: relative;
+}
+
+/* El chevron está fuera del iconUnit, como sibling */
+.desktopIcon {
+  width: 88px;
+  height: auto;
+  display: block;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  flex-shrink: 0;
+}
+
+/* Chevron entre iconos — clip-path hexagonal apuntando derecha */
+.chevron {
+  display: block;
+  width: 28px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.28);
+  clip-path: polygon(0 0, 58% 0, 100% 50%, 58% 100%, 0 100%, 42% 50%);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+/* Fila 2 — timeline */
+.timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.25rem 0 0.75rem;
+  padding: 0;
+  padding: 55px;
+  padding-right: 70px;
+}
+
+.timelineLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 5px;
+  background: #ffffff;
+  transform: translateY(-50%);
+}
+
+.timelineDot {
+  width: 22px;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  display: block;
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+}
+
+/* Fila 3 — labels */
+.desktopLabel {
+  font-family: var(--text-font);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.45;
+  margin: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* ════════════════════════════
+   Estados: activo / inactivo
+════════════════════════════ */
+.stepOn {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.stepOff {
+  transform: scale(0.93);
+  filter: brightness(180%);
+  -webkit-filter: brightness(180%);
+}
+
+.dotOn {
+  opacity: 1;
+  transform: scale(1.35);
+}
+
+.dotOff {
+  filter: brightness(180%);
+  transform: scale(1);
+}
+
+.labelOn {
+  opacity: 1;
+}
+
+.labelOff {
+  opacity: 0.55;
+}
+
+/* ════════════════════════════
+   Responsive
+════════════════════════════ */
+
+/* sm */
+@media (min-width: 576px) {
+  .mobileIcon {
+    width: 88px;
+  }
+
+  .heading {
+    font-size: 1.25rem;
+  }
+
+  .mobileLabel {
+    font-size: 0.9rem;
+  }
+}
+
+/* md */
+@media (min-width: 768px) {
+  .section {
+    padding: 0 2rem 4rem;
+  }
+
+  .card {
+    padding: 2.5rem 2rem 2rem;
+  }
+
+  .iconsRow {
+    position: relative;
+  }
+
+  .iconsRow::after {
+    content: '';
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 75%;
+    height: 1px;
+    background: white;
+    z-index: 0;
+  }
+
+  .iconUnit {
+    z-index: 1;
+  }
+
+  .timeline {
+    padding-left: 10%;
+    padding-right: 12%;
+  }
+
+  .timelineLine {
+    left: 10.5%;
+    width: 77%;
+  }
+}
+
+/* lg */
+@media (min-width: 992px) {
+  .card {
+    padding: 2.5rem 2.5rem 2rem;
+  }
+
+  .heading {
+    font-size: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .timelineLine {
+    width: 76%;
+  }
+}

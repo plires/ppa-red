@@ -5,6 +5,8 @@ import axios from 'axios'
 import Hero from '@/Components/Hero'
 import FeaturesSection from '@/Components/FeaturesSection'
 import BannerSection from '@/Components/BannerSection'
+import AniversarioSection from '@/Components/AniversarioSection'
+import ProcesosSection from '@/Components/ProcesosSection'
 
 export default function Landing() {
   const [provinces, setProvinces] = useState([])
@@ -100,6 +102,8 @@ export default function Landing() {
       />
       <FeaturesSection />
       <BannerSection />
+      <AniversarioSection />
+      <ProcesosSection />
     </section>
   )
 }
