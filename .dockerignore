@@ -1,0 +1,16 @@
+node_modules
+vendor
+.env
+.env.*
+!.env.example
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+public/build
+.git
+.claude
+*.md
+tests
+phpunit.xml
+docker-compose*.yml
