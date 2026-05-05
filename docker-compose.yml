@@ -8,6 +8,19 @@ services:
       - "80"
     networks:
       - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP → redirect a HTTPS
+      - "traefik.http.routers.ppa-http.rule=Host(`plires.cloud`)"
+      - "traefik.http.routers.ppa-http.entrypoints=web"
+      - "traefik.http.routers.ppa-http.middlewares=ppa-https-redirect"
+      - "traefik.http.middlewares.ppa-https-redirect.redirectscheme.scheme=https"
+      # HTTPS
+      - "traefik.http.routers.ppa-https.rule=Host(`plires.cloud`)"
+      - "traefik.http.routers.ppa-https.entrypoints=websecure"
+      - "traefik.http.routers.ppa-https.tls=true"
+      - "traefik.http.routers.ppa-https.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ppa-app.loadbalancer.server.port=80"
     environment:
       APP_NAME: ${APP_NAME}
       APP_ENV: ${APP_ENV}
