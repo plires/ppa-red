@@ -3,7 +3,7 @@
 /public/build
 /public/hot
 /public/storage
-/resources/images
+# /resources/images — imágenes trackeadas en git para el build de Docker
 /storage/*.key
 /storage/pail
 /vendor
