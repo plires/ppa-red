@@ -4,8 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - "80:80"
+    expose:
+      - "80"
+    networks:
+      - dokploy-network
     environment:
       APP_NAME: ${APP_NAME}
       APP_ENV: ${APP_ENV}
@@ -32,3 +34,7 @@ services:
 volumes:
   ppa_database:
   ppa_storage:
+
+networks:
+  dokploy-network:
+    external: true
