@@ -13,8 +13,8 @@ import {
     Bell,
     MessageSquare,
     ChevronDown,
-    LayoutDashboard,
 } from 'lucide-react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 import FlashMessages from '@/Components/FlashMessages';
 
 const adminMenus = [
@@ -93,28 +93,33 @@ export default function AuthenticatedLayout({ header, children }) {
             {/* Mobile overlay */}
             {sidebarOpen && (
                 <div
-                    className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+                    className="fixed inset-0 z-20 bg-black/60 lg:hidden"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
 
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-gray-900 transition-transform duration-300 ${
+                className={`fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-black transition-transform duration-300 ${
                     sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } lg:static lg:translate-x-0`}
             >
                 {/* Brand */}
-                <div className="flex h-16 flex-shrink-0 items-center gap-3 border-b border-gray-700 px-4">
+                <div className="flex h-16 flex-shrink-0 items-center gap-3 border-b border-white/10 px-4">
                     <Link
                         href={route('form_submissions.index')}
-                        className="flex items-center gap-2 text-white"
+                        className="flex items-center gap-3 text-white"
                     >
-                        <LayoutDashboard className="h-5 w-5 text-indigo-400" />
-                        <span className="text-lg font-bold">PPA RED</span>
+                        <ApplicationLogo className="h-8 w-auto text-white" />
+                        <span
+                            className="text-base font-bold tracking-wide"
+                            style={{ background: 'linear-gradient(90deg, #FD3C00, #FF7500)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                        >
+                            PPA RED
+                        </span>
                     </Link>
                     <button
-                        className="ms-auto text-gray-400 hover:text-white lg:hidden"
+                        className="ms-auto text-white/40 hover:text-white lg:hidden"
                         onClick={() => setSidebarOpen(false)}
                     >
                         <X className="h-5 w-5" />
@@ -122,14 +127,17 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
 
                 {/* User panel */}
-                <div className="flex-shrink-0 border-b border-gray-700 px-4 py-3">
+                <div className="flex-shrink-0 border-b border-white/10 px-4 py-3">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
+                        <div
+                            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
+                            style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                        >
                             {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
                             <p className="truncate text-sm font-medium text-gray-200">{user.name}</p>
-                            <p className="text-xs text-gray-400 capitalize">{user.role}</p>
+                            <p className="text-xs text-gray-500 capitalize">{user.role}</p>
                         </div>
                     </div>
                 </div>
@@ -140,9 +148,12 @@ export default function AuthenticatedLayout({ header, children }) {
                         href={route('form_submissions.index')}
                         className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                             route().current('form_submissions.*')
-                                ? 'bg-indigo-600 text-white'
-                                : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                                ? 'text-white'
+                                : 'text-gray-400 hover:bg-white/5 hover:text-white'
                         }`}
+                        style={route().current('form_submissions.*')
+                            ? { background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }
+                            : {}}
                     >
                         <FileText className="h-4 w-4 flex-shrink-0" />
                         Formularios
@@ -150,7 +161,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                     {isAdmin && (
                         <>
-                            <div className="my-2 border-t border-gray-700" />
+                            <div className="my-2 border-t border-white/10" />
                             {adminMenus.map((item) => (
                                 <CollapsibleMenu
                                     key={item.key}
@@ -164,12 +175,12 @@ export default function AuthenticatedLayout({ header, children }) {
                 </nav>
 
                 {/* Logout */}
-                <div className="flex-shrink-0 border-t border-gray-700 px-3 py-3">
+                <div className="flex-shrink-0 border-t border-white/10 px-3 py-3">
                     <Link
                         href={route('logout')}
                         method="post"
                         as="button"
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-700 hover:text-white"
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-white/5 hover:text-white"
                     >
                         <LogOut className="h-4 w-4 flex-shrink-0" />
                         Cerrar Sesión
@@ -199,13 +210,11 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <NotificationBell
                                     icon={MessageSquare}
                                     count={unreadComments ?? 0}
-                                    badgeColor="bg-red-500"
                                     title="Comentarios sin leer"
                                 />
                                 <NotificationBell
                                     icon={Bell}
                                     count={unreadNotifications ?? 0}
-                                    badgeColor="bg-yellow-500"
                                     title="Notificaciones sin leer"
                                 />
                             </>
@@ -215,7 +224,10 @@ export default function AuthenticatedLayout({ header, children }) {
                             href={route('profile.edit')}
                             className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white">
+                            <div
+                                className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold text-white"
+                                style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                            >
                                 {user.name.charAt(0).toUpperCase()}
                             </div>
                             <span className="hidden sm:block">{user.name}</span>
@@ -242,8 +254,8 @@ function CollapsibleMenu({ item, expanded, onToggle }) {
                 onClick={onToggle}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                     isActive
-                        ? 'bg-gray-700 text-white'
-                        : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                        ? 'bg-white/10 text-white'
+                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
                 }`}
             >
                 <Icon className="h-4 w-4 flex-shrink-0" />
@@ -254,16 +266,19 @@ function CollapsibleMenu({ item, expanded, onToggle }) {
             </button>
 
             {expanded && (
-                <div className="mt-0.5 ml-4 space-y-0.5 border-l border-gray-700 pl-3">
+                <div className="mt-0.5 ml-4 space-y-0.5 border-l border-white/10 pl-3">
                     {item.children.map((child) => (
                         <Link
                             key={child.routeName}
                             href={child.href}
                             className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
                                 route().current(child.routeName)
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                                    ? 'text-white'
+                                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
                             }`}
+                            style={route().current(child.routeName)
+                                ? { background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }
+                                : {}}
                         >
                             {child.label}
                         </Link>
@@ -274,16 +289,18 @@ function CollapsibleMenu({ item, expanded, onToggle }) {
     );
 }
 
-function NotificationBell({ icon: Icon, count, badgeColor, title }) {
+function NotificationBell({ icon: Icon, count, title }) {
+    const hasCount = count > 0;
     return (
         <button
             title={title}
             className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
             <Icon className="h-5 w-5" />
-            {count > 0 && (
+            {hasCount && (
                 <span
-                    className={`absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white ${badgeColor}`}
+                    className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white"
+                    style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
                 >
                     {count}
                 </span>

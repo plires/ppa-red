@@ -68,7 +68,8 @@ export default function Index({ provinces }) {
                         </Link>
                         <Link
                             href={route('provinces.create')}
-                            className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+                            style={{ background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }}
                         >
                             <Plus className="h-4 w-4" />
                             Nueva Provincia

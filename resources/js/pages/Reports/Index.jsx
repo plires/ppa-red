@@ -109,7 +109,8 @@ export default function Index({ partners }) {
                         <button
                             onClick={fetchData}
                             disabled={loading}
-                            className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
+                            style={{ background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }}
                         >
                             <Search className="h-4 w-4" />
                             {loading ? 'Cargando...' : 'Consultar'}
@@ -139,7 +140,7 @@ export default function Index({ partners }) {
                                     {chartData.map((entry, i) => (
                                         <Cell
                                             key={i}
-                                            fill={detail?.partnerId === entry.id ? '#4338ca' : COLORS[i % COLORS.length]}
+                                            fill={detail?.partnerId === entry.id ? '#FD3C00' : COLORS[i % COLORS.length]}
                                         />
                                     ))}
                                 </Bar>
@@ -152,12 +153,12 @@ export default function Index({ partners }) {
                 {(detail || loadingDetail) && (
                     <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
                         <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-4">
-                            <User2 className="h-4 w-4 text-indigo-500" />
+                            <User2 className="h-4 w-4 text-[#FF7500]" />
                             <h2 className="font-semibold text-gray-800">
                                 {detail ? `Formularios de ${detail.partnerName}` : 'Cargando...'}
                             </h2>
                             {detail && (
-                                <span className="ml-auto rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-600">
+                                <span className="ml-auto rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-[#FF7500]">
                                     {detail.items.length}
                                 </span>
                             )}
@@ -199,7 +200,7 @@ export default function Index({ partners }) {
                                                 <td className="px-6 py-3">
                                                     <Link
                                                         href={route('form_submissions.show', item.id)}
-                                                        className="inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-indigo-600 hover:bg-indigo-50"
+                                                        className="inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-[#FF7500] hover:bg-orange-50"
                                                     >
                                                         <Eye className="h-4 w-4" />
                                                         Ver

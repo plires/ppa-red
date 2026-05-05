@@ -56,7 +56,7 @@ export default function Index({ formSubmissions }) {
                 cell: ({ row }) => (
                     <Link
                         href={route('form_submissions.show', row.original.id)}
-                        className="flex items-center gap-1 rounded px-2 py-1 text-sm text-indigo-600 hover:bg-indigo-50"
+                        className="flex items-center gap-1 rounded px-2 py-1 text-sm text-[#FF7500] hover:bg-orange-50"
                     >
                         <Eye className="h-4 w-4" />
                         Ver

@@ -2,7 +2,7 @@ import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -11,18 +11,18 @@ export default function ForgotPassword({ status }) {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route('password.email'));
     };
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password" />
+            <Head title="Recuperar contraseña" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+            <div className="mb-6">
+                <h1 className="text-2xl font-bold text-gray-900">Recuperar contraseña</h1>
+                <p className="mt-2 text-sm text-gray-500">
+                    Ingresá tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+                </p>
             </div>
 
             {status && (
@@ -31,23 +31,32 @@ export default function ForgotPassword({ status }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
+            <form onSubmit={submit} className="space-y-5">
+                <div>
+                    <TextInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={data.email}
+                        className="block w-full"
+                        placeholder="tu@correo.com"
+                        isFocused={true}
+                        onChange={(e) => setData('email', e.target.value)}
+                    />
+                    <InputError message={errors.email} className="mt-2" />
+                </div>
 
-                <InputError message={errors.email} className="mt-2" />
+                <PrimaryButton className="w-full justify-center py-2.5" disabled={processing}>
+                    Enviar enlace de recuperación
+                </PrimaryButton>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
-                    </PrimaryButton>
+                <div className="text-center">
+                    <Link
+                        href={route('login')}
+                        className="text-sm text-gray-500 underline hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF7500] focus:ring-offset-2 rounded"
+                    >
+                        Volver al inicio de sesión
+                    </Link>
                 </div>
             </form>
         </GuestLayout>

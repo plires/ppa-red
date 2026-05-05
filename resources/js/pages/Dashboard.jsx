@@ -5,7 +5,7 @@ import { FileText, MapPin, Map, Globe, Users, BarChart2 } from 'lucide-react';
 
 export default function Dashboard() {
     const cards = [
-        { label: 'Formularios', icon: FileText, href: route('form_submissions.index'), color: 'bg-indigo-50 text-indigo-600' },
+        { label: 'Formularios', icon: FileText, href: route('form_submissions.index'), color: 'bg-orange-50 text-[#FF7500]' },
         { label: 'Provincias', icon: Globe, href: route('provinces.index'), color: 'bg-purple-50 text-purple-600' },
         { label: 'Zonas', icon: Map, href: route('zones.index'), color: 'bg-cyan-50 text-cyan-600' },
         { label: 'Localidades', icon: MapPin, href: route('localities.index'), color: 'bg-green-50 text-green-600' },

@@ -18,17 +18,17 @@ import {
 } from 'lucide-react';
 
 const STATUS_COLORS = {
-    'Pendiente de Respuesta Del Partner': 'bg-yellow-100 text-yellow-800',
-    'Respondido Por El Partner': 'bg-green-100 text-green-800',
-    'Demorado - Sin Respuesta Del Partner (48h)': 'bg-orange-100 text-orange-800',
-    'Cerrado - Sin Respuesta Del Partner': 'bg-red-100 text-red-800',
-    'Cerrado - Sin Respuesta Del Usuario': 'bg-red-100 text-red-800',
-    'Cerrado Por El Partner': 'bg-gray-100 text-gray-800',
+    'Pendiente de Respuesta Del Partner':         'bg-yellow-100 text-yellow-800 border-yellow-200',
+    'Respondido Por El Partner':                  'bg-green-100 text-green-800 border-green-200',
+    'Demorado - Sin Respuesta Del Partner (48h)': 'bg-orange-100 text-orange-800 border-orange-200',
+    'Cerrado - Sin Respuesta Del Partner':        'bg-red-100 text-red-800 border-red-200',
+    'Cerrado - Sin Respuesta Del Usuario':        'bg-red-100 text-red-800 border-red-200',
+    'Cerrado Por El Partner':                     'bg-gray-100 text-gray-700 border-gray-200',
 };
 
 function StatusBadge({ status }) {
     return (
-        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[status] ?? 'bg-gray-100 text-gray-600'}`}>
+        <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_COLORS[status] ?? 'bg-gray-100 text-gray-600 border-gray-200'}`}>
             {status ?? '—'}
         </span>
     );
@@ -77,52 +77,60 @@ export default function Show({ formSubmission, formData, responses }) {
         .filter(Boolean)
         .join(', ');
 
+    // Chat header: muestra el solicitante (el admin habla CON él)
+    const requesterInitial = formData?.name?.charAt(0)?.toUpperCase() ?? '?';
+    // Card del partner
+    const partnerInitial = formSubmission.user?.name?.charAt(0)?.toUpperCase() ?? 'P';
+
     return (
         <AuthenticatedLayout header="Formularios / Detalle">
             <div className="mx-auto max-w-4xl space-y-5">
 
-                {/* Back + status */}
+                {/* ── Navegación superior ── */}
                 <div className="flex items-center justify-between">
                     <Link
                         href={route('form_submissions.index')}
-                        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800"
                     >
-                        <ArrowLeft className="h-4 w-4" /> Volver
+                        <ArrowLeft className="h-4 w-4" />
+                        Volver al listado
                     </Link>
-                    <StatusBadge status={formSubmission.status?.name} />
+                    <a
+                        href={route('public.form_submission.show', formSubmission.secure_token)}
+                        target="_blank"
+                        rel="noopener"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-500 shadow-sm hover:bg-gray-50"
+                    >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        Ver versión pública
+                    </a>
                 </div>
 
-                {/* Header card */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                {/* ── Estado de la consulta ── */}
+                <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                             <h1 className="text-lg font-semibold text-gray-900">
                                 Consulta de{' '}
-                                <span className="text-indigo-700">{formData?.name}</span>
+                                <span style={{ color: '#FF7500' }}>{formData?.name}</span>
                             </h1>
-                            <p className="mt-0.5 flex items-center gap-1 text-sm text-gray-500">
+                            <p className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
                                 <Calendar className="h-4 w-4" />
                                 {new Date(formSubmission.created_at).toLocaleDateString('es-AR')}
                             </p>
                         </div>
-                        <a
-                            href={route('public.form_submission.show', formSubmission.secure_token)}
-                            target="_blank"
-                            rel="noopener"
-                            className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50"
-                        >
-                            <ExternalLink className="h-3.5 w-3.5" />
-                            Ver versión pública
-                        </a>
+                        <StatusBadge status={formSubmission.status?.name} />
                     </div>
                 </div>
 
-                {/* Profile cards */}
+                {/* ── Info cards ── */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {/* Usuario final */}
-                    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                        <h2 className="mb-3 text-sm font-semibold text-gray-700">Información del solicitante</h2>
-                        <p className="font-medium text-gray-900">{formData?.name}</p>
+                    {/* Solicitante */}
+                    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                            Solicitante
+                        </h2>
+                        <p className="font-semibold text-gray-900">{formData?.name}</p>
                         <ul className="mt-2 space-y-1.5 text-sm text-gray-600">
                             {formData?.email && (
                                 <li className="flex items-center gap-2">
@@ -145,107 +153,165 @@ export default function Show({ formSubmission, formData, responses }) {
                         </ul>
                     </div>
 
-                    {/* Partner */}
-                    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                        <h2 className="mb-3 text-sm font-semibold text-gray-700">Partner PPA RED asignado</h2>
-                        <p className="font-medium text-gray-900">{formSubmission.user?.name ?? '—'}</p>
-                        <ul className="mt-2 space-y-1.5 text-sm text-gray-600">
-                            {formSubmission.user?.email && (
-                                <li className="flex items-center gap-2">
-                                    <Mail className="h-4 w-4 flex-shrink-0 text-gray-400" />
-                                    {formSubmission.user.email}
-                                </li>
-                            )}
-                            {formSubmission.user?.phone && (
+                    {/* Partner asignado */}
+                    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                            Partner PPA RED asignado
+                        </h2>
+                        <div className="flex items-center gap-3">
+                            <div
+                                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-base font-bold text-white"
+                                style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                            >
+                                {partnerInitial}
+                            </div>
+                            <div>
+                                <p className="font-semibold text-gray-900">{formSubmission.user?.name ?? '—'}</p>
+                                {formSubmission.user?.email && (
+                                    <p className="text-xs text-gray-500">{formSubmission.user.email}</p>
+                                )}
+                            </div>
+                        </div>
+                        {formSubmission.user?.phone && (
+                            <ul className="mt-3 space-y-1 text-sm text-gray-600">
                                 <li className="flex items-center gap-2">
                                     <Phone className="h-4 w-4 flex-shrink-0 text-gray-400" />
                                     {formSubmission.user.phone}
                                 </li>
-                            )}
-                            {locationText && (
-                                <li className="flex items-center gap-2">
-                                    <MapPin className="h-4 w-4 flex-shrink-0 text-gray-400" />
-                                    {locationText}
-                                </li>
-                            )}
-                        </ul>
+                            </ul>
+                        )}
                     </div>
                 </div>
 
-                {/* Consulta original */}
+                {/* ── Consulta original ── */}
                 {formData?.message && (
-                    <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
-                        <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-indigo-700">
-                            <MessageCircle className="h-4 w-4" /> Consulta original
+                    <div className="rounded-2xl border border-orange-200 bg-orange-50 p-5">
+                        <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold" style={{ color: '#FF7500' }}>
+                            <MessageCircle className="h-4 w-4" />
+                            Consulta original
                         </h2>
-                        <p className="whitespace-pre-line text-sm text-gray-700">{formData.message}</p>
+                        <p className="text-sm leading-relaxed text-gray-700 whitespace-pre-line">
+                            {formData.message}
+                        </p>
                     </div>
                 )}
 
-                {/* Conversación */}
-                <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-                    <div className="border-b border-gray-100 px-5 py-4">
-                        <h2 className="text-sm font-semibold text-gray-700">Conversación</h2>
+                {/* ── Conversación tipo chat ── */}
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+                    {/* Chat header — muestra el solicitante */}
+                    <div className="flex items-center gap-3 px-5 py-4" style={{ background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }}>
+                        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">
+                            {requesterInitial}
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-white">{formData?.name ?? 'Solicitante'}</p>
+                            <p className="text-xs text-white/70">Solicitante</p>
+                        </div>
+                        {isClosed && (
+                            <span className="ml-auto rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-medium text-white">
+                                Cerrada
+                            </span>
+                        )}
                     </div>
 
-                    {/* Bubbles */}
-                    <div className="space-y-4 p-5 min-h-[200px] max-h-[460px] overflow-y-auto">
+                    {/* Bubbles area */}
+                    <div className="min-h-[200px] max-h-[460px] overflow-y-auto space-y-3 bg-[#F2F2F2] px-4 py-5">
                         {responses.length === 0 ? (
-                            <p className="py-6 text-center text-sm text-gray-400">Aún no hay mensajes.</p>
+                            <div className="flex flex-col items-center justify-center py-10 text-center">
+                                <MessageCircle className="mb-2 h-8 w-8 text-gray-300" />
+                                <p className="text-sm text-gray-400">Sin mensajes aún.</p>
+                                <p className="mt-0.5 text-xs text-gray-400">Escribí el primer mensaje para iniciar la conversación.</p>
+                            </div>
                         ) : (
-                            responses.map((resp) => (
-                                <MessageBubble key={resp.id} response={resp} />
-                            ))
+                            responses.map((resp) => {
+                                // Sin user_id → mensaje automático del sistema
+                                if (!resp.user_id) {
+                                    return (
+                                        <div key={resp.id} className="flex justify-center py-1">
+                                            <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-400 shadow-sm">
+                                                {resp.message}
+                                            </span>
+                                        </div>
+                                    );
+                                }
+
+                                // is_system = 1 → partner (derecha, degradado)
+                                // is_system = 0 → usuario público (izquierda, blanco)
+                                const isPartnerMsg = !!resp.is_system;
+                                const time = new Date(resp.created_at).toLocaleDateString('es-AR', {
+                                    day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
+                                });
+
+                                return (
+                                    <div key={resp.id} className={`flex ${isPartnerMsg ? 'justify-end' : 'justify-start'}`}>
+                                        <div
+                                            className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
+                                                isPartnerMsg
+                                                    ? 'rounded-tr-none text-white'
+                                                    : 'rounded-tl-none bg-white text-gray-800'
+                                            }`}
+                                            style={isPartnerMsg ? { background: 'linear-gradient(135deg, #FD3C00, #FF7500)' } : {}}
+                                        >
+                                            <p className="whitespace-pre-line leading-relaxed">{resp.message}</p>
+                                            <p className={`mt-1.5 text-xs ${isPartnerMsg ? 'text-white/70' : 'text-gray-400'}`}>
+                                                {resp.user?.name ?? (isPartnerMsg ? 'Partner' : 'Usuario')} · {time}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         )}
                         <div ref={messagesEndRef} />
                     </div>
 
                     {/* Input */}
-                    <div className="border-t border-gray-100 px-5 py-4">
+                    <div className="border-t border-gray-100 bg-white px-4 py-3">
                         {!isClosed ? (
-                            <form onSubmit={submitResponse} className="flex gap-2">
-                                <div className="flex-1">
-                                    <input
-                                        type="text"
-                                        value={responseForm.data.message}
-                                        onChange={(e) => responseForm.setData('message', e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                submitResponse(e);
-                                            }
-                                        }}
-                                        placeholder="Escribí tu mensaje..."
-                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    />
-                                    <InputError message={responseForm.errors.message} className="mt-1" />
-                                </div>
+                            <form onSubmit={submitResponse} className="flex items-center gap-2">
+                                <input
+                                    type="text"
+                                    value={responseForm.data.message}
+                                    onChange={(e) => responseForm.setData('message', e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') { e.preventDefault(); submitResponse(e); }
+                                    }}
+                                    placeholder="Escribí tu mensaje..."
+                                    className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-[#FF7500]"
+                                />
                                 <button
                                     type="submit"
                                     disabled={responseForm.processing || !responseForm.data.message.trim()}
-                                    className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                                    style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                                    title="Enviar"
                                 >
                                     <Send className="h-4 w-4" />
-                                    Enviar
                                 </button>
                             </form>
                         ) : (
-                            <div className="text-sm text-gray-500">
-                                <p className="font-medium text-gray-700">Esta consulta está cerrada.</p>
-                                {formSubmission.closure_reason && (
-                                    <p className="mt-1">Motivo: {formSubmission.closure_reason}</p>
-                                )}
+                            <div className="flex items-start gap-3 rounded-xl bg-gray-50 p-4 text-sm">
+                                <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+                                <div>
+                                    <p className="font-medium text-gray-700">Esta consulta está cerrada.</p>
+                                    {formSubmission.closure_reason && (
+                                        <p className="mt-0.5 text-gray-500">Motivo: {formSubmission.closure_reason}</p>
+                                    )}
+                                </div>
                             </div>
+                        )}
+                        {responseForm.errors.message && (
+                            <p className="mt-1 px-1 text-xs text-red-600">{responseForm.errors.message}</p>
                         )}
                     </div>
                 </div>
 
-                {/* Cerrar consulta — solo partner */}
+                {/* ── Cerrar consulta (solo partner) ── */}
                 {isPartner && !isClosed && (
                     <div className="flex justify-end">
                         <button
                             onClick={() => setShowCloseModal(true)}
-                            className="flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-100"
+                            className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-100"
                         >
                             <XCircle className="h-4 w-4" />
                             Cerrar consulta
@@ -254,18 +320,20 @@ export default function Show({ formSubmission, formData, responses }) {
                 )}
             </div>
 
-            {/* Modal cierre */}
+            {/* ── Modal de cierre ── */}
             <Modal show={showCloseModal} onClose={() => setShowCloseModal(false)}>
                 <div className="p-6">
                     <h2 className="mb-1 text-lg font-semibold text-gray-800">Cerrar consulta</h2>
-                    <p className="mb-4 text-sm text-gray-500">Describí el motivo del cierre para registrarlo en el historial.</p>
+                    <p className="mb-4 text-sm text-gray-500">
+                        Describí el motivo del cierre para registrarlo en el historial.
+                    </p>
                     <form onSubmit={submitClose} className="space-y-4">
                         <div>
                             <textarea
                                 value={closeForm.data.closure_reason}
                                 onChange={(e) => closeForm.setData('closure_reason', e.target.value)}
                                 rows={4}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#FF7500] focus:outline-none focus:ring-1 focus:ring-[#FF7500]"
                                 placeholder="Motivo del cierre (mínimo 10 caracteres)..."
                             />
                             <InputError message={closeForm.errors.closure_reason} className="mt-1" />
@@ -282,46 +350,5 @@ export default function Show({ formSubmission, formData, responses }) {
                 </div>
             </Modal>
         </AuthenticatedLayout>
-    );
-}
-
-function MessageBubble({ response }) {
-    // is_system = 1 → mensaje del partner (derecha, indigo)
-    // is_system = 0 → mensaje del usuario público (izquierda, gris)
-    // sin user_id    → mensaje automático del sistema (centrado)
-    if (!response.user_id) {
-        return (
-            <div className="flex justify-center py-1">
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-500">
-                    {response.message}
-                </span>
-            </div>
-        );
-    }
-
-    const isPartner = !!response.is_system;
-
-    const time = new Date(response.created_at).toLocaleDateString('es-AR', {
-        day: '2-digit',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-
-    return (
-        <div className={`flex ${isPartner ? 'justify-end' : 'justify-start'}`}>
-            <div
-                className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
-                    isPartner
-                        ? 'rounded-tr-none bg-indigo-600 text-white'
-                        : 'rounded-tl-none bg-gray-100 text-gray-800'
-                }`}
-            >
-                <p className="whitespace-pre-line">{response.message}</p>
-                <p className={`mt-1 text-xs ${isPartner ? 'text-indigo-200' : 'text-gray-400'}`}>
-                    {response.user?.name ?? 'Usuario'} · {time}
-                </p>
-            </div>
-        </div>
     );
 }
