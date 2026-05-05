@@ -14,9 +14,11 @@ RUN apk add --no-cache \
       nginx \
       supervisor \
       sqlite \
+      sqlite-dev \
       curl \
       unzip \
-    && docker-php-ext-install pdo pdo_sqlite opcache pcntl
+    && docker-php-ext-install pdo pdo_sqlite opcache pcntl \
+    && apk del sqlite-dev
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
