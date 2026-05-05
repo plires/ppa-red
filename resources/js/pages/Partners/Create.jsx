@@ -2,6 +2,7 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import NativeSelect from '@/Components/NativeSelect';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
@@ -84,15 +85,15 @@ export default function Create() {
 
                         <div>
                             <InputLabel htmlFor="role" value="Rol" />
-                            <select
+                            <NativeSelect
                                 id="role"
                                 value={data.role}
                                 onChange={(e) => setData('role', e.target.value)}
-                                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                className="mt-1"
                             >
                                 <option value="partner">Partner</option>
                                 <option value="admin">Admin</option>
-                            </select>
+                            </NativeSelect>
                             <InputError message={errors.role} className="mt-1" />
                         </div>
 

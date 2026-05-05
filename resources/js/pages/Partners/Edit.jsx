@@ -3,6 +3,7 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import NativeSelect from '@/Components/NativeSelect';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
@@ -56,7 +57,7 @@ export default function Edit({ partner }) {
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                     <h2 className="mb-6 text-lg font-semibold text-gray-800">
                         Editar Partner:{' '}
-                        <span className="text-indigo-600">{partner.name}</span>
+                        <span className="text-[#FF7500]">{partner.name}</span>
                     </h2>
 
                     <form onSubmit={submit} className="space-y-4">
@@ -98,15 +99,15 @@ export default function Edit({ partner }) {
 
                         <div>
                             <InputLabel htmlFor="role" value="Rol" />
-                            <select
+                            <NativeSelect
                                 id="role"
                                 value={data.role}
                                 onChange={(e) => setData('role', e.target.value)}
-                                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                className="mt-1"
                             >
                                 <option value="partner">Partner</option>
                                 <option value="admin">Admin</option>
-                            </select>
+                            </NativeSelect>
                             <InputError message={errors.role} className="mt-1" />
                         </div>
 
@@ -117,7 +118,7 @@ export default function Edit({ partner }) {
                                 type="checkbox"
                                 checked={changePassword}
                                 onChange={(e) => handleTogglePassword(e.target.checked)}
-                                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="rounded border-gray-300 text-[#FF7500] focus:ring-[#FF7500]"
                             />
                             <label htmlFor="change_password" className="text-sm text-gray-700">
                                 Cambiar contraseña

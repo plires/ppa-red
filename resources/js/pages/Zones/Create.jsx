@@ -2,6 +2,7 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import NativeSelect from '@/Components/NativeSelect';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
@@ -45,11 +46,11 @@ export default function Create({ provinces }) {
 
                         <div>
                             <InputLabel htmlFor="province_id" value="Provincia" />
-                            <select
+                            <NativeSelect
                                 id="province_id"
                                 value={data.province_id}
                                 onChange={(e) => setData('province_id', e.target.value)}
-                                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                className="mt-1"
                             >
                                 <option value="">Seleccioná una provincia</option>
                                 {provinces.map((p) => (
@@ -57,7 +58,7 @@ export default function Create({ provinces }) {
                                         {p.name}
                                     </option>
                                 ))}
-                            </select>
+                            </NativeSelect>
                             <InputError message={errors.province_id} className="mt-1" />
                         </div>
 

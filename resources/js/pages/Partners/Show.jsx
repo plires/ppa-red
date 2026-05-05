@@ -49,13 +49,13 @@ export default function Show({ partner, recentSubmissions }) {
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white">
+                            <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full text-xl font-bold text-white" style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}>
                                 {partner.name.charAt(0).toUpperCase()}
                             </div>
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Partner</p>
                                 <h1 className="text-xl font-bold text-gray-900">{partner.name}</h1>
-                                <span className="mt-0.5 inline-block rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-600">
+                                <span className="mt-0.5 inline-block rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium capitalize text-[#FF7500]">
                                     {partner.role}
                                 </span>
                             </div>
@@ -121,15 +121,15 @@ export default function Show({ partner, recentSubmissions }) {
                                         )}
                                         {locality.province && (
                                             <>
-                                                <Globe className="h-3 w-3 text-indigo-400" />
-                                                <span className="text-indigo-600">{locality.province.name}</span>
+                                                <Globe className="h-3 w-3 text-gray-400" />
+                                                <span className="text-[#FF7500]">{locality.province.name}</span>
                                             </>
                                         )}
                                     </div>
 
                                     <Link
                                         href={route('localities.show', locality.id)}
-                                        className="ml-auto text-xs text-indigo-500 hover:underline"
+                                        className="ml-auto text-xs text-[#FF7500] hover:underline"
                                     >
                                         Ver
                                     </Link>
@@ -142,9 +142,9 @@ export default function Show({ partner, recentSubmissions }) {
                 {/* Últimos formularios */}
                 <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
                     <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-4">
-                        <FileText className="h-4 w-4 text-indigo-500" />
+                        <FileText className="h-4 w-4 text-[#FF7500]" />
                         <h2 className="font-semibold text-gray-800">Últimos formularios recibidos</h2>
-                        <span className="ml-auto rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-600">
+                        <span className="ml-auto rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-[#FF7500]">
                             {recentSubmissions.length}
                         </span>
                     </div>

@@ -37,13 +37,13 @@ export default function Show({ locality }) {
                     {/* Jerarquía geográfica */}
                     <div className="mt-5 grid grid-cols-2 gap-3 border-t border-gray-100 pt-5">
                         <div className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
-                            <Globe className="h-5 w-5 text-indigo-500" />
+                            <Globe className="h-5 w-5 text-[#FF7500]" />
                             <div>
                                 <p className="text-xs text-gray-500">Provincia</p>
                                 {locality.province ? (
                                     <Link
                                         href={route('provinces.show', locality.province.id)}
-                                        className="text-sm font-semibold text-indigo-600 hover:underline"
+                                        className="text-sm font-semibold text-[#FF7500] hover:underline"
                                     >
                                         {locality.province.name}
                                     </Link>
@@ -59,7 +59,7 @@ export default function Show({ locality }) {
                                 {locality.zone ? (
                                     <Link
                                         href={route('zones.show', locality.zone.id)}
-                                        className="text-sm font-semibold text-indigo-600 hover:underline"
+                                        className="text-sm font-semibold text-[#FF7500] hover:underline"
                                     >
                                         {locality.zone.name}
                                     </Link>
@@ -74,13 +74,13 @@ export default function Show({ locality }) {
                 {/* Partner asignado */}
                 <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
                     <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-4">
-                        <User2 className="h-4 w-4 text-indigo-500" />
+                        <User2 className="h-4 w-4 text-[#FF7500]" />
                         <h2 className="font-semibold text-gray-800">Partner asignado</h2>
                     </div>
 
                     {locality.user ? (
                         <div className="flex items-center gap-4 px-6 py-5">
-                            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}>
                                 {locality.user.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="min-w-0 flex-1">
@@ -102,7 +102,7 @@ export default function Show({ locality }) {
                             </div>
                             <Link
                                 href={route('partners.show', locality.user.id)}
-                                className="text-xs text-indigo-500 hover:underline"
+                                className="text-xs text-[#FF7500] hover:underline"
                             >
                                 Ver perfil
                             </Link>

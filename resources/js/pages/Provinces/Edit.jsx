@@ -28,7 +28,7 @@ export default function Edit({ province }) {
 
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                     <h2 className="mb-6 text-lg font-semibold text-gray-800">
-                        Editar Provincia: <span className="text-indigo-600">{province.name}</span>
+                        Editar Provincia: <span className="text-[#FF7500]">{province.name}</span>
                     </h2>
 
                     <form onSubmit={submit} className="space-y-4">

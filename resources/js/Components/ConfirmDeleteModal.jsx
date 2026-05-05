@@ -1,19 +1,13 @@
-import { useRef } from 'react';
-import Modal from '@/Components/Modal';
-import DangerButton from '@/Components/DangerButton';
-import SecondaryButton from '@/Components/SecondaryButton';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from '@/Components/ui/dialog';
 import { AlertTriangle } from 'lucide-react';
 
-/**
- * Modal de confirmación para eliminar un recurso.
- * Props:
- *   show       — boolean, si el modal está abierto
- *   onClose    — función para cerrar el modal sin confirmar
- *   onConfirm  — función llamada al confirmar la eliminación
- *   title      — título del modal (default: "Confirmar eliminación")
- *   message    — mensaje descriptivo (default: genérico)
- *   processing — boolean, deshabilita el botón mientras se procesa
- */
 export default function ConfirmDeleteModal({
     show,
     onClose,
@@ -22,30 +16,37 @@ export default function ConfirmDeleteModal({
     message = '¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer fácilmente.',
     processing = false,
 }) {
-    const cancelButtonRef = useRef(null);
-
     return (
-        <Modal show={show} onClose={onClose} initialFocus={cancelButtonRef}>
-            <div className="p-6">
-                <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
-                        <AlertTriangle className="h-5 w-5 text-red-600" />
+        <Dialog open={show} onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <div className="flex items-start gap-4">
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                            <AlertTriangle className="h-5 w-5 text-red-600" />
+                        </div>
+                        <div className="flex-1 pt-0.5">
+                            <DialogTitle>{title}</DialogTitle>
+                            <DialogDescription className="mt-1">{message}</DialogDescription>
+                        </div>
                     </div>
-                    <div>
-                        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-                        <p className="mt-1 text-sm text-gray-600">{message}</p>
-                    </div>
-                </div>
+                </DialogHeader>
 
-                <div className="mt-6 flex justify-end gap-3">
-                    <SecondaryButton ref={cancelButtonRef} onClick={onClose}>
+                <DialogFooter className="mt-2 gap-2 sm:gap-2">
+                    <button
+                        onClick={onClose}
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                    >
                         Cancelar
-                    </SecondaryButton>
-                    <DangerButton onClick={onConfirm} disabled={processing}>
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        disabled={processing}
+                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
+                    >
                         {processing ? 'Eliminando...' : 'Eliminar'}
-                    </DangerButton>
-                </div>
-            </div>
-        </Modal>
+                    </button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }

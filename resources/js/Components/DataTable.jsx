@@ -7,17 +7,17 @@ import {
     getSortedRowModel,
     flexRender,
 } from '@tanstack/react-table';
-import { ChevronUp, ChevronDown, ChevronsUpDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronsUpDown, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/Components/ui/table';
+import { cn } from '@/lib/utils';
 
-/**
- * Tabla reutilizable basada en TanStack Table v8.
- * Props:
- *   data        — array de objetos
- *   columns     — definición de columnas (TanStack Table format)
- *   searchable  — boolean, muestra campo de búsqueda global (default: true)
- *   pageSize    — tamaño inicial de página (default: 10)
- *   emptyText   — texto cuando no hay resultados (default: "Sin resultados")
- */
 export default function DataTable({
     data = [],
     columns = [],
@@ -41,30 +41,43 @@ export default function DataTable({
         initialState: { pagination: { pageSize } },
     });
 
+    const totalRows = table.getFilteredRowModel().rows.length;
+    const pageIndex = table.getState().pagination.pageIndex;
+    const pageCount = table.getPageCount();
+    const from = pageIndex * pageSize + 1;
+    const to = Math.min((pageIndex + 1) * pageSize, totalRows);
+
     return (
         <div className="space-y-4">
+            {/* Barra superior: búsqueda + contador */}
             {searchable && (
-                <div className="relative max-w-sm">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        value={globalFilter}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        placeholder="Buscar..."
-                        className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
+                <div className="flex items-center justify-between gap-4">
+                    <div className="relative max-w-xs flex-1">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <input
+                            type="text"
+                            value={globalFilter}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            placeholder="Buscar..."
+                            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm shadow-sm transition focus:border-[#FF7500] focus:outline-none focus:ring-1 focus:ring-[#FF7500]"
+                        />
+                    </div>
+                    <span className="shrink-0 text-xs text-gray-400">
+                        {totalRows} {totalRows === 1 ? 'registro' : 'registros'}
+                    </span>
                 </div>
             )}
 
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-                <table className="min-w-full divide-y divide-gray-200 text-sm">
-                    <thead className="bg-gray-50">
+            {/* Tabla */}
+            <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+                <Table>
+                    <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id}>
+                            <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-gray-200">
                                 {headerGroup.headers.map((header) => (
-                                    <th
+                                    <TableHead
                                         key={header.id}
-                                        className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        className="bg-gray-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500 first:rounded-tl-xl last:rounded-tr-xl"
                                         style={{ width: header.column.columnDef.size }}
                                     >
                                         {header.isPlaceholder ? null : header.column.getCanSort() ? (
@@ -78,69 +91,62 @@ export default function DataTable({
                                         ) : (
                                             flexRender(header.column.columnDef.header, header.getContext())
                                         )}
-                                    </th>
+                                    </TableHead>
                                 ))}
-                            </tr>
+                            </TableRow>
                         ))}
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 bg-white">
+                    </TableHeader>
+                    <TableBody>
                         {table.getRowModel().rows.length === 0 ? (
-                            <tr>
-                                <td
+                            <TableRow>
+                                <TableCell
                                     colSpan={columns.length}
-                                    className="px-4 py-8 text-center text-gray-400"
+                                    className="py-12 text-center text-sm text-gray-400"
                                 >
                                     {emptyText}
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             table.getRowModel().rows.map((row) => (
-                                <tr key={row.id} className="hover:bg-gray-50">
+                                <TableRow
+                                    key={row.id}
+                                    className="border-b border-gray-100 hover:bg-orange-50/40 transition-colors"
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-3 text-gray-700">
+                                        <TableCell key={cell.id} className="px-4 py-3 text-sm text-gray-700">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
+                                        </TableCell>
                                     ))}
-                                </tr>
+                                </TableRow>
                             ))
                         )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
 
-            {/* Pagination */}
-            {table.getPageCount() > 1 && (
-                <div className="flex items-center justify-between text-sm text-gray-600">
-                    <p>
-                        Mostrando{' '}
-                        {table.getState().pagination.pageIndex *
-                            table.getState().pagination.pageSize +
-                            1}{' '}
-                        -{' '}
-                        {Math.min(
-                            (table.getState().pagination.pageIndex + 1) *
-                                table.getState().pagination.pageSize,
-                            table.getFilteredRowModel().rows.length,
-                        )}{' '}
-                        de {table.getFilteredRowModel().rows.length} registros
+            {/* Paginación */}
+            {pageCount > 1 && (
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                    <p className="text-xs">
+                        Mostrando <span className="font-medium text-gray-700">{from}–{to}</span> de{' '}
+                        <span className="font-medium text-gray-700">{totalRows}</span> registros
                     </p>
                     <div className="flex items-center gap-1">
-                        <PageButton
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </PageButton>
-                        <span className="px-2">
-                            Página {table.getState().pagination.pageIndex + 1} de{' '}
-                            {table.getPageCount()}
+                        <PageBtn onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} title="Primera">
+                            <ChevronsLeft className="h-3.5 w-3.5" />
+                        </PageBtn>
+                        <PageBtn onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} title="Anterior">
+                            <ChevronLeft className="h-3.5 w-3.5" />
+                        </PageBtn>
+                        <span className="px-3 py-1 text-xs font-medium">
+                            {pageIndex + 1} / {pageCount}
                         </span>
-                        <PageButton
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </PageButton>
+                        <PageBtn onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} title="Siguiente">
+                            <ChevronRight className="h-3.5 w-3.5" />
+                        </PageBtn>
+                        <PageBtn onClick={() => table.setPageIndex(pageCount - 1)} disabled={!table.getCanNextPage()} title="Última">
+                            <ChevronsRight className="h-3.5 w-3.5" />
+                        </PageBtn>
                     </div>
                 </div>
             )}
@@ -151,18 +157,23 @@ export default function DataTable({
 function SortIcon({ sorted }) {
     if (!sorted) return <ChevronsUpDown className="h-3 w-3 text-gray-400" />;
     return sorted === 'asc' ? (
-        <ChevronUp className="h-3 w-3" />
+        <ChevronUp className="h-3 w-3 text-[#FF7500]" />
     ) : (
-        <ChevronDown className="h-3 w-3" />
+        <ChevronDown className="h-3 w-3 text-[#FF7500]" />
     );
 }
 
-function PageButton({ children, onClick, disabled }) {
+function PageBtn({ children, onClick, disabled, title }) {
     return (
         <button
             onClick={onClick}
             disabled={disabled}
-            className="rounded border border-gray-300 p-1 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+            title={title}
+            className={cn(
+                'flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition',
+                'hover:border-[#FF7500] hover:text-[#FF7500]',
+                'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-600',
+            )}
         >
             {children}
         </button>

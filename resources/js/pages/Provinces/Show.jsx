@@ -20,8 +20,8 @@ export default function Show({ province }) {
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100">
-                                <Globe className="h-5 w-5 text-indigo-600" />
+                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100">
+                                <Globe className="h-5 w-5 text-[#FF7500]" />
                             </div>
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Provincia</p>
@@ -76,7 +76,7 @@ export default function Show({ province }) {
                                     <span className="text-sm text-gray-700">{zone.name}</span>
                                     <Link
                                         href={route('zones.show', zone.id)}
-                                        className="ml-auto text-xs text-indigo-500 hover:underline"
+                                        className="ml-auto text-xs text-[#FF7500] hover:underline"
                                     >
                                         Ver
                                     </Link>
@@ -106,7 +106,7 @@ export default function Show({ province }) {
                                     <span className="text-sm font-medium text-gray-700">{locality.name}</span>
 
                                     {locality.user ? (
-                                        <span className="ml-4 flex items-center gap-1.5 rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-700">
+                                        <span className="ml-4 flex items-center gap-1.5 rounded-full bg-orange-50 px-2.5 py-0.5 text-xs text-[#FF7500]">
                                             <User2 className="h-3 w-3" />
                                             {locality.user.name}
                                         </span>
@@ -119,7 +119,7 @@ export default function Show({ province }) {
 
                                     <Link
                                         href={route('localities.show', locality.id)}
-                                        className="ml-auto text-xs text-indigo-500 hover:underline"
+                                        className="ml-auto text-xs text-[#FF7500] hover:underline"
                                     >
                                         Ver
                                     </Link>

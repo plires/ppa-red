@@ -1,27 +1,29 @@
-/**
- * Badge de color según el estado del FormSubmission.
- * Props:
- *   status — string con el nombre del estado
- */
+import { Badge } from '@/Components/ui/badge';
+import { cn } from '@/lib/utils';
+
 const STATUS_STYLES = {
-    'Pendiente de Respuesta Del Partner': 'bg-yellow-100 text-yellow-800',
-    'Respondido Por El Partner': 'bg-blue-100 text-blue-800',
-    'Demorado - Sin Respuesta Del Partner (48h)': 'bg-orange-100 text-orange-800',
-    'Cerrado - Sin Respuesta Del Partner': 'bg-gray-100 text-gray-600',
-    'Cerrado - Sin Respuesta Del Usuario': 'bg-gray-100 text-gray-600',
-    'Cerrado Por El Partner': 'bg-green-100 text-green-800',
+    'Pendiente de Respuesta Del Partner':
+        'border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-50',
+    'Respondido Por El Partner':
+        'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50',
+    'Demorado - Sin Respuesta Del Partner (48h)':
+        'border-orange-200 bg-orange-50 text-[#FF7500] hover:bg-orange-50',
+    'Cerrado - Sin Respuesta Del Partner':
+        'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-50',
+    'Cerrado - Sin Respuesta Del Usuario':
+        'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-50',
+    'Cerrado Por El Partner':
+        'border-green-200 bg-green-50 text-green-700 hover:bg-green-50',
 };
 
-const DEFAULT_STYLE = 'bg-gray-100 text-gray-600';
+const DEFAULT_STYLE = 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-50';
 
 export default function StatusBadge({ status }) {
     const style = STATUS_STYLES[status] ?? DEFAULT_STYLE;
 
     return (
-        <span
-            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${style}`}
-        >
+        <Badge variant="outline" className={cn('text-xs font-medium', style)}>
             {status ?? 'Sin estado'}
-        </span>
+        </Badge>
     );
 }

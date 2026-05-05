@@ -39,13 +39,13 @@ export default function Show({ zone }) {
                     {/* Provincia + stat */}
                     <div className="mt-5 grid grid-cols-2 gap-3 border-t border-gray-100 pt-5">
                         <div className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
-                            <Globe className="h-5 w-5 text-indigo-500" />
+                            <Globe className="h-5 w-5 text-[#FF7500]" />
                             <div>
                                 <p className="text-xs text-gray-500">Provincia</p>
                                 {zone.province ? (
                                     <Link
                                         href={route('provinces.show', zone.province.id)}
-                                        className="text-sm font-semibold text-indigo-600 hover:underline"
+                                        className="text-sm font-semibold text-[#FF7500] hover:underline"
                                     >
                                         {zone.province.name}
                                     </Link>
@@ -84,7 +84,7 @@ export default function Show({ zone }) {
                                     <span className="text-sm font-medium text-gray-700">{locality.name}</span>
 
                                     {locality.user ? (
-                                        <span className="ml-4 flex items-center gap-1.5 rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-700">
+                                        <span className="ml-4 flex items-center gap-1.5 rounded-full bg-orange-50 px-2.5 py-0.5 text-xs text-[#FF7500]">
                                             <User2 className="h-3 w-3" />
                                             {locality.user.name}
                                         </span>
@@ -97,7 +97,7 @@ export default function Show({ zone }) {
 
                                     <Link
                                         href={route('localities.show', locality.id)}
-                                        className="ml-auto text-xs text-indigo-500 hover:underline"
+                                        className="ml-auto text-xs text-[#FF7500] hover:underline"
                                     >
                                         Ver
                                     </Link>
