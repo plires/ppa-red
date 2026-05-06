@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import StatusBadge from '@/Components/StatusBadge';
 import NativeSelect from '@/Components/NativeSelect';
@@ -19,7 +19,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from 'recharts';
-import { Search, Eye, BarChart2, Users } from 'lucide-react';
+import { Search, Eye, BarChart2, Users, FileText } from 'lucide-react';
 
 const BRAND_COLORS = [
     '#FF7500', '#FD3C00', '#10b981', '#f59e0b',
@@ -50,7 +50,13 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
 };
 
 export default function StatusChart({ partners }) {
-    const [filters, setFilters] = useState({ start_date: '', end_date: '', partner_id: '' });
+    const { auth } = usePage().props
+    const isPartner = auth.user.role === 'partner'
+    const [filters, setFilters] = useState({
+        start_date: '',
+        end_date: '',
+        partner_id: isPartner ? String(auth.user.id) : '',
+    })
     const [chartData, setChartData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [detail, setDetail] = useState(null);
@@ -117,13 +123,23 @@ export default function StatusChart({ partners }) {
                         <h1 className="text-xl font-semibold text-gray-900">Estado de Formularios</h1>
                         <p className="mt-0.5 text-sm text-gray-500">Distribución de formularios por estado</p>
                     </div>
-                    <Link
-                        href={route('reports.index')}
-                        className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 shadow-sm hover:border-[#FF7500] hover:text-[#FF7500]"
-                    >
-                        <Users className="h-4 w-4" />
-                        Ver por partner
-                    </Link>
+                    {isPartner ? (
+                        <Link
+                            href={route('form_submissions.index')}
+                            className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 shadow-sm hover:border-[#FF7500] hover:text-[#FF7500]"
+                        >
+                            <FileText className="h-4 w-4" />
+                            Ver mis formularios
+                        </Link>
+                    ) : (
+                        <Link
+                            href={route('reports.index')}
+                            className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 shadow-sm hover:border-[#FF7500] hover:text-[#FF7500]"
+                        >
+                            <Users className="h-4 w-4" />
+                            Ver por partner
+                        </Link>
+                    )}
                 </div>
 
                 {/* Panel de filtros */}
@@ -153,9 +169,10 @@ export default function StatusChart({ partners }) {
                             <NativeSelect
                                 value={filters.partner_id}
                                 onChange={(e) => setFilters((f) => ({ ...f, partner_id: e.target.value }))}
-                                className="min-w-[180px]"
+                                disabled={isPartner}
+                                className="min-w-[180px] disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                <option value="">Todos los partners</option>
+                                {!isPartner && <option value="">Todos los partners</option>}
                                 {partners.map((p) => (
                                     <option key={p.id} value={p.id}>{p.name}</option>
                                 ))}

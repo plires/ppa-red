@@ -7,6 +7,7 @@ import {
     Globe,
     Users,
     BarChart2,
+    PieChart,
     LogOut,
     Menu,
     X,
@@ -158,6 +159,23 @@ export default function AuthenticatedLayout({ header, children }) {
                         <FileText className="h-4 w-4 flex-shrink-0" />
                         Formularios
                     </Link>
+
+                    {!isAdmin && (
+                        <Link
+                            href={route('reports.status_chart')}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                                route().current('reports.status_chart')
+                                    ? 'text-white'
+                                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                            }`}
+                            style={route().current('reports.status_chart')
+                                ? { background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }
+                                : {}}
+                        >
+                            <PieChart className="h-4 w-4 flex-shrink-0" />
+                            Estado de Forms
+                        </Link>
+                    )}
 
                     {isAdmin && (
                         <>

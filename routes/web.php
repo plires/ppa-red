@@ -12,6 +12,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,10 +33,14 @@ Route::get('/public/form_submission/{token}', [PublicFormSubmissionController::c
 Route::post('/public/form_responses/', [PublicFormResponseController::class, 'store'])
     ->name('public.form_responses.store');
 
-// Dashboard: protegido por autenticación y rol admin
-Route::prefix('dashboard')->middleware(['auth', AdminMiddleware::class])->group(function () {
+// Dashboard: accesible para todos los usuarios autenticados (admin y partner)
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
     Route::get('/', function () {
+        if (Auth::user()->role !== User::ADMIN_USER) {
+            return redirect()->route('form_submissions.index');
+        }
+
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
@@ -72,62 +78,68 @@ Route::prefix('dashboard')->middleware(['auth', AdminMiddleware::class])->group(
         [FormResponseController::class, 'markAsReadAllResponses']
     )->name('responses.mark_as_all_read');
 
-    // Provincias
-    Route::get('/provinces/trashed', [ProvinceController::class, 'trashed'])->name('provinces.trashed');
-    Route::patch('/provinces/{id}/restore', [ProvinceController::class, 'restore'])->name('provinces.restore');
-    Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');
-    Route::get('/provinces/create', [ProvinceController::class, 'create'])->name('provinces.create');
-    Route::post('/provinces', [ProvinceController::class, 'store'])->name('provinces.store');
-    Route::get('/provinces/{province}/edit', [ProvinceController::class, 'edit'])->name('provinces.edit');
-    Route::put('/provinces/{province}', [ProvinceController::class, 'update'])->name('provinces.update');
-    Route::delete('/provinces/{province}', [ProvinceController::class, 'destroy'])->name('provinces.destroy');
-    Route::get('/provinces/{province}', [ProvinceController::class, 'show'])->name('provinces.show');
-
-    // Zonas
-    Route::get('/zones/trashed', [ZoneController::class, 'trashed'])->name('zones.trashed');
-    Route::patch('/zones/{id}/restore', [ZoneController::class, 'restore'])->name('zones.restore');
-    Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
-    Route::get('/zones/create', [ZoneController::class, 'create'])->name('zones.create');
-    Route::post('/zones', [ZoneController::class, 'store'])->name('zones.store');
-    Route::get('/zones/{zone}/edit', [ZoneController::class, 'edit'])->name('zones.edit');
-    Route::put('/zones/{zone}', [ZoneController::class, 'update'])->name('zones.update');
-    Route::delete('/zones/{zone}', [ZoneController::class, 'destroy'])->name('zones.destroy');
-    Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
-
-    // Localidades
-    Route::get('/localities/trashed', [LocalityController::class, 'trashed'])->name('localities.trashed');
-    Route::patch('/localities/{id}/restore', [LocalityController::class, 'restore'])->name('localities.restore');
-    Route::get('/localities', [LocalityController::class, 'index'])->name('localities.index');
-    Route::get('/localities/create', [LocalityController::class, 'create'])->name('localities.create');
-    Route::post('/localities', [LocalityController::class, 'store'])->name('localities.store');
-    Route::get('/localities/{locality}/edit', [LocalityController::class, 'edit'])->name('localities.edit');
-    Route::put('/localities/{locality}', [LocalityController::class, 'update'])->name('localities.update');
-    Route::delete('/localities/{locality}', [LocalityController::class, 'destroy'])->name('localities.destroy');
-    Route::get('/localities/{locality}', [LocalityController::class, 'show'])->name('localities.show');
-
-    // Partners (usuarios)
-    Route::get('/partners/trashed', [UserController::class, 'trashed'])->name('partners.trashed');
-    Route::patch('/partners/{id}/restore', [UserController::class, 'restore'])->name('partners.restore');
-    Route::get('/partners', [UserController::class, 'index'])->name('partners.index');
-    Route::get('/partners/create', [UserController::class, 'create'])->name('partners.create');
-    Route::post('/partners', [UserController::class, 'store'])->name('partners.store');
-    Route::get('/partners/{partner}/edit', [UserController::class, 'edit'])->name('partners.edit');
-    Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
-    Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
-    Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
-
-    // Reportes
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/forms-by-partner', [ReportController::class, 'getFormSubmissionByPartner'])
-        ->name('reports.form_submissions_by_partner');
-    Route::get('/reports/form_submissions/{user_id}/{start}/{end}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
-        ->name('reportes.form_submissionsDetail');
+    // Estado de Forms: accesible para admin y partner
     Route::get('/reports/status-chart', [ReportController::class, 'statusChart'])
         ->name('reports.status_chart');
     Route::get('/reports/form_status_chart', [ReportController::class, 'formStatusChart'])
         ->name('reports.form_status_chart');
     Route::get('/reports/form_submissions_by_status/{user_id}/{status_id}/{start}/{end}', [ReportController::class, 'getFormulariosByStatus'])
         ->name('reports.form_status_chart_detail');
+
+    // Rutas solo admin
+    Route::middleware(AdminMiddleware::class)->group(function () {
+
+        // Provincias
+        Route::get('/provinces/trashed', [ProvinceController::class, 'trashed'])->name('provinces.trashed');
+        Route::patch('/provinces/{id}/restore', [ProvinceController::class, 'restore'])->name('provinces.restore');
+        Route::get('/provinces', [ProvinceController::class, 'index'])->name('provinces.index');
+        Route::get('/provinces/create', [ProvinceController::class, 'create'])->name('provinces.create');
+        Route::post('/provinces', [ProvinceController::class, 'store'])->name('provinces.store');
+        Route::get('/provinces/{province}/edit', [ProvinceController::class, 'edit'])->name('provinces.edit');
+        Route::put('/provinces/{province}', [ProvinceController::class, 'update'])->name('provinces.update');
+        Route::delete('/provinces/{province}', [ProvinceController::class, 'destroy'])->name('provinces.destroy');
+        Route::get('/provinces/{province}', [ProvinceController::class, 'show'])->name('provinces.show');
+
+        // Zonas
+        Route::get('/zones/trashed', [ZoneController::class, 'trashed'])->name('zones.trashed');
+        Route::patch('/zones/{id}/restore', [ZoneController::class, 'restore'])->name('zones.restore');
+        Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
+        Route::get('/zones/create', [ZoneController::class, 'create'])->name('zones.create');
+        Route::post('/zones', [ZoneController::class, 'store'])->name('zones.store');
+        Route::get('/zones/{zone}/edit', [ZoneController::class, 'edit'])->name('zones.edit');
+        Route::put('/zones/{zone}', [ZoneController::class, 'update'])->name('zones.update');
+        Route::delete('/zones/{zone}', [ZoneController::class, 'destroy'])->name('zones.destroy');
+        Route::get('/zones/{zone}', [ZoneController::class, 'show'])->name('zones.show');
+
+        // Localidades
+        Route::get('/localities/trashed', [LocalityController::class, 'trashed'])->name('localities.trashed');
+        Route::patch('/localities/{id}/restore', [LocalityController::class, 'restore'])->name('localities.restore');
+        Route::get('/localities', [LocalityController::class, 'index'])->name('localities.index');
+        Route::get('/localities/create', [LocalityController::class, 'create'])->name('localities.create');
+        Route::post('/localities', [LocalityController::class, 'store'])->name('localities.store');
+        Route::get('/localities/{locality}/edit', [LocalityController::class, 'edit'])->name('localities.edit');
+        Route::put('/localities/{locality}', [LocalityController::class, 'update'])->name('localities.update');
+        Route::delete('/localities/{locality}', [LocalityController::class, 'destroy'])->name('localities.destroy');
+        Route::get('/localities/{locality}', [LocalityController::class, 'show'])->name('localities.show');
+
+        // Partners (usuarios)
+        Route::get('/partners/trashed', [UserController::class, 'trashed'])->name('partners.trashed');
+        Route::patch('/partners/{id}/restore', [UserController::class, 'restore'])->name('partners.restore');
+        Route::get('/partners', [UserController::class, 'index'])->name('partners.index');
+        Route::get('/partners/create', [UserController::class, 'create'])->name('partners.create');
+        Route::post('/partners', [UserController::class, 'store'])->name('partners.store');
+        Route::get('/partners/{partner}/edit', [UserController::class, 'edit'])->name('partners.edit');
+        Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
+        Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
+        Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
+
+        // Reportes (solo admin)
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/forms-by-partner', [ReportController::class, 'getFormSubmissionByPartner'])
+            ->name('reports.form_submissions_by_partner');
+        Route::get('/reports/form_submissions/{user_id}/{start}/{end}', [ReportController::class, 'getFormSubmissionByPartnerDetail'])
+            ->name('reportes.form_submissionsDetail');
+    });
 });
 
 require __DIR__.'/auth.php';
