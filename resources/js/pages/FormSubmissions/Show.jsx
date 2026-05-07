@@ -267,7 +267,7 @@ export default function Show({ formSubmission, formData, responses }) {
 
                     {/* Input */}
                     <div className="border-t border-gray-100 bg-white px-4 py-3">
-                        {!isClosed ? (
+                        {!isClosed && isPartner ? (
                             <form onSubmit={submitResponse} className="flex items-center gap-2">
                                 <input
                                     type="text"
@@ -289,7 +289,7 @@ export default function Show({ formSubmission, formData, responses }) {
                                     <Send className="h-4 w-4" />
                                 </button>
                             </form>
-                        ) : (
+                        ) : isClosed ? (
                             <div className="flex items-start gap-3 rounded-xl bg-gray-50 p-4 text-sm">
                                 <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
                                 <div>
@@ -299,7 +299,7 @@ export default function Show({ formSubmission, formData, responses }) {
                                     )}
                                 </div>
                             </div>
-                        )}
+                        ) : null}
                         {responseForm.errors.message && (
                             <p className="mt-1 px-1 text-xs text-red-600">{responseForm.errors.message}</p>
                         )}

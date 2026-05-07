@@ -14,10 +14,11 @@ class FormResponseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Agregar is_system ya que en este FormResponseRequest, siempre sera 1 (el mensaje lo envia el partner )
-        $this->merge([
-            'is_system' => 1,
-        ]);
+        if (Auth::user()->role !== User::PARTNER_USER) {
+            return false;
+        }
+
+        $this->merge(['is_system' => 1]);
 
         return true;
     }
