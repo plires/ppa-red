@@ -17,18 +17,21 @@ class SendFormStatusChange implements ShouldQueue
 
     protected $formSubmission;
 
-    protected $recipent;
+    protected $recipient;
 
     protected $emailTemplate;
+
+    protected $recipientType;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(FormSubmission $formSubmission, $recipent, $emailTemplate)
+    public function __construct(FormSubmission $formSubmission, $recipient, $emailTemplate, string $recipientType = 'partner')
     {
         $this->formSubmission = $formSubmission;
-        $this->recipent = $recipent;
+        $this->recipient = $recipient;
         $this->emailTemplate = $emailTemplate;
+        $this->recipientType = $recipientType;
     }
 
     /**
@@ -36,6 +39,6 @@ class SendFormStatusChange implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->recipent)->send(new MailFormSubmissionStatusChange($this->formSubmission, $this->emailTemplate));
+        Mail::to($this->recipient)->send(new MailFormSubmissionStatusChange($this->formSubmission, $this->emailTemplate, $this->recipientType));
     }
 }

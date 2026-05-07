@@ -137,6 +137,7 @@ class UpdateFormSubmissionStatus extends Command
         $now = Carbon::now();
         $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['pendingPartner']->id)
             ->where('updated_at', '<', $now->copy()->subHours(48))
+            ->with('user')
             ->get();
 
         if ($submissions->isNotEmpty()) {
@@ -216,6 +217,7 @@ class UpdateFormSubmissionStatus extends Command
         $now = Carbon::now();
         $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['delayedPartner']->id)
             ->where('updated_at', '<', $now->copy()->subDays(7))
+            ->with('user')
             ->get();
 
         if ($submissions->isNotEmpty()) {
@@ -238,6 +240,7 @@ class UpdateFormSubmissionStatus extends Command
         $now = Carbon::now();
         $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['answeredPartner']->id)
             ->where('updated_at', '<', $now->copy()->subDays(7))
+            ->with('user')
             ->get();
 
         if ($submissions->isNotEmpty()) {
@@ -267,14 +270,17 @@ class UpdateFormSubmissionStatus extends Command
     {
         foreach ($submissions as $formSubmission) {
             // Enviar email al partner
-            if ($formSubmission->user && $formSubmission->user->email) {
-                $this->sendEmailWithChanges($formSubmission, $formSubmission->user->email, $emailTemplateToPartner);
+            if ($emailTemplateToPartner && $formSubmission->user && $formSubmission->user->email) {
+                $this->sendEmailWithChanges($formSubmission, $formSubmission->user->email, $emailTemplateToPartner, 'partner');
             }
 
             // Enviar email al usuario si existe plantilla
             if ($emailTemplateToUser) {
                 $userData = json_decode($formSubmission->data, true);
-                $this->sendEmailWithChanges($formSubmission, $userData['email'], $emailTemplateToUser);
+                $userEmail = $userData['email'] ?? null;
+                if ($userEmail) {
+                    $this->sendEmailWithChanges($formSubmission, $userEmail, $emailTemplateToUser, 'user');
+                }
             }
 
             // Guardar el estado anterior antes de actualizarlo
@@ -326,9 +332,9 @@ class UpdateFormSubmissionStatus extends Command
     /**
      * Envía un email con los cambios realizados
      */
-    protected function sendEmailWithChanges($formSubmission, $recipient, $emailTemplate): void
+    protected function sendEmailWithChanges($formSubmission, $recipient, $emailTemplate, string $recipientType = 'partner'): void
     {
-        SendFormStatusChange::dispatch($formSubmission, $recipient, $emailTemplate)
+        SendFormStatusChange::dispatch($formSubmission, $recipient, $emailTemplate, $recipientType)
             ->delay(now()->addSeconds(10));
     }
 }

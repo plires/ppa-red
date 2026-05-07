@@ -36,6 +36,11 @@ class SendFormResponseEmailToPartner implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->formResponse->user->email)->send(new FormResponseMailToPartner($this->formResponse, $this->formSubmission, $this->data));
+        $partner = $this->formSubmission->user;
+        if (! $partner) {
+            return;
+        }
+
+        Mail::to($partner->email)->send(new FormResponseMailToPartner($this->formResponse, $this->formSubmission, $this->data));
     }
 }

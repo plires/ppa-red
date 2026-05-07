@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendFormResponseEmailToPartner;
+use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
 use App\Models\Locality;
@@ -60,6 +62,20 @@ class PublicFormSubmissionController extends Controller
             ]),
             'form_submission_status_id' => $statusId,
         ]);
+
+        // Crear el primer mensaje de la conversación con el mensaje del solicitante
+        $formResponse = FormResponse::create([
+            'form_submission_id' => $formSubmission->id,
+            'user_id'            => null,
+            'message'            => $validated['message'],
+            'is_system'          => false,
+        ]);
+
+        // Notificar al partner asignado
+        $partner = $formSubmission->user;
+        if ($partner && $partner->email) {
+            SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission, $validated);
+        }
 
         return redirect()->route('public.form_submission.show', $formSubmission->secure_token)
             ->with('success', 'Tu consulta fue enviada correctamente. Te responderemos a la brevedad.');
