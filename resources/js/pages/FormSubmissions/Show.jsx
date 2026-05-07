@@ -6,6 +6,13 @@ import DangerButton from '@/Components/DangerButton';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/Components/ui/select';
+import {
     ArrowLeft,
     Send,
     XCircle,
@@ -15,6 +22,7 @@ import {
     Calendar,
     MessageCircle,
     ExternalLink,
+    UserRoundCog,
 } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -34,13 +42,15 @@ function StatusBadge({ status }) {
     );
 }
 
-export default function Show({ formSubmission, formData, responses }) {
+export default function Show({ formSubmission, formData, responses, partners = [] }) {
     const { auth } = usePage().props;
     const user = auth.user;
     const isPartner = user.role === 'partner';
+    const isAdmin = user.role === 'admin';
     const isClosed = formSubmission.status?.name?.startsWith('Cerrado');
     const messagesEndRef = useRef(null);
     const [showCloseModal, setShowCloseModal] = useState(false);
+    const [showReassignModal, setShowReassignModal] = useState(false);
 
     const responseForm = useForm({
         message: '',
@@ -53,6 +63,8 @@ export default function Show({ formSubmission, formData, responses }) {
         form_submission_id: formSubmission.id,
         user_id: formSubmission.user_id,
     });
+
+    const reassignForm = useForm({ partner_id: '' });
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -69,6 +81,16 @@ export default function Show({ formSubmission, formData, responses }) {
         e.preventDefault();
         closeForm.put(route('form_submissions.update', formSubmission.id), {
             onSuccess: () => setShowCloseModal(false),
+        });
+    }
+
+    function submitReassign(e) {
+        e.preventDefault();
+        reassignForm.patch(route('form_submissions.reassign', formSubmission.id), {
+            onSuccess: () => {
+                setShowReassignModal(false);
+                reassignForm.reset();
+            },
         });
     }
 
@@ -306,6 +328,19 @@ export default function Show({ formSubmission, formData, responses }) {
                     </div>
                 </div>
 
+                {/* ── Reasignar partner (solo admin, consulta vigente) ── */}
+                {isAdmin && !isClosed && (
+                    <div className="flex justify-end">
+                        <button
+                            onClick={() => setShowReassignModal(true)}
+                            className="flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2.5 text-sm font-medium text-orange-700 hover:bg-orange-100"
+                        >
+                            <UserRoundCog className="h-4 w-4" />
+                            Reasignar partner
+                        </button>
+                    </div>
+                )}
+
                 {/* ── Cerrar consulta (solo partner) ── */}
                 {isPartner && !isClosed && (
                     <div className="flex justify-end">
@@ -345,6 +380,66 @@ export default function Show({ formSubmission, formData, responses }) {
                             <DangerButton type="submit" disabled={closeForm.processing}>
                                 {closeForm.processing ? 'Cerrando...' : 'Cerrar consulta'}
                             </DangerButton>
+                        </div>
+                    </form>
+                </div>
+            </Modal>
+            {/* ── Modal de reasignación ── */}
+            <Modal show={showReassignModal} onClose={() => setShowReassignModal(false)}>
+                <div className="p-6">
+                    <div className="mb-4 flex items-center gap-3">
+                        <div
+                            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full"
+                            style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                        >
+                            <UserRoundCog className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-semibold text-gray-800">Reasignar partner</h2>
+                            <p className="text-xs text-gray-500">
+                                Partner actual: <span className="font-medium text-gray-700">{formSubmission.user?.name ?? '—'}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <p className="mb-5 text-sm text-gray-500">
+                        Seleccioná el nuevo partner responsable de esta consulta.
+                        Se notificará por email al partner saliente, al entrante y al solicitante.
+                    </p>
+                    <form onSubmit={submitReassign} className="space-y-4">
+                        <div>
+                            <Select
+                                value={reassignForm.data.partner_id}
+                                onValueChange={(val) => reassignForm.setData('partner_id', val)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Seleccioná un partner…" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {partners
+                                        .filter((p) => p.id !== formSubmission.user_id)
+                                        .map((p) => (
+                                            <SelectItem key={p.id} value={String(p.id)}>
+                                                {p.name}
+                                                <span className="ml-1 text-xs text-gray-400">({p.email})</span>
+                                            </SelectItem>
+                                        ))}
+                                </SelectContent>
+                            </Select>
+                            <InputError message={reassignForm.errors.partner_id} className="mt-1" />
+                        </div>
+                        <div className="flex justify-end gap-3">
+                            <SecondaryButton type="button" onClick={() => setShowReassignModal(false)}>
+                                Cancelar
+                            </SecondaryButton>
+                            <button
+                                type="submit"
+                                disabled={reassignForm.processing || !reassignForm.data.partner_id}
+                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                                style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                            >
+                                <UserRoundCog className="h-4 w-4" />
+                                {reassignForm.processing ? 'Reasignando…' : 'Confirmar reasignación'}
+                            </button>
                         </div>
                     </form>
                 </div>

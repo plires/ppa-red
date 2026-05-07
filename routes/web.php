@@ -68,6 +68,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/form_submissions/{formSubmission}/edit', [FormSubmissionController::class, 'edit'])->name('form_submissions.edit');
     Route::put('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'update'])->name('form_submissions.update');
     Route::delete('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'destroy'])->name('form_submissions.destroy');
+    Route::patch('/form_submissions/{formSubmission}/reassign', [FormSubmissionController::class, 'reassign'])
+        ->middleware(AdminMiddleware::class)
+        ->name('form_submissions.reassign');
 
     // Responses
     Route::post('/form_responses', [FormResponseController::class, 'store'])->name('form_responses.store');
