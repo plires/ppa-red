@@ -25,6 +25,9 @@ Route::get('/', function () {
 Route::post('/public/form_submission', [PublicFormSubmissionController::class, 'store'])
     ->name('public.form_submission.store');
 
+// sin token → redirigir a la landing en lugar de explotar con error de método
+Route::get('/public/form_submission', fn () => redirect('/'));
+
 // mostrar formulario con sus datos
 Route::get('/public/form_submission/{token}', [PublicFormSubmissionController::class, 'show'])
     ->name('public.form_submission.show');

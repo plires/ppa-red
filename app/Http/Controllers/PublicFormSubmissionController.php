@@ -16,7 +16,11 @@ class PublicFormSubmissionController extends Controller
     {
         $formSubmission = FormSubmission::where('secure_token', $token)
             ->with(['status', 'locality', 'zone', 'province', 'user', 'formResponses.user'])
-            ->firstOrFail();
+            ->first();
+
+        if (! $formSubmission) {
+            return Inertia::render('PublicForms/NotFound');
+        }
 
         $data = json_decode($formSubmission->data, true);
 
