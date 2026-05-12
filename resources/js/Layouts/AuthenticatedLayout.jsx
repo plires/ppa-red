@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import {
     FileText,
@@ -78,7 +78,7 @@ function getActiveMenuKey() {
 }
 
 export default function AuthenticatedLayout({ header, children }) {
-    const { auth, unreadComments, unreadNotifications } = usePage().props;
+    const { auth, unreadComments, unreadNotifications, unreadCommentsList = [], unreadNotificationsList = [] } = usePage().props;
     const user = auth.user;
     const isAdmin = user.role === 'admin';
 
@@ -229,11 +229,28 @@ export default function AuthenticatedLayout({ header, children }) {
                                     icon={MessageSquare}
                                     count={unreadComments ?? 0}
                                     title="Comentarios sin leer"
+                                    items={unreadCommentsList.map((c) => ({
+                                        id: c.id,
+                                        href: route('responses.mark_as_read', c.id),
+                                        label: c.message,
+                                        time: formatRelativeTime(c.created_at),
+                                    }))}
+                                    markAllHref={route('responses.mark_as_all_read', user.id)}
                                 />
                                 <NotificationBell
                                     icon={Bell}
                                     count={unreadNotifications ?? 0}
                                     title="Notificaciones sin leer"
+                                    items={unreadNotificationsList.map((n) => ({
+                                        id: n.id,
+                                        href: route('notification.mark_as_read', {
+                                            notification: n.id,
+                                            formSubmission: n.form_submission_id,
+                                        }),
+                                        label: n.notification_details || `Estado actualizado: ${n.new_status?.name ?? ''}`,
+                                        time: formatRelativeTime(n.created_at),
+                                    }))}
+                                    markAllHref={route('notification.mark_as_all_read')}
                                 />
                             </>
                         )}
@@ -307,22 +324,85 @@ function CollapsibleMenu({ item, expanded, onToggle }) {
     );
 }
 
-function NotificationBell({ icon: Icon, count, title }) {
-    const hasCount = count > 0;
+function formatRelativeTime(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'ahora';
+    if (mins < 60) return `hace ${mins}m`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `hace ${hours}h`;
+    return `hace ${Math.floor(hours / 24)}d`;
+}
+
+function NotificationBell({ icon: Icon, count, title, items = [], markAllHref }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (!open) return;
+        function handler(e) {
+            if (!ref.current?.contains(e.target)) setOpen(false);
+        }
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [open]);
+
     return (
-        <button
-            title={title}
-            className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-        >
-            <Icon className="h-5 w-5" />
-            {hasCount && (
-                <span
-                    className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white"
-                    style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
-                >
-                    {count}
-                </span>
+        <div ref={ref} className="relative">
+            <button
+                onClick={() => setOpen((v) => !v)}
+                title={title}
+                className={`relative rounded-full p-2 transition-colors ${open ? 'bg-gray-100 text-gray-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
+            >
+                <Icon className="h-5 w-5" />
+                {count > 0 && (
+                    <span
+                        className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-xs font-medium text-white"
+                        style={{ background: 'linear-gradient(135deg, #FD3C00, #FF7500)' }}
+                    >
+                        {count}
+                    </span>
+                )}
+            </button>
+
+            {open && (
+                <div className="absolute right-0 top-full z-50 mt-1 w-80 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+                    <div className="border-b border-gray-100 px-4 py-2.5">
+                        <p className="text-sm font-semibold text-gray-800">{title}</p>
+                    </div>
+
+                    {items.length === 0 ? (
+                        <p className="px-4 py-8 text-center text-sm text-gray-400">Todo al día</p>
+                    ) : (
+                        <ul className="max-h-72 divide-y divide-gray-50 overflow-y-auto">
+                            {items.map((item) => (
+                                <li key={item.id}>
+                                    <Link
+                                        href={item.href}
+                                        onClick={() => setOpen(false)}
+                                        className="block px-4 py-3 hover:bg-gray-50"
+                                    >
+                                        <p className="line-clamp-2 text-sm text-gray-700">{item.label}</p>
+                                        <p className="mt-0.5 text-xs text-gray-400">{item.time}</p>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
+                    <div className="border-t border-gray-100 px-4 py-2.5">
+                        <Link
+                            href={markAllHref}
+                            method="post"
+                            as="button"
+                            onClick={() => setOpen(false)}
+                            className="text-xs font-medium text-gray-500 hover:text-[#FF7500] transition-colors"
+                        >
+                            Marcar todo como leído
+                        </Link>
+                    </div>
+                </div>
             )}
-        </button>
+        </div>
     );
 }

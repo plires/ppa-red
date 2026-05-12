@@ -46,6 +46,12 @@ class HandleInertiaRequests extends Middleware
             'unreadNotifications' => fn () => $user && $user->isPartner()
                 ? $user->unreadNotificationsCount()
                 : 0,
+            'unreadCommentsList' => fn () => $user && $user->isPartner()
+                ? $user->unreadCommentsList()
+                : [],
+            'unreadNotificationsList' => fn () => $user && $user->isPartner()
+                ? $user->unreadNotificationsList()
+                : [],
         ];
     }
 }

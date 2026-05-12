@@ -109,18 +109,36 @@ class User extends Authenticatable
 
     public function unreadNotificationsCount()
     {
-        // Si necesitas contar notificaciones solo para ciertos form submissions
-        return FormSubmissionNotification::whereIn('form_submission_id', $this->formSubmissions->pluck('id'))
+        return FormSubmissionNotification::whereHas('formSubmission', fn ($q) => $q->where('user_id', $this->id))
             ->where('is_read', false)
             ->count();
     }
 
     public function unreadCommentsCount()
     {
-        // contar mensajes para ciertos form submissions
-        return FormResponse::whereIn('form_submission_id', $this->formSubmissions->pluck('id'))
+        return FormResponse::whereHas('formSubmission', fn ($q) => $q->where('user_id', $this->id))
             ->where('is_read', false)
             ->where('is_system', false)
             ->count();
+    }
+
+    public function unreadCommentsList(int $limit = 15)
+    {
+        return FormResponse::whereHas('formSubmission', fn ($q) => $q->where('user_id', $this->id))
+            ->where('is_read', false)
+            ->where('is_system', false)
+            ->latest()
+            ->limit($limit)
+            ->get(['id', 'form_submission_id', 'message', 'created_at']);
+    }
+
+    public function unreadNotificationsList(int $limit = 15)
+    {
+        return FormSubmissionNotification::whereHas('formSubmission', fn ($q) => $q->where('user_id', $this->id))
+            ->where('is_read', false)
+            ->with('newStatus:id,name')
+            ->latest()
+            ->limit($limit)
+            ->get(['id', 'form_submission_id', 'notification_details', 'new_status_id', 'created_at']);
     }
 }

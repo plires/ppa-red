@@ -4,7 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DataTable from '@/Components/DataTable';
 import StatusBadge from '@/Components/StatusBadge';
 import { createColumnHelper } from '@tanstack/react-table';
-import { Eye } from 'lucide-react';
+import { Bell, Eye, MessageSquare } from 'lucide-react';
 
 const col = createColumnHelper();
 
@@ -23,7 +23,25 @@ export default function Index({ formSubmissions }) {
                         return '—';
                     }
                 },
-                { id: 'nombre', header: 'Nombre' },
+                {
+                    id: 'nombre',
+                    header: 'Nombre',
+                    cell: ({ row, getValue }) => {
+                        const hasComments = row.original.has_unread_comments;
+                        const hasNotifs = row.original.has_unread_notifications;
+                        return (
+                            <span className="flex items-center gap-1.5">
+                                {hasComments && (
+                                    <MessageSquare className="h-3.5 w-3.5 flex-shrink-0 text-[#FF7500]" />
+                                )}
+                                <span className={hasComments ? 'font-semibold' : ''}>{getValue()}</span>
+                                {hasNotifs && (
+                                    <Bell className="h-3.5 w-3.5 flex-shrink-0 text-[#FF7500]" />
+                                )}
+                            </span>
+                        );
+                    },
+                },
             ),
             col.accessor('locality.name', {
                 id: 'locality',

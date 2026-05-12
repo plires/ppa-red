@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FormSubmissionRequest;
 use App\Jobs\SendPartnerReassignmentEmails;
+use App\Models\FormResponse;
 use App\Models\FormSubmission;
+use App\Models\FormSubmissionNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,11 +24,32 @@ class FormSubmissionController extends Controller
             $query->where('user_id', $user->id);
         }
 
-        // Obtener resultados
-        $formSubmissions = $query->get();
+        $formSubmissions = $query->get()->load(['status', 'locality', 'user']);
+
+        if ($user->role === User::PARTNER_USER) {
+            $ids = $formSubmissions->pluck('id');
+
+            $withUnreadComments = FormResponse::whereIn('form_submission_id', $ids)
+                ->where('is_read', false)
+                ->where('is_system', false)
+                ->pluck('form_submission_id')
+                ->flip()
+                ->toArray();
+
+            $withUnreadNotifs = FormSubmissionNotification::whereIn('form_submission_id', $ids)
+                ->where('is_read', false)
+                ->pluck('form_submission_id')
+                ->flip()
+                ->toArray();
+
+            $formSubmissions->each(function ($fs) use ($withUnreadComments, $withUnreadNotifs) {
+                $fs->has_unread_comments = isset($withUnreadComments[$fs->id]);
+                $fs->has_unread_notifications = isset($withUnreadNotifs[$fs->id]);
+            });
+        }
 
         return Inertia::render('FormSubmissions/Index', [
-            'formSubmissions' => $formSubmissions->load(['status', 'locality', 'user']),
+            'formSubmissions' => $formSubmissions,
         ]);
     }
 
