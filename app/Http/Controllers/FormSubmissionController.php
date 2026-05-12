@@ -15,7 +15,7 @@ class FormSubmissionController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = FormSubmission::query();
+        $query = FormSubmission::latest();
 
         // Si el usuario es 'partner', solo puede ver sus propios formularios
         if ($user->role === User::PARTNER_USER) {
