@@ -7,7 +7,7 @@ export default function AniversarioSection() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <div className={styles.frame}>
+        <div className={styles.frame} data-aos='zoom-in' data-aos-duration='800'>
           <img
             src={treintaAnos}
             alt='30 años automatizando Argentina'
@@ -15,14 +15,19 @@ export default function AniversarioSection() {
           />
         </div>
 
-        <p className={styles.subtitle}>AÑOS AUTOMATIZANDO ARGENTINA</p>
+        <p className={styles.subtitle} data-aos='fade-up' data-aos-delay='150'>AÑOS AUTOMATIZANDO ARGENTINA</p>
 
         <ul
           className={`${styles.badges} flex flex-wrap justify-center gap-3`}
           role='list'
         >
-          {BADGES.map(badge => (
-            <li key={badge} className={styles.badge}>
+          {BADGES.map((badge, i) => (
+            <li
+              key={badge}
+              className={styles.badge}
+              data-aos='fade-up'
+              data-aos-delay={250 + i * 100}
+            >
               {badge}
             </li>
           ))}

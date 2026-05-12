@@ -69,13 +69,18 @@ export default function FaqSection() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <h2 className={styles.title}>Preguntas frecuentes:</h2>
+        <h2 className={styles.title} data-aos='fade-up'>Preguntas frecuentes:</h2>
 
         <ul className={styles.list} role='list'>
           {FAQS.map(({ pregunta, respuesta }, i) => {
             const isOpen = openIndex === i
             return (
-              <li key={i} className={styles.item}>
+              <li
+                key={i}
+                className={styles.item}
+                data-aos='fade-up'
+                data-aos-delay={Math.min(i * 60, 400)}
+              >
                 <button
                   type='button'
                   className={styles.trigger}

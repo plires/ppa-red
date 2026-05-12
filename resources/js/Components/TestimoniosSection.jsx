@@ -127,13 +127,15 @@ export default function TestimoniosSection() {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}>Lo que dicen nuestros clientes.</h2>
+      <h2 className={styles.title} data-aos='fade-up'>Lo que dicen nuestros clientes.</h2>
 
       <div
         className={styles.viewport}
         ref={emblaRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        data-aos='fade-up'
+        data-aos-delay='150'
       >
         <div className={styles.container}>
           {TESTIMONIOS.map(({ nombre, estrellas, texto }) => (

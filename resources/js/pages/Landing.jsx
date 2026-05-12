@@ -2,6 +2,8 @@ import './Landing.css'
 import { Head, useForm } from '@inertiajs/react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import Hero from '@/Components/Hero'
 import FeaturesSection from '@/Components/FeaturesSection'
 import BannerSection from '@/Components/BannerSection'
@@ -30,6 +32,10 @@ export default function Landing() {
     zone_id: '',
     locality_id: '',
   })
+
+  useEffect(() => {
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 })
+  }, [])
 
   useEffect(() => {
     axios

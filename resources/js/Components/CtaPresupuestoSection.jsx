@@ -10,7 +10,7 @@ export default function CtaPresupuestoSection() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <div className={styles.copy}>
+        <div className={styles.copy} data-aos='fade-right'>
           <h2 className={styles.title}>
             Conseguí tu presupuesto
             <br />
@@ -23,7 +23,13 @@ export default function CtaPresupuestoSection() {
           </p>
         </div>
 
-        <a href='#presupuesto' className={styles.btn} onClick={scrollToPresupuesto}>
+        <a
+          href='#presupuesto'
+          className={styles.btn}
+          onClick={scrollToPresupuesto}
+          data-aos='fade-left'
+          data-aos-delay='150'
+        >
           QUIERO MI PRESUPUESTO GRATIS
         </a>
       </div>

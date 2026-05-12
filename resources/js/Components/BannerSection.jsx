@@ -46,13 +46,13 @@ export default function BannerSection() {
           </div>
           <div className={styles.bannerOverlay} aria-hidden='true' />
           <div className={styles.bannerContent}>
-            <h2 className={styles.bannerTitle}>
+            <h2 className={styles.bannerTitle} data-aos='fade-right' data-aos-duration='800'>
               LA COMODIDAD
               <br />
               QUE TE CAMBIA
               <br /> EL DÍA.
             </h2>
-            <p className={styles.bannerBody}>
+            <p className={styles.bannerBody} data-aos='fade-right' data-aos-delay='180' data-aos-duration='800'>
               Llegás y el portón <strong>se abre con un click.</strong>
               <br />
               Ideal para compras, lluvia y llegadas nocturnas.

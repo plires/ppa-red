@@ -4,7 +4,7 @@ import logoPpa from '../../images/landing/logo-ppa.webp'
 export default function FooterSection() {
   return (
     <footer className={styles.footer}>
-      <div className={styles.inner}>
+      <div className={styles.inner} data-aos='fade-up' data-aos-duration='600'>
         <img src={logoPpa} alt='PPA' className={styles.logo} />
 
         <p className={styles.brand}>ARGENTINA</p>

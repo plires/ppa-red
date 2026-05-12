@@ -10,7 +10,7 @@ function scrollToPresupuesto(e) {
 export default function CtaFinalSection() {
   return (
     <section className={styles.section}>
-      <div className={styles.card}>
+      <div className={styles.card} data-aos='zoom-in' data-aos-duration='800'>
         <h2 className={styles.title}>
           Dale a tu familia la seguridad que merece.
         </h2>

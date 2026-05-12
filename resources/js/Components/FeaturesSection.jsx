@@ -29,7 +29,7 @@ export default function FeaturesSection() {
     <>
       <section className={`${styles.features} features`}>
         <div className={styles.featuresInner}>
-          <header className={styles.header}>
+          <header className={styles.header} data-aos='fade-up'>
             <h2 className={styles.title}>No más bajarte del auto.</h2>
             <p className={styles.subtitle}>
               Con un portón PPA llegás y salís sin exponerte. Evitá situaciones
@@ -41,8 +41,13 @@ export default function FeaturesSection() {
             className={`${styles.list} grid grid-cols-1 sm:grid-cols-3 gap-4`}
             role='list'
           >
-            {FEATURES.map(f => (
-              <li key={f.title} className={`${styles.item} m-auto`}>
+            {FEATURES.map((f, i) => (
+              <li
+                key={f.title}
+                className={`${styles.item} m-auto`}
+                data-aos='fade-up'
+                data-aos-delay={i * 120}
+              >
                 <div className={styles.iconWrap} aria-hidden='true'>
                   <img src={f.icon} alt='' className={styles.icon} />
                 </div>

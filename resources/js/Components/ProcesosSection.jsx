@@ -23,7 +23,7 @@ export default function ProcesosSection() {
 
   return (
     <section className={styles.section}>
-      <div className={styles.card}>
+      <div className={styles.card} data-aos='fade-up'>
         <p className={styles.heading}>
           Instaladores oficiales en tu zona.
           <br />

@@ -27,15 +27,21 @@ const TIPOS = [
 export default function TiposPortonSection() {
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}>
+      <h2 className={styles.title} data-aos='fade-up'>
         Automatizamos
         <br />
         cualquier tipo de portón
       </h2>
 
       <ul className={styles.grid} role='list'>
-        {TIPOS.map(({ src, alt, label, desc }) => (
-          <li key={label} className={styles.item}>
+        {TIPOS.map(({ src, alt, label, desc }, i) => (
+          <li
+            key={label}
+            className={styles.item}
+            data-aos='flip-left'
+            data-aos-delay={i * 130}
+            data-aos-duration='800'
+          >
             <img src={src} alt={alt} className={styles.image} />
             <h3 className={styles.label}>{label}</h3>
             <p className={styles.desc}>{desc}</p>
