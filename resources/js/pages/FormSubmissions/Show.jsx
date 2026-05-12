@@ -290,16 +290,16 @@ export default function Show({ formSubmission, formData, responses, partners = [
                     {/* Input */}
                     <div className="border-t border-gray-100 bg-white px-4 py-3">
                         {!isClosed && isPartner ? (
-                            <form onSubmit={submitResponse} className="flex items-center gap-2">
-                                <input
-                                    type="text"
+                            <form onSubmit={submitResponse} className="flex items-end gap-2">
+                                <textarea
+                                    rows={1}
                                     value={responseForm.data.message}
                                     onChange={(e) => responseForm.setData('message', e.target.value)}
                                     onKeyDown={(e) => {
-                                        if (e.key === 'Enter') { e.preventDefault(); submitResponse(e); }
+                                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitResponse(e); }
                                     }}
                                     placeholder="Escribí tu mensaje..."
-                                    className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-[#FF7500]"
+                                    className="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2 focus:ring-[#FF7500]"
                                 />
                                 <button
                                     type="submit"

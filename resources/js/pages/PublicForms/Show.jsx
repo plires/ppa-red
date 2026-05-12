@@ -248,16 +248,16 @@ export default function PublicFormShow({ formSubmission, formData, isClosed, clo
                         {/* Input de respuesta */}
                         <div className="border-t border-gray-100 bg-white px-4 py-3">
                             {!isClosed ? (
-                                <form onSubmit={submit} className="flex items-center gap-2">
-                                    <input
-                                        type="text"
+                                <form onSubmit={submit} className="flex items-end gap-2">
+                                    <textarea
+                                        rows={1}
                                         value={data.message}
                                         onChange={(e) => setData('message', e.target.value)}
                                         onKeyDown={(e) => {
-                                            if (e.key === 'Enter') { e.preventDefault(); submit(e); }
+                                            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(e); }
                                         }}
                                         placeholder="Escribí tu mensaje..."
-                                        className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2"
+                                        className="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none transition focus:border-transparent focus:ring-2"
                                         style={{ '--tw-ring-color': '#FF7500' }}
                                     />
                                     <button
