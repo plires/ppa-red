@@ -59,7 +59,7 @@ function FormCard({
           <input
             type='email'
             className={styles.input}
-            placeholder='Email (opcional)'
+            placeholder='Email'
             value={data.email}
             onChange={e => setData('email', e.target.value)}
           />
@@ -139,7 +139,7 @@ function FormCard({
         <div className={styles.field}>
           <textarea
             className={styles.textarea}
-            placeholder='Comentarios (opcional)'
+            placeholder='Ej: tipo de portón, medidas, consultas, etc.'
             value={data.message}
             onChange={e => setData('message', e.target.value)}
             rows={3}
