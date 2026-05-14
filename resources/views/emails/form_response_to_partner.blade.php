@@ -123,7 +123,7 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:28px; font-size:1px; line-height:28px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
 
     {{-- Mensaje recibido --}}
-    @if (!empty($data['message']) || !empty($formResponse->message))
+    @if (!empty($formResponse->message))
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:44px; font-size:1px; line-height:44px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
     <p style="margin:0 0 14px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#9CA3AF; letter-spacing:1px; text-transform:uppercase;">
         Mensaje del solicitante
@@ -131,7 +131,7 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
             <td style="background-color:#FFF7ED; border-left:4px solid #FF7500; border-radius:0 6px 6px 0; padding:20px 24px;">
-                <p style="margin:0; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:15px; font-weight:400; color:#374151; line-height:1.7; white-space:pre-line;">{{ $data['message'] ?? $formResponse->message ?? '' }}</p>
+                <p style="margin:0; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:15px; font-weight:400; color:#374151; line-height:1.7; white-space:pre-line;">{{ $formResponse->message }}</p>
             </td>
         </tr>
     </table>
