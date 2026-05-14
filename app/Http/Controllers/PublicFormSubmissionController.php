@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendFormResponseEmailToPartner;
+use App\Jobs\SendFormSubmissionConfirmationEmail;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
@@ -80,6 +81,9 @@ class PublicFormSubmissionController extends Controller
         if ($partner && $partner->email) {
             SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission, $validated);
         }
+
+        // Confirmar recepción al usuario que realizó la consulta
+        SendFormSubmissionConfirmationEmail::dispatch($formSubmission, $validated);
 
         return redirect()->route('public.form_submission.show', $formSubmission->secure_token)
             ->with('success', 'Tu consulta fue enviada correctamente. Te responderemos a la brevedad.');
