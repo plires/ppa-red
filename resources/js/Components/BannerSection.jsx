@@ -1,30 +1,6 @@
 import styles from './BannerSection.module.css'
-import iconTx from '../../images/landing/tx.svg'
-import iconCandado from '../../images/landing/candado.svg'
-import iconReloj from '../../images/landing/reloj.svg'
-import autoLluvia from '../../images/landing/auto-lluvia.webp'
-import autoLluviaMobile from '../../images/landing/auto-lluvia-mobile.webp'
-
-const FEATURES = [
-  {
-    icon: iconTx,
-    alt: 'Control remoto PPA',
-    title: 'Cero exposición',
-    text: 'Abrís y cerrás desde el auto.',
-  },
-  {
-    icon: iconReloj,
-    alt: 'Apertura rápida',
-    title: 'Rapidez que protege',
-    text: 'Apertura y cierre en segundos.',
-  },
-  {
-    icon: iconCandado,
-    alt: 'Seguridad total',
-    title: 'Control total',
-    text: 'Sabés siempre si tu portón está cerrado.',
-  },
-]
+import autoLluvia from '../../images/landing/auto2-lluvia.webp'
+import autoLluviaMobile from '../../images/landing/auto2-lluvia-mobile.webp'
 
 export default function BannerSection() {
   return (
@@ -46,13 +22,22 @@ export default function BannerSection() {
           </div>
           <div className={styles.bannerOverlay} aria-hidden='true' />
           <div className={styles.bannerContent}>
-            <h2 className={styles.bannerTitle} data-aos='fade-right' data-aos-duration='800'>
+            <h2
+              className={styles.bannerTitle}
+              data-aos='fade-right'
+              data-aos-duration='800'
+            >
               LA COMODIDAD
               <br />
               QUE TE CAMBIA
               <br /> EL DÍA.
             </h2>
-            <p className={styles.bannerBody} data-aos='fade-right' data-aos-delay='180' data-aos-duration='800'>
+            <p
+              className={styles.bannerBody}
+              data-aos='fade-right'
+              data-aos-delay='180'
+              data-aos-duration='800'
+            >
               Llegás y el portón <strong>se abre con un click.</strong>
               <br />
               Ideal para compras, lluvia y llegadas nocturnas.
