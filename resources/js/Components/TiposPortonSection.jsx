@@ -2,6 +2,8 @@ import styles from './TiposPortonSection.module.css'
 import corredizos from '../../images/landing/corredizos.webp'
 import levadizos from '../../images/landing/levadizos.webp'
 import pivotantes from '../../images/landing/pivotantes.webp'
+import puertas from '../../images/landing/puertas.webp'
+import barreras from '../../images/landing/barreras.webp'
 
 const TIPOS = [
   {
@@ -22,6 +24,18 @@ const TIPOS = [
     label: 'Pivotantes',
     desc: 'Diseño clásico con tecnología moderna.',
   },
+  {
+    src: puertas,
+    alt: 'Puertas Sociales Automáticas',
+    label: 'Puertas Sociales',
+    desc: 'Solución ideal para puertas de vidrio.',
+  },
+  {
+    src: barreras,
+    alt: 'Barreras Automáticas',
+    label: 'Barreras',
+    desc: 'Alta resistencia a la intemperie.',
+  },
 ]
 
 export default function TiposPortonSection() {
@@ -30,7 +44,7 @@ export default function TiposPortonSection() {
       <h2 className={styles.title} data-aos='fade-up'>
         Automatizamos
         <br />
-        cualquier tipo de portón
+        cualquier tipo de acceso
       </h2>
 
       <ul className={styles.grid} role='list'>
