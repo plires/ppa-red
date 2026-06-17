@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
+import axios from 'axios';
 import {
     FileText,
     MapPin,
@@ -231,7 +232,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     title="Comentarios sin leer"
                                     items={unreadCommentsList.map((c) => ({
                                         id: c.id,
-                                        href: route('responses.mark_as_read', c.id),
+                                        href: route('form_submissions.show', c.form_submission_id),
+                                        markReadHref: route('responses.mark_as_read', c.id),
                                         label: c.message,
                                         time: formatRelativeTime(c.created_at),
                                     }))}
@@ -243,7 +245,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     title="Notificaciones sin leer"
                                     items={unreadNotificationsList.map((n) => ({
                                         id: n.id,
-                                        href: route('notification.mark_as_read', {
+                                        href: route('form_submissions.show', n.form_submission_id),
+                                        markReadHref: route('notification.mark_as_read', {
                                             notification: n.id,
                                             formSubmission: n.form_submission_id,
                                         }),
@@ -377,14 +380,17 @@ function NotificationBell({ icon: Icon, count, title, items = [], markAllHref })
                         <ul className="max-h-72 divide-y divide-gray-50 overflow-y-auto">
                             {items.map((item) => (
                                 <li key={item.id}>
-                                    <Link
-                                        href={item.href}
-                                        onClick={() => setOpen(false)}
-                                        className="block px-4 py-3 hover:bg-gray-50"
+                                    <button
+                                        onClick={() => {
+                                            setOpen(false);
+                                            axios.get(item.markReadHref).catch(() => {});
+                                            router.visit(item.href);
+                                        }}
+                                        className="block w-full px-4 py-3 text-left hover:bg-gray-50"
                                     >
                                         <p className="line-clamp-2 text-sm text-gray-700">{item.label}</p>
                                         <p className="mt-0.5 text-xs text-gray-400">{item.time}</p>
-                                    </Link>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
