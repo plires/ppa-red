@@ -1,6 +1,12 @@
+import useEmblaCarousel from 'embla-carousel-react'
+import Autoplay from 'embla-carousel-autoplay'
 import styles from './Hero.module.css'
 import heroBg from '../../images/landing/hero/hero-background.webp'
+import heroBg2 from '../../images/landing/hero/hero2-background.webp'
+import heroBg3 from '../../images/landing/hero/hero3-background.webp'
 import logoPpaRed from '../../images/landing/hero/logo-ppa-red.svg'
+
+const SLIDES = [heroBg, heroBg2, heroBg3]
 
 const BENEFITS = [
   'Instalación en 24-48hs.',
@@ -173,6 +179,10 @@ function BadgeList() {
 }
 
 export default function Hero(props) {
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 4000, stopOnInteraction: false }),
+  ])
+
   return (
     <>
       {/* ── MOBILE ── */}
@@ -193,10 +203,16 @@ export default function Hero(props) {
       {/* ── DESKTOP ── */}
       <div className={styles.desktop}>
         {/* Foto hero con diagonal naranja encima */}
-        <div
-          className={styles.heroBg}
-          style={{ backgroundImage: `url(${heroBg})` }}
-        >
+        <div className={styles.heroBg}>
+          <div className={styles.embla} ref={emblaRef} aria-hidden='true'>
+            <div className={styles.emblaContainer}>
+              {SLIDES.map((src, i) => (
+                <div key={i} className={styles.emblaSlide}>
+                  <img src={src} alt='' className={styles.emblaImg} />
+                </div>
+              ))}
+            </div>
+          </div>
           <div className={styles.diagonal} aria-hidden='true' />
           <div className={styles.brand}>
             <img src={logoPpaRed} alt='PPA RED' className={styles.logo} />
