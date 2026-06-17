@@ -1,0 +1,80 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    networks:
+      - ppa-local
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment:
+      APP_NAME: "PPA RED"
+      APP_ENV: local
+      APP_KEY: ${APP_KEY}
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      ASSET_URL: http://localhost:5173
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-ppa_red}
+      DB_USERNAME: ${DB_USERNAME:-ppa}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      QUEUE_CONNECTION: database
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-hello@ppa-red.test}
+      MAIL_FROM_NAME: "PPA RED"
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor   # prevent host vendor from overriding container vendor
+      - ppa_local_storage:/var/www/html/storage/app
+
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    networks:
+      - ppa-local
+    ports:
+      - "3307:3306"   # 3307 para no chocar con MySQL local si lo tenés instalado
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-ppa_red}
+      MYSQL_USER: ${DB_USERNAME:-ppa}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    volumes:
+      - ppa_local_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootsecret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    networks:
+      - ppa-local
+    ports:
+      - "8025:8025"   # web UI
+      # puerto 1025 (SMTP) sólo interno, no necesita exponerse al host
+
+volumes:
+  ppa_local_mysql:
+  ppa_local_storage:
+
+networks:
+  ppa-local:
+    driver: bridge
