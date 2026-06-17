@@ -64,6 +64,14 @@
       "sessions": 0,
       "memories": 2,
       "prompts": 0
+    },
+    {
+      "id": "ff72db79",
+      "created_by": "pablolires",
+      "created_at": "2026-06-17T23:13:23Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
     }
   ]
 }
