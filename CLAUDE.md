@@ -22,9 +22,38 @@ Style guide de páginas públicas en `.claude/style-guide.md` — colores instit
 1. `.claude/style-guide.md` — colores y tipografía de marca. Tienen prioridad absoluta. Nunca sobreescribir con valores externos.
 2. Skill `web-design-guidelines` (`.agents/skills/web-design-guidelines/SKILL.md`) — auditoría de buenas prácticas UI (accesibilidad, contraste, UX). Usar para revisar páginas, no para definir marca.
 
+## Entorno Local (Docker)
+
+El proyecto corre en Docker local — **NO usar `php artisan serve` ni Sail**.
+
+```bash
+# Levantar
+docker compose -f docker-compose.local.yml up -d
+npm run dev   # en terminal separada (Vite corre en el host, no en Docker)
+
+# Bajar
+docker compose -f docker-compose.local.yml down
+
+# Artisan (alias dpa — configurar una vez por máquina)
+echo 'alias dpa="docker compose -f docker-compose.local.yml exec app php artisan"' >> ~/.zshrc && source ~/.zshrc
+dpa migrate:fresh --seed
+
+# Reconstruir imagen (tras cambios en Dockerfile.dev o composer.json)
+docker compose -f docker-compose.local.yml down -v
+docker compose -f docker-compose.local.yml build --no-cache
+docker compose -f docker-compose.local.yml up -d
+```
+
+**Servicios**: App → `http://localhost:8000` · MySQL → `127.0.0.1:3307` · Mailpit → `http://localhost:8025`
+
+**Gotchas conocidos**:
+- Si la app devuelve 503: verificar con `dpa about` si está en modo mantenimiento (`dpa up` para salir).
+- Cambios de permisos en staging (`chmod` del entrypoint): descartar con `git checkout -- .` y correr `git config core.fileMode false`.
+- PHP-FPM puede escuchar en IPv6 (`:::9000`) en vez de IPv4 (`127.0.0.1:9000`) según la imagen Alpine. Si nginx devuelve 503 a nivel conexión, cambiar `fastcgi_pass` en `docker/nginx.conf` a `[::1]:9000` y reconstruir.
+
 ## Stack Tecnológico
 
-- **Backend**: Laravel 11, PHP 8.2+, SQLite
+- **Backend**: Laravel 11, PHP 8.2+, MySQL (local Docker) / SQLite (tests)
 - **Frontend**: Inertia.js + React 18, Tailwind CSS, @headlessui/react
 - **Build**: Vite 6.0 con `@vitejs/plugin-react`
 - **Auth**: Laravel Breeze (stack React/Inertia)
