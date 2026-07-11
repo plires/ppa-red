@@ -7,6 +7,7 @@ use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
 use App\Models\User;
+use Database\Seeders\TransactionalEmailSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -26,6 +27,7 @@ class UpdateFormSubmissionStatusTest extends TestCase
         Queue::fake();
 
         $this->setupStatuses();
+        $this->seed(TransactionalEmailSeeder::class);
 
         $this->user = User::factory()->create([
             'email' => 'partner@example.com',

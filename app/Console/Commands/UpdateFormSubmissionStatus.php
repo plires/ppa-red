@@ -185,16 +185,12 @@ class UpdateFormSubmissionStatus extends Command
         $now = Carbon::now();
         $submissions = FormSubmission::where('form_submission_status_id', $this->statuses['answeredPartner']->id)
             ->where('updated_at', '<', $now->copy()->subDays(7))
-            ->withCount([
-                'formResponses as user_responses_count' => function ($query) {
-                    $query->where('is_system', false); // Cuenta solo respuestas del usuario
-                },
-                'formResponses as partner_responses_count' => function ($query) {
-                    $query->where('is_system', true); // Cuenta solo respuestas del partner
-                },
-            ])
-            ->having('user_responses_count', '=', 1) // Usuario tiene solo 1 respuesta
-            ->having('partner_responses_count', '>=', 1) // Partner tiene 1 o más respuestas
+            ->whereHas('formResponses', function ($query) {
+                $query->where('is_system', false); // Cuenta solo respuestas del usuario
+            }, '=', 1) // Usuario tiene solo 1 respuesta
+            ->whereHas('formResponses', function ($query) {
+                $query->where('is_system', true); // Cuenta solo respuestas del partner
+            }, '>=', 1) // Partner tiene 1 o más respuestas
             ->get();
 
         if ($submissions->isNotEmpty()) {

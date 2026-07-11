@@ -9,6 +9,16 @@ abstract class TestCase extends BaseTestCase
 {
     public function createApplication()
     {
+        // Mismo problema que DB_CONNECTION más abajo: el contenedor trae
+        // APP_ENV=local como variable de entorno real del proceso, así que
+        // el <env name="APP_ENV" value="testing"/> de phpunit.xml no llega a
+        // pisarla. Sin esto, $app->runningUnitTests() da false y el
+        // middleware VerifyCsrfToken deja de saltearse en tests (419 en
+        // cualquier POST/PUT/DELETE).
+        $_ENV['APP_ENV'] = 'testing';
+        $_SERVER['APP_ENV'] = 'testing';
+        putenv('APP_ENV=testing');
+
         $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Kernel::class)->bootstrap();
