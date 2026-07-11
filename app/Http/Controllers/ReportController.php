@@ -34,9 +34,12 @@ class ReportController extends Controller
 
         // Agrupar por partner y contar formularios
         $data = $query->selectRaw('user_id, COUNT(*) as total')
+            ->whereNotNull('user_id')
             ->groupBy('user_id')
             ->with('user')
-            ->get();
+            ->get()
+            ->filter(fn ($d) => $d->user !== null)
+            ->values();
 
         $id = $data->map(fn ($d) => $d->user->id);
         $labels = $data->map(fn ($d) => $d->user->name);
