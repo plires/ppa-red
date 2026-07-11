@@ -5,7 +5,7 @@ import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = __APP_NAME__;
 
 // Inertia can throw unhandled promise rejections when a navigation response
 // arrives with a missing or malformed `url` field (e.g. during concurrent

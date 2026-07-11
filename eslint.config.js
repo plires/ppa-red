@@ -3,6 +3,10 @@ import pluginJs from '@eslint/js'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      globals: { ...globals.browser, __APP_NAME__: 'readonly' },
+    },
+  },
   pluginJs.configs.recommended,
 ]
