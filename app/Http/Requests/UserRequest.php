@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserRequest extends FormRequest
 {
@@ -13,6 +15,12 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $partner = $this->route('partner');
+
+        if ($partner && $partner->role !== User::PARTNER_USER) {
+            throw new NotFoundHttpException;
+        }
+
         return true;
     }
 

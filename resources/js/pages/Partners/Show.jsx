@@ -55,9 +55,6 @@ export default function Show({ partner, recentSubmissions }) {
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Partner</p>
                                 <h1 className="text-xl font-bold text-gray-900">{partner.name}</h1>
-                                <span className="mt-0.5 inline-block rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium capitalize text-[#FF7500]">
-                                    {partner.role}
-                                </span>
                             </div>
                         </div>
                         <Link

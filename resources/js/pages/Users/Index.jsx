@@ -4,11 +4,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DataTable from '@/Components/DataTable';
 import ConfirmDeleteModal from '@/Components/ConfirmDeleteModal';
 import { createColumnHelper } from '@tanstack/react-table';
-import { Pencil, Trash2, Plus, Eye } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 
 const col = createColumnHelper();
 
-export default function Index({ partners }) {
+export default function Index({ users }) {
     const [deleting, setDeleting] = useState(null);
 
     const columns = useMemo(
@@ -16,21 +16,20 @@ export default function Index({ partners }) {
             col.accessor('name', { header: 'Nombre' }),
             col.accessor('email', { header: 'Email' }),
             col.accessor('phone', { header: 'Teléfono' }),
+            col.accessor('role', {
+                header: 'Rol',
+                cell: ({ getValue }) => (
+                    <span className="capitalize">{getValue()}</span>
+                ),
+            }),
             col.display({
                 id: 'actions',
                 header: 'Acciones',
-                size: 140,
+                size: 100,
                 cell: ({ row }) => (
                     <div className="flex items-center gap-2">
                         <Link
-                            href={route('partners.show', row.original.id)}
-                            className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                            title="Ver"
-                        >
-                            <Eye className="h-4 w-4" />
-                        </Link>
-                        <Link
-                            href={route('partners.edit', row.original.id)}
+                            href={route('users.edit', row.original.id)}
                             className="rounded p-1 text-blue-500 hover:bg-blue-50 hover:text-blue-700"
                             title="Editar"
                         >
@@ -51,43 +50,43 @@ export default function Index({ partners }) {
     );
 
     function handleDelete() {
-        router.delete(route('partners.destroy', deleting.id), {
+        router.delete(route('users.destroy', deleting.id), {
             onFinish: () => setDeleting(null),
         });
     }
 
     return (
-        <AuthenticatedLayout header="Partners">
+        <AuthenticatedLayout header="Usuarios">
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold text-gray-800">Partners</h1>
+                    <h1 className="text-xl font-semibold text-gray-800">Usuarios</h1>
                     <div className="flex gap-2">
                         <Link
-                            href={route('partners.trashed')}
+                            href={route('users.trashed')}
                             className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
                         >
                             Papelera
                         </Link>
                         <Link
-                            href={route('partners.create')}
+                            href={route('users.create')}
                             className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90"
                             style={{ background: 'linear-gradient(90deg, #FD3C00, #FF7500)' }}
                         >
                             <Plus className="h-4 w-4" />
-                            Nuevo Partner
+                            Nuevo Usuario
                         </Link>
                     </div>
                 </div>
 
-                <DataTable data={partners} columns={columns} />
+                <DataTable data={users} columns={columns} />
             </div>
 
             <ConfirmDeleteModal
                 show={!!deleting}
                 onClose={() => setDeleting(null)}
                 onConfirm={handleDelete}
-                title="Eliminar partner"
-                message={`¿Eliminar al partner "${deleting?.name}"?`}
+                title="Eliminar usuario"
+                message={`¿Eliminar al usuario "${deleting?.name}"?`}
             />
         </AuthenticatedLayout>
     );

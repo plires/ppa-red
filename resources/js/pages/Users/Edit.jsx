@@ -3,17 +3,19 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import NativeSelect from '@/Components/NativeSelect';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
 
-export default function Edit({ partner }) {
+export default function Edit({ user }) {
     const [changePassword, setChangePassword] = useState(false);
 
     const { data, setData, put, processing, errors, setError } = useForm({
-        name: partner.name,
-        email: partner.email,
-        phone: partner.phone ?? '',
+        name: user.name,
+        email: user.email,
+        phone: user.phone ?? '',
+        role: user.role,
         password: '',
         password_confirmation: '',
     });
@@ -39,14 +41,14 @@ export default function Edit({ partner }) {
             }
         }
 
-        put(route('partners.update', partner.id));
+        put(route('users.update', user.id));
     }
 
     return (
-        <AuthenticatedLayout header="Partners / Editar">
+        <AuthenticatedLayout header="Usuarios / Editar">
             <div className="mx-auto max-w-xl">
                 <Link
-                    href={route('partners.index')}
+                    href={route('users.index')}
                     className="mb-4 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
                 >
                     <ArrowLeft className="h-4 w-4" /> Volver
@@ -54,8 +56,8 @@ export default function Edit({ partner }) {
 
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                     <h2 className="mb-6 text-lg font-semibold text-gray-800">
-                        Editar Partner:{' '}
-                        <span className="text-[#FF7500]">{partner.name}</span>
+                        Editar Usuario:{' '}
+                        <span className="text-[#FF7500]">{user.name}</span>
                     </h2>
 
                     <form onSubmit={submit} className="space-y-4">
@@ -93,6 +95,19 @@ export default function Edit({ partner }) {
                                 className="mt-1 w-full"
                             />
                             <InputError message={errors.phone} className="mt-1" />
+                        </div>
+
+                        <div>
+                            <InputLabel htmlFor="role" value="Rol" />
+                            <NativeSelect
+                                id="role"
+                                value={data.role}
+                                onChange={(e) => setData('role', e.target.value)}
+                                className="mt-1"
+                            >
+                                <option value="admin">Admin</option>
+                            </NativeSelect>
+                            <InputError message={errors.role} className="mt-1" />
                         </div>
 
                         {/* Toggle cambiar contraseña */}
@@ -141,7 +156,7 @@ export default function Edit({ partner }) {
 
                         <div className="flex justify-end gap-3 pt-2">
                             <Link
-                                href={route('partners.index')}
+                                href={route('users.index')}
                                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
                             >
                                 Cancelar

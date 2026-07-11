@@ -9,6 +9,7 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\PublicFormResponseController;
 use App\Http\Controllers\PublicFormSubmissionController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\AdminMiddleware;
@@ -138,6 +139,16 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
         Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
         Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
+
+        // Usuarios (admins y demás roles no-partner)
+        Route::get('/users/trashed', [UserAccountController::class, 'trashed'])->name('users.trashed');
+        Route::patch('/users/{id}/restore', [UserAccountController::class, 'restore'])->name('users.restore');
+        Route::get('/users', [UserAccountController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserAccountController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserAccountController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}/edit', [UserAccountController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [UserAccountController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserAccountController::class, 'destroy'])->name('users.destroy');
 
         // Reportes (solo admin)
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

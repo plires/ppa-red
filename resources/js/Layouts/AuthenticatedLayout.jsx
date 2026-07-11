@@ -7,6 +7,7 @@ import {
     Map,
     Globe,
     Users,
+    UserCog,
     BarChart2,
     PieChart,
     LogOut,
@@ -58,6 +59,16 @@ const adminMenus = [
             { label: 'Listar', href: route('partners.index'), routeName: 'partners.index' },
             { label: 'Agregar', href: route('partners.create'), routeName: 'partners.create' },
             { label: 'Restaurar', href: route('partners.trashed'), routeName: 'partners.trashed' },
+        ],
+    },
+    {
+        key: 'users',
+        label: 'Usuarios',
+        icon: UserCog,
+        children: [
+            { label: 'Listar', href: route('users.index'), routeName: 'users.index' },
+            { label: 'Agregar', href: route('users.create'), routeName: 'users.create' },
+            { label: 'Restaurar', href: route('users.trashed'), routeName: 'users.trashed' },
         ],
     },
     {

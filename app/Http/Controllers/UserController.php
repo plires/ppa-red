@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
@@ -14,15 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $partners = [];
-
-        // Si el usuario es 'admin', se listan los partners
-        if ($user->role === User::ADMIN_USER) {
-            $partners = User::all();
-        }
-
-        $role_admin = User::ADMIN_USER;
+        $partners = User::where('role', User::PARTNER_USER)->get();
 
         return Inertia::render('Partners/Index', ['partners' => $partners]);
     }
@@ -40,7 +32,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $partner = User::create($request->validated());
+        $partner = User::create([...$request->validated(), 'role' => User::PARTNER_USER]);
 
         // Redirigir a la lista de provincias con un mensaje de éxito
         return redirect()->route('partners.index')->with('success', 'el partner'.$partner->name.' fue agregado correctamente.');
@@ -51,6 +43,8 @@ class UserController extends Controller
      */
     public function show(User $partner)
     {
+        $this->ensurePartner($partner);
+
         $partner->load(['localities.zone', 'localities.province']);
 
         $recentSubmissions = $partner->formSubmissions()
@@ -77,6 +71,8 @@ class UserController extends Controller
      */
     public function edit(User $partner)
     {
+        $this->ensurePartner($partner);
+
         return Inertia::render('Partners/Edit', ['partner' => $partner]);
     }
 
@@ -102,28 +98,39 @@ class UserController extends Controller
      */
     public function destroy(UserRequest $request, User $partner)
     {
-
         $partner->delete();
 
         // Redirigir a la lista de provincias con un mensaje de éxito
         return redirect()->route('partners.index')->with('success', 'El partner '.$partner->name.' fue eliminado correctamente.');
     }
 
-    // Método para listar provincias eliminadas
+    // Método para listar partners eliminados
     public function trashed()
     {
-        $partners = User::onlyTrashed()->get();
+        $partners = User::onlyTrashed()->where('role', User::PARTNER_USER)->get();
 
         return Inertia::render('Partners/Trashed', ['partners' => $partners]);
     }
 
-    // Método para restaurar una provincia
+    // Método para restaurar un partner
     public function restore($id)
     {
-
         $partner = User::withTrashed()->findOrFail($id);
+        $this->ensurePartner($partner);
+
         $partner->restore();
 
         return redirect()->route('partners.trashed')->with('success', 'El partner '.$partner->name.' fue restaurado correctamente.');
+    }
+
+    /**
+     * Guard para show()/edit(): no pasan por UserRequest, así que el chequeo de
+     * rol no lo cubre authorize(). update()/destroy() ya lo resuelven vía UserRequest.
+     */
+    private function ensurePartner(User $partner): void
+    {
+        if ($partner->role !== User::PARTNER_USER) {
+            throw new NotFoundHttpException;
+        }
     }
 }

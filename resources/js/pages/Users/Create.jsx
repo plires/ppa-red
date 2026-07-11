@@ -2,6 +2,7 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import NativeSelect from '@/Components/NativeSelect';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { ArrowLeft } from 'lucide-react';
@@ -13,25 +14,26 @@ export default function Create() {
         phone: '',
         password: '',
         password_confirmation: '',
+        role: 'admin',
     });
 
     function submit(e) {
         e.preventDefault();
-        post(route('partners.store'));
+        post(route('users.store'));
     }
 
     return (
-        <AuthenticatedLayout header="Partners / Nuevo">
+        <AuthenticatedLayout header="Usuarios / Nuevo">
             <div className="mx-auto max-w-xl">
                 <Link
-                    href={route('partners.index')}
+                    href={route('users.index')}
                     className="mb-4 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
                 >
                     <ArrowLeft className="h-4 w-4" /> Volver
                 </Link>
 
                 <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h2 className="mb-6 text-lg font-semibold text-gray-800">Nuevo Partner</h2>
+                    <h2 className="mb-6 text-lg font-semibold text-gray-800">Nuevo Usuario</h2>
 
                     <form onSubmit={submit} className="space-y-4">
                         <div>
@@ -94,9 +96,22 @@ export default function Create() {
                             <InputError message={errors.password_confirmation} className="mt-1" />
                         </div>
 
+                        <div>
+                            <InputLabel htmlFor="role" value="Rol" />
+                            <NativeSelect
+                                id="role"
+                                value={data.role}
+                                onChange={(e) => setData('role', e.target.value)}
+                                className="mt-1"
+                            >
+                                <option value="admin">Admin</option>
+                            </NativeSelect>
+                            <InputError message={errors.role} className="mt-1" />
+                        </div>
+
                         <div className="flex justify-end gap-3 pt-2">
                             <Link
-                                href={route('partners.index')}
+                                href={route('users.index')}
                                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
                             >
                                 Cancelar

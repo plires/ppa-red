@@ -7,11 +7,12 @@ import { RotateCcw, ArrowLeft } from 'lucide-react';
 
 const col = createColumnHelper();
 
-export default function Trashed({ partners }) {
+export default function Trashed({ users }) {
     const columns = useMemo(
         () => [
             col.accessor('name', { header: 'Nombre' }),
             col.accessor('email', { header: 'Email' }),
+            col.accessor('role', { header: 'Rol', cell: ({ getValue }) => <span className="capitalize">{getValue()}</span> }),
             col.display({
                 id: 'actions',
                 header: 'Acciones',
@@ -19,7 +20,7 @@ export default function Trashed({ partners }) {
                 cell: ({ row }) => (
                     <button
                         onClick={() =>
-                            router.patch(route('partners.restore', row.original.id))
+                            router.patch(route('users.restore', row.original.id))
                         }
                         className="flex items-center gap-1 rounded px-2 py-1 text-sm text-green-600 hover:bg-green-50"
                     >
@@ -33,12 +34,12 @@ export default function Trashed({ partners }) {
     );
 
     return (
-        <AuthenticatedLayout header="Partners / Papelera">
+        <AuthenticatedLayout header="Usuarios / Papelera">
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold text-gray-800">Partners eliminados</h1>
+                    <h1 className="text-xl font-semibold text-gray-800">Usuarios eliminados</h1>
                     <Link
-                        href={route('partners.index')}
+                        href={route('users.index')}
                         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
                     >
                         <ArrowLeft className="h-4 w-4" /> Volver
@@ -46,9 +47,9 @@ export default function Trashed({ partners }) {
                 </div>
 
                 <DataTable
-                    data={partners}
+                    data={users}
                     columns={columns}
-                    emptyText="No hay partners eliminados"
+                    emptyText="No hay usuarios eliminados"
                 />
             </div>
         </AuthenticatedLayout>
