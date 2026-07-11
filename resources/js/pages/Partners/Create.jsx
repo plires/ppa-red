@@ -4,15 +4,13 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mail } from 'lucide-react';
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
         phone: '',
-        password: '',
-        password_confirmation: '',
     });
 
     function submit(e) {
@@ -70,28 +68,12 @@ export default function Create() {
                             <InputError message={errors.phone} className="mt-1" />
                         </div>
 
-                        <div>
-                            <InputLabel htmlFor="password" value="Contraseña" />
-                            <TextInput
-                                id="password"
-                                type="password"
-                                value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
-                                className="mt-1 w-full"
-                            />
-                            <InputError message={errors.password} className="mt-1" />
-                        </div>
-
-                        <div>
-                            <InputLabel htmlFor="password_confirmation" value="Confirmar contraseña" />
-                            <TextInput
-                                id="password_confirmation"
-                                type="password"
-                                value={data.password_confirmation}
-                                onChange={(e) => setData('password_confirmation', e.target.value)}
-                                className="mt-1 w-full"
-                            />
-                            <InputError message={errors.password_confirmation} className="mt-1" />
+                        <div className="flex items-start gap-2 rounded-lg border border-orange-100 bg-orange-50 p-3 text-xs text-orange-800">
+                            <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                            <p>
+                                Le vamos a enviar un correo de bienvenida a este email para que active su
+                                cuenta y elija su propia contraseña.
+                            </p>
                         </div>
 
                         <div className="flex justify-end gap-3 pt-2">

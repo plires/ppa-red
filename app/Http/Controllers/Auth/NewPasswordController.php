@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,7 +50,17 @@ class NewPasswordController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                     'remember_token' => Str::random(60),
-                ])->save();
+                ]);
+
+                // Primer seteo de contraseña de un partner invitado: al llegar acá
+                // solo pudo ser abriendo el link del correo de bienvenida, así que
+                // damos por confirmado el email y activamos la cuenta en el mismo paso.
+                if ($user->role === User::PARTNER_USER && ! $user->isActivated()) {
+                    $user->email_verified_at = now();
+                    $user->activated_at = now();
+                }
+
+                $user->save();
 
                 event(new PasswordReset($user));
             }

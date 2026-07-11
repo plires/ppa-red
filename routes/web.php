@@ -138,6 +138,9 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         Route::get('/partners/{partner}/edit', [UserController::class, 'edit'])->name('partners.edit');
         Route::put('/partners/{partner}', [UserController::class, 'update'])->name('partners.update');
         Route::delete('/partners/{partner}', [UserController::class, 'destroy'])->name('partners.destroy');
+        Route::post('/partners/{partner}/resend-welcome', [UserController::class, 'resendWelcome'])
+            ->middleware('throttle:6,1')
+            ->name('partners.resend_welcome');
         Route::get('/partners/{partner}', [UserController::class, 'show'])->name('partners.show');
 
         // Usuarios (admins y demás roles no-partner)

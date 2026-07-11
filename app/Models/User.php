@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->role == User::PARTNER_USER;
     }
 
+    public function isActivated(): bool
+    {
+        return $this->activated_at !== null;
+    }
+
     public static function generateVerificationToken()
     {
         return Str::random(40);
@@ -93,6 +98,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'activated_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

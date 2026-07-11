@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Jobs\SendPartnerWelcomeEmail;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -32,10 +35,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $partner = User::create([...$request->validated(), 'role' => User::PARTNER_USER]);
+        // El partner elige su propia contraseña al activar la cuenta desde el
+        // correo de bienvenida; acá solo generamos una inutilizable de arranque.
+        $partner = User::create([
+            ...$request->validated(),
+            'role' => User::PARTNER_USER,
+            'password' => Hash::make(Str::random(40)),
+        ]);
 
-        // Redirigir a la lista de provincias con un mensaje de éxito
-        return redirect()->route('partners.index')->with('success', 'el partner'.$partner->name.' fue agregado correctamente.');
+        SendPartnerWelcomeEmail::dispatch($partner);
+
+        return redirect()->route('partners.index')->with('success', 'El partner '.$partner->name.' fue agregado correctamente. Se le envió un correo de bienvenida para que active su cuenta.');
     }
 
     /**
@@ -82,13 +92,21 @@ class UserController extends Controller
     public function update(UserRequest $request, User $partner)
     {
         $data = $request->validated();
+        $setsNewPassword = ! empty($data['password']);
+        $wasPending = ! $partner->isActivated();
 
-        if (empty($data['password'])) {
+        if (! $setsNewPassword) {
             unset($data['password']);
         }
         unset($data['password_confirmation']);
 
         $partner->update($data);
+
+        if ($setsNewPassword && $wasPending) {
+            // El admin le puso una contraseña a mano: ya no tiene sentido dejarlo
+            // marcado como "pendiente de activación" ni seguir ofreciendo el resend.
+            $partner->forceFill(['activated_at' => now(), 'email_verified_at' => now()])->save();
+        }
 
         return redirect()->back()->with('success', 'El partner '.$partner->name.' fue actualizado correctamente.');
     }
@@ -121,6 +139,20 @@ class UserController extends Controller
         $partner->restore();
 
         return redirect()->route('partners.trashed')->with('success', 'El partner '.$partner->name.' fue restaurado correctamente.');
+    }
+
+    // Reenvía el correo de bienvenida a un partner que todavía no activó su cuenta
+    public function resendWelcome(User $partner)
+    {
+        $this->ensurePartner($partner);
+
+        if ($partner->isActivated()) {
+            return back()->with('error', 'Este partner ya activó su cuenta.');
+        }
+
+        SendPartnerWelcomeEmail::dispatch($partner);
+
+        return back()->with('success', 'Se reenvió el correo de bienvenida a '.$partner->name.'.');
     }
 
     /**

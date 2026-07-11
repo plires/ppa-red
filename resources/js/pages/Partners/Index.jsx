@@ -3,8 +3,9 @@ import { Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DataTable from '@/Components/DataTable';
 import ConfirmDeleteModal from '@/Components/ConfirmDeleteModal';
+import PartnerActivationBadge from '@/Components/PartnerActivationBadge';
 import { createColumnHelper } from '@tanstack/react-table';
-import { Pencil, Trash2, Plus, Eye } from 'lucide-react';
+import { Pencil, Trash2, Plus, Eye, Mail } from 'lucide-react';
 
 const col = createColumnHelper();
 
@@ -16,12 +17,25 @@ export default function Index({ partners }) {
             col.accessor('name', { header: 'Nombre' }),
             col.accessor('email', { header: 'Email' }),
             col.accessor('phone', { header: 'Teléfono' }),
+            col.accessor('activated_at', {
+                header: 'Estado',
+                cell: ({ getValue }) => <PartnerActivationBadge activatedAt={getValue()} />,
+            }),
             col.display({
                 id: 'actions',
                 header: 'Acciones',
-                size: 140,
+                size: 170,
                 cell: ({ row }) => (
                     <div className="flex items-center gap-2">
+                        {!row.original.activated_at && (
+                            <button
+                                onClick={() => router.post(route('partners.resend_welcome', row.original.id))}
+                                className="rounded p-1 text-amber-500 hover:bg-amber-50 hover:text-amber-700"
+                                title="Reenviar correo de bienvenida"
+                            >
+                                <Mail className="h-4 w-4" />
+                            </button>
+                        )}
                         <Link
                             href={route('partners.show', row.original.id)}
                             className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"

@@ -1,5 +1,6 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import PartnerActivationBadge from '@/Components/PartnerActivationBadge';
 import {
     ArrowLeft,
     Pencil,
@@ -55,15 +56,29 @@ export default function Show({ partner, recentSubmissions }) {
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Partner</p>
                                 <h1 className="text-xl font-bold text-gray-900">{partner.name}</h1>
+                                <div className="mt-1">
+                                    <PartnerActivationBadge activatedAt={partner.activated_at} />
+                                </div>
                             </div>
                         </div>
-                        <Link
-                            href={route('partners.edit', partner.id)}
-                            className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
-                        >
-                            <Pencil className="h-3.5 w-3.5" />
-                            Editar
-                        </Link>
+                        <div className="flex items-center gap-2">
+                            {!partner.activated_at && (
+                                <button
+                                    onClick={() => router.post(route('partners.resend_welcome', partner.id))}
+                                    className="flex items-center gap-1.5 rounded-lg border border-amber-300 px-3 py-1.5 text-sm text-amber-700 hover:bg-amber-50"
+                                >
+                                    <Mail className="h-3.5 w-3.5" />
+                                    Reenviar bienvenida
+                                </button>
+                            )}
+                            <Link
+                                href={route('partners.edit', partner.id)}
+                                className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+                            >
+                                <Pencil className="h-3.5 w-3.5" />
+                                Editar
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Contacto */}
