@@ -14,7 +14,7 @@ class SendPartnerReassignmentEmails implements ShouldQueue
 
     public function __construct(
         public FormSubmission $formSubmission,
-        public User $outgoingPartner,
+        public ?User $outgoingPartner,
         public User $incomingPartner,
         public array $data,
     ) {}
@@ -26,12 +26,14 @@ class SendPartnerReassignmentEmails implements ShouldQueue
         $incoming   = $this->incomingPartner;
         $data       = $this->data;
 
-        // Partner saliente
-        Mail::send(
-            'emails.reassign_outgoing_partner',
-            compact('submission', 'outgoing', 'incoming', 'data'),
-            fn ($m) => $m->to($outgoing->email)->subject('Tu consulta asignada fue reasignada — PPA RED')
-        );
+        // Partner saliente (puede no existir si la consulta nunca tuvo partner asignado)
+        if ($outgoing) {
+            Mail::send(
+                'emails.reassign_outgoing_partner',
+                compact('submission', 'outgoing', 'incoming', 'data'),
+                fn ($m) => $m->to($outgoing->email)->subject('Tu consulta asignada fue reasignada — PPA RED')
+            );
+        }
 
         // Partner entrante
         Mail::send(
