@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import {
     FileText,
@@ -101,8 +101,16 @@ export default function AuthenticatedLayout({ header, children }) {
         setOpenMenu((prev) => (prev === key ? null : key));
     };
 
+    // `header` sólo es un string en las páginas de sección (ej. "Zonas", "Partners / Editar");
+    // en páginas como Profile/Edit viene como nodo React con su propio <Head>, así que ahí no pisamos el title.
+    const pageTitle = typeof header === 'string'
+        ? (header === 'Dashboard' ? 'Dashboard' : `Dashboard ${header}`)
+        : null;
+
     return (
         <div className="flex h-screen bg-gray-50">
+            {pageTitle && <Head title={pageTitle} />}
+
             {/* Mobile overlay */}
             {sidebarOpen && (
                 <div

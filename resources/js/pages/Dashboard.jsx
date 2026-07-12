@@ -1,5 +1,4 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import { FileText, MapPin, Map, Globe, Users, BarChart2 } from 'lucide-react';
 
@@ -15,8 +14,6 @@ export default function Dashboard() {
 
     return (
         <AuthenticatedLayout header="Dashboard">
-            <Head title="Dashboard" />
-
             <div className="space-y-6">
                 <h1 className="text-xl font-semibold text-gray-800">Panel de administración</h1>
 
