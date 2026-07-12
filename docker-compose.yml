@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        APP_NAME: ${APP_NAME}
     restart: unless-stopped
     expose:
       - "80"

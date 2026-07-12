@@ -1,6 +1,8 @@
 # ── Stage 1: build frontend assets ──────────────────────────────────────────
 FROM node:20-alpine AS assets
 WORKDIR /app
+ARG APP_NAME
+ENV APP_NAME=$APP_NAME
 COPY package*.json ./
 RUN npm ci
 COPY . .
