@@ -6,6 +6,7 @@ use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -61,11 +62,11 @@ class ReportController extends Controller
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(fn ($s) => [
-                'id'            => $s->id,
+                'id' => $s->id,
                 'end_user_name' => data_get(json_decode($s->data, true), 'name', '—'),
-                'locality'      => $s->locality?->name,
-                'status'        => $s->status?->name,
-                'created_at'    => $s->created_at,
+                'locality' => $s->locality?->name,
+                'status' => $s->status?->name,
+                'created_at' => $s->created_at,
             ]);
 
         return response()->json($formSubmissions);
@@ -73,7 +74,12 @@ class ReportController extends Controller
 
     public function statusChart()
     {
-        $partners = User::where('role', User::PARTNER_USER)->get(); // Ajustá esto a tu lógica de roles
+        // Esta pantalla la comparten admin y partner. El listado de partners es
+        // sólo para los filtros del admin: entregárselo a un partner le expone
+        // el directorio completo de sus competidores, con nombre y correo.
+        $partners = Auth::user()->isAdmin()
+            ? User::where('role', User::PARTNER_USER)->get()
+            : [];
 
         $statuses = [
             FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER => '#007bff',
@@ -102,7 +108,14 @@ class ReportController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
-        if ($request->filled('partner_id')) {
+        // Un partner sólo cuenta sus propias consultas, sin importar el filtro
+        // que llegue por querystring. Esta ruta está fuera de AdminMiddleware
+        // porque el partner también la usa, así que el aislamiento se resuelve acá.
+        $user = Auth::user();
+
+        if (! $user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        } elseif ($request->filled('partner_id')) {
             $query->where('user_id', $request->partner_id);
         }
 
@@ -138,18 +151,26 @@ class ReportController extends Controller
             ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc');
 
-        if ($user_id !== 'null') {
+        // Un partner queda anclado a sus propias consultas: el user_id de la URL
+        // se ignora. Antes se respetaba tal cual, así que un partner podía pedir
+        // el detalle de otro — o el corte completo con user_id = 'null' — y leer
+        // el nombre del cliente final de consultas ajenas.
+        $user = Auth::user();
+
+        if (! $user->isAdmin()) {
+            $query->where('user_id', $user->id);
+        } elseif ($user_id !== 'null') {
             $query->where('user_id', $user_id);
         }
 
         return response()->json(
             $query->get()->map(fn ($s) => [
-                'id'            => $s->id,
+                'id' => $s->id,
                 'end_user_name' => data_get(json_decode($s->data, true), 'name', '—'),
-                'locality'      => $s->locality?->name,
-                'partner'       => $s->user?->name,
-                'status'        => $s->status?->name,
-                'created_at'    => $s->created_at,
+                'locality' => $s->locality?->name,
+                'partner' => $s->user?->name,
+                'status' => $s->status?->name,
+                'created_at' => $s->created_at,
             ])
         );
     }
