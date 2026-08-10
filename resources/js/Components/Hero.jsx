@@ -74,7 +74,7 @@ function FormCard({
 
         <div className={styles.field}>
           <select
-            className={styles.select}
+            className={`${styles.select} ${data.province_id ? styles.selectFilled : ''}`}
             value={data.province_id}
             onChange={handleProvinceChange}
           >
@@ -95,7 +95,7 @@ function FormCard({
         {(zones.length > 0 || loadingZones) && (
           <div className={styles.field}>
             <select
-              className={styles.select}
+              className={`${styles.select} ${data.zone_id ? styles.selectFilled : ''}`}
               value={data.zone_id}
               onChange={handleZoneChange}
               disabled={loadingZones}
@@ -116,7 +116,7 @@ function FormCard({
         {data.province_id && (
           <div className={styles.field}>
             <select
-              className={styles.select}
+              className={`${styles.select} ${data.locality_id ? styles.selectFilled : ''}`}
               value={data.locality_id}
               onChange={e => setData('locality_id', e.target.value)}
               disabled={loadingLocalities || localities.length === 0}

@@ -135,6 +135,10 @@
   cursor: pointer;
 }
 
+.selectFilled {
+  color: #555;
+}
+
 .input:focus,
 .select:focus,
 .textarea:focus {
