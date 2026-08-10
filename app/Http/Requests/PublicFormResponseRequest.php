@@ -37,7 +37,7 @@ class PublicFormResponseRequest extends FormRequest
         return [
             'message' => 'required|string|max:65535', // 65535 es el límite de un campo TEXT en MySQL
             'form_submission_id' => 'required|exists:form_submissions,id',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
             'is_system' => 'required|boolean', // Asegura que siempre tenga un valor y sea 0 o 1
         ];
     }

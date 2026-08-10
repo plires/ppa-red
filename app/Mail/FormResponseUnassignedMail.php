@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Mail;
+
+use App\Models\FormResponse;
+use App\Models\FormSubmission;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class FormResponseUnassignedMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $formResponse;
+
+    public $formSubmission;
+
+    public $data;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(FormResponse $formResponse, FormSubmission $formSubmission, $data)
+    {
+        $this->formResponse = $formResponse;
+        $this->formSubmission = $formSubmission;
+        $this->data = $data;
+    }
+
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'Nuevo mensaje sin partner asignado — requiere reasignación manual',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.form_response_unassigned',
+            with: [
+                'formResponse' => $this->formResponse,
+                'formSubmission' => $this->formSubmission,
+                'data' => $this->data,
+            ]
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
+    }
+}

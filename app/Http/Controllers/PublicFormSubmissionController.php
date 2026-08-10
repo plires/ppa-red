@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendFormResponseEmailToPartner;
 use App\Jobs\SendFormSubmissionConfirmationEmail;
+use App\Jobs\SendFormSubmissionUnassignedEmailToAdmin;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
@@ -76,10 +77,12 @@ class PublicFormSubmissionController extends Controller
             'is_system'          => false,
         ]);
 
-        // Notificar al partner asignado
+        // Notificar al partner asignado, o al administrador si la localidad no tiene partner
         $partner = $formSubmission->user;
         if ($partner && $partner->email) {
             SendFormResponseEmailToPartner::dispatch($formResponse, $formSubmission, $validated);
+        } else {
+            SendFormSubmissionUnassignedEmailToAdmin::dispatch($formSubmission, $validated);
         }
 
         // Confirmar recepción al usuario que realizó la consulta
