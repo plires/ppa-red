@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -19,7 +20,7 @@ class ZoneRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -29,8 +30,15 @@ class ZoneRequest extends FormRequest
             return []; // No aplicamos validaciones generales al eliminar
         }
 
+        // zones.name tiene índice único en base. Sin esta regla el nombre
+        // repetido llegaba al INSERT y reventaba con QueryException (500) en
+        // vez de devolver un error de formulario.
+        // No se excluyen las zonas borradas: el índice único de la base tampoco
+        // las excluye, así que un nombre de zona en la papelera sigue ocupado.
+        $zoneId = $this->route('zone')?->id ?? null;
+
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:zones,name,'.$zoneId,
             'province_id' => ['required', 'numeric', 'exists:provinces,id'],
         ];
     }
