@@ -18,6 +18,17 @@ import {
 } from '@/Components/ui/table';
 import { cn } from '@/lib/utils';
 
+function normalizeText(value) {
+    return String(value ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
+
+function accentInsensitiveFilter(row, columnId, filterValue) {
+    return normalizeText(row.getValue(columnId)).includes(normalizeText(filterValue));
+}
+
 export default function DataTable({
     data = [],
     columns = [],
@@ -33,6 +44,7 @@ export default function DataTable({
         columns,
         state: { globalFilter, sorting },
         onGlobalFilterChange: setGlobalFilter,
+        globalFilterFn: accentInsensitiveFilter,
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
