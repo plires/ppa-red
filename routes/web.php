@@ -66,9 +66,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     // Formularios enviados por los clientes
     Route::get('/form_submissions', [FormSubmissionController::class, 'index'])->name('form_submissions.index');
     Route::get('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'show'])->name('form_submissions.show');
-    Route::get('/form_submissions/{formSubmission}/edit', [FormSubmissionController::class, 'edit'])->name('form_submissions.edit');
     Route::put('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'update'])->name('form_submissions.update');
-    Route::delete('/form_submissions/{formSubmission}', [FormSubmissionController::class, 'destroy'])->name('form_submissions.destroy');
     Route::patch('/form_submissions/{formSubmission}/reassign', [FormSubmissionController::class, 'reassign'])
         ->middleware(AdminMiddleware::class)
         ->name('form_submissions.reassign');
