@@ -13,6 +13,12 @@ class PublicFormResponseRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        // Ningún usuario logueado (admin o partner) puede enviar mensajes desde la pantalla pública,
+        // solo el usuario final anónimo que recibió el link por email.
+        if ($this->user()) {
+            return false;
+        }
+
         // Agregar is_system ya que en este FormResponseRequest, siempre sera 0 (el mensaje lo envia el usuario publico )
         $this->merge([
             'is_system' => 0,

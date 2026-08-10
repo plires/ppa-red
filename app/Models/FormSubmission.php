@@ -17,6 +17,8 @@ class FormSubmission extends Model
 
     protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id', 'closure_reason'];
 
+    protected $hidden = ['secure_token'];
+
     protected static function boot()
     {
         parent::boot();

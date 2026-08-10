@@ -21,7 +21,6 @@ import {
     Mail,
     Calendar,
     MessageCircle,
-    ExternalLink,
     UserRoundCog,
 } from 'lucide-react';
 
@@ -117,15 +116,6 @@ export default function Show({ formSubmission, formData, responses, partners = [
                         <ArrowLeft className="h-4 w-4" />
                         Volver al listado
                     </Link>
-                    <a
-                        href={route('public.form_submission.show', formSubmission.secure_token)}
-                        target="_blank"
-                        rel="noopener"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-500 shadow-sm hover:bg-gray-50"
-                    >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                        Ver versión pública
-                    </a>
                 </div>
 
                 {/* ── Estado de la consulta ── */}

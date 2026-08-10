@@ -21,7 +21,8 @@ function StatusBadge({ name }) {
 }
 
 export default function PublicFormShow({ formSubmission, formData, isClosed, closedByPartner }) {
-    const { flash } = usePage().props;
+    const { flash, auth } = usePage().props;
+    const isLoggedIn = !!auth?.user;
     const [showFlash, setShowFlash] = useState(true);
     const messagesEndRef = useRef(null);
 
@@ -247,7 +248,14 @@ export default function PublicFormShow({ formSubmission, formData, isClosed, clo
 
                         {/* Input de respuesta */}
                         <div className="border-t border-gray-100 bg-white px-4 py-3">
-                            {!isClosed ? (
+                            {isLoggedIn ? (
+                                <div className="flex items-start gap-3 rounded-xl bg-gray-50 p-4 text-sm">
+                                    <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+                                    <p className="text-gray-500">
+                                        Esta pantalla es exclusiva para el solicitante de la consulta. Para responder, hacelo desde el panel de gestión.
+                                    </p>
+                                </div>
+                            ) : !isClosed ? (
                                 <form onSubmit={submit} className="flex items-end gap-2">
                                     <textarea
                                         rows={1}
