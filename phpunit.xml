@@ -17,6 +17,15 @@
             <directory>app</directory>
         </include>
     </source>
+    <!--
+        OJO: dentro del contenedor Docker este bloque <env> es INERTE. El
+        contenedor inyecta APP_ENV, DB_*, CACHE_STORE, MAIL_MAILER,
+        QUEUE_CONNECTION y SESSION_DRIVER como variables de entorno reales del
+        proceso, y Laravel las prioriza por sobre lo que PHPUnit define con
+        putenv() (incluso con force="true"). La configuración de testing que
+        realmente manda está forzada en tests/TestCase.php::createApplication().
+        Este bloque se mantiene para cuando la suite corre fuera del contenedor.
+    -->
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
