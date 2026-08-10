@@ -42,10 +42,12 @@ class SendPartnerReassignmentEmails implements ShouldQueue
             fn ($m) => $m->to($incoming->email)->subject('Se te asignó una nueva consulta — PPA RED')
         );
 
-        // Usuario final
+        // Usuario final: solo si había un partner previo (reasignación real).
+        // Si la consulta nunca tuvo partner asignado, es la primera asignación y no una
+        // "reasignación" desde la perspectiva del usuario — no corresponde avisarle.
         $userEmail = $data['email'] ?? null;
         $userName  = $data['name']  ?? 'Solicitante';
-        if ($userEmail) {
+        if ($outgoing && $userEmail) {
             Mail::send(
                 'emails.reassign_user',
                 compact('submission', 'incoming', 'data', 'userName'),

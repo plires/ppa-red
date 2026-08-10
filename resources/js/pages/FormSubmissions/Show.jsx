@@ -102,6 +102,9 @@ export default function Show({ formSubmission, formData, responses, partners = [
     const requesterInitial = formData?.name?.charAt(0)?.toUpperCase() ?? '?';
     // Card del partner
     const partnerInitial = formSubmission.user?.name?.charAt(0)?.toUpperCase() ?? 'P';
+    // El mensaje original de la consulta (sin partner asignado en ese momento) se marca como pill.
+    // Mensajes de seguimiento sin partner asignado deben verse como burbujas normales del usuario.
+    const firstResponseId = responses.length > 0 ? Math.min(...responses.map((r) => r.id)) : null;
 
     return (
         <AuthenticatedLayout header="Formularios / Detalle">
@@ -237,8 +240,8 @@ export default function Show({ formSubmission, formData, responses, partners = [
                             </div>
                         ) : (
                             responses.map((resp) => {
-                                // Sin user_id → mensaje automático del sistema
-                                if (!resp.user_id) {
+                                // Sin user_id y es el primer mensaje → marca el inicio de la conversación
+                                if (!resp.user_id && resp.id === firstResponseId) {
                                     return (
                                         <div key={resp.id} className="flex justify-center py-1">
                                             <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-400 shadow-sm">
@@ -393,7 +396,9 @@ export default function Show({ formSubmission, formData, responses, partners = [
                     </div>
                     <p className="mb-5 text-sm text-gray-500">
                         Seleccioná el nuevo partner responsable de esta consulta.
-                        Se notificará por email al partner saliente, al entrante y al solicitante.
+                        {formSubmission.user
+                            ? ' Se notificará por email al partner saliente, al entrante y al solicitante.'
+                            : ' Esta consulta no tenía partner asignado: se notificará por email únicamente al partner entrante.'}
                     </p>
                     <form onSubmit={submitReassign} className="space-y-4">
                         <div>

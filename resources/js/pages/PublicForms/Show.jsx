@@ -33,6 +33,9 @@ export default function PublicFormShow({ formSubmission, formData, isClosed, clo
     });
 
     const responses = formSubmission.form_responses ?? [];
+    // El mensaje original de la consulta (sin partner asignado en ese momento) se marca como pill.
+    // Mensajes de seguimiento sin partner asignado deben verse como burbujas normales del usuario.
+    const firstResponseId = responses.length > 0 ? Math.min(...responses.map((r) => r.id)) : null;
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -206,9 +209,10 @@ export default function PublicFormShow({ formSubmission, formData, isClosed, clo
                                 </div>
                             ) : (
                                 responses.map((response) => {
+                                    // Sin user_id y es el primer mensaje → marca el inicio de la conversación
                                     // is_system = 1 → mensaje del partner (izquierda, gris)
                                     // is_system = 0 → mensaje del usuario (derecha, naranja)
-                                    if (!response.user_id) {
+                                    if (!response.user_id && response.id === firstResponseId) {
                                         return (
                                             <div key={response.id} className="flex justify-center py-1">
                                                 <span className="rounded-full bg-white px-3 py-1 text-xs text-gray-400 shadow-sm border border-gray-200">
