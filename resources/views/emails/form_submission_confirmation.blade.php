@@ -59,7 +59,7 @@
                                 {{ $partner->name }}
                             </p>
                             <p style="margin:0; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:12px; font-weight:400; color:#9CA3AF; line-height:1.3;">
-                                Instalador Partner PPA RED
+                                Instalador Oficial PPA RED
                             </p>
                         </td>
                     </tr>

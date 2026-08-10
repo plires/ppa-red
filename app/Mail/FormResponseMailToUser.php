@@ -32,7 +32,7 @@ class FormResponseMailToUser extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nuevo mensaje del Partner - PPA RED',
+            subject: 'Nuevo mensaje del Instalador - PPA RED',
         );
     }
 

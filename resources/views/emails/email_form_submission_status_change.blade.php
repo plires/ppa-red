@@ -154,7 +154,7 @@
         @php
             $isPartnerMsg = $response->user !== null;
             $msgSenderName = $isPartnerMsg
-                ? ($response->user->name ?? 'Partner PPA RED')
+                ? ($response->user->name ?? ($recipientType === 'partner' ? 'Partner PPA RED' : 'Instalador PPA RED'))
                 : ($dataUser['name'] ?? 'Usuario');
             // Alineación: el mensaje del "otro" (la contraparte) va a la derecha
             // Email al usuario → mensajes del partner (otro) a la derecha
@@ -236,7 +236,7 @@
             <tr>
                 <td style="background-color:#F9FAFB; border:1px solid #E5E7EB; border-left:3px solid #FF7500; border-radius:0 6px 6px 0; padding:16px 20px;">
                     <p style="margin:0 0 10px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#FF7500; letter-spacing:1px; text-transform:uppercase;">
-                        Contacto del Partner PPA RED.
+                        Contacto del Instalador PPA RED.
                     </p>
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>

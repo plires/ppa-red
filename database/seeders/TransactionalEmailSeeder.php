@@ -29,7 +29,7 @@ class TransactionalEmailSeeder extends Seeder
                 'subject' => 'Gracias por tu contacto.',
                 'type' => 'cambio de estado',
                 'variant' => null,
-                'body' => 'Tu consulta ha sido enviada correctamente y estamos esperando la respuesta del partner. Te avisaremos cuando tengamos novedades.',
+                'body' => 'Tu consulta ha sido enviada correctamente y estamos esperando la respuesta del instalador. Te avisaremos cuando tengamos novedades.',
             ],
 
             // Estado: Respondido por el partner
@@ -47,7 +47,7 @@ class TransactionalEmailSeeder extends Seeder
                 'subject' => '¡Tienes una nueva respuesta a tu consulta!',
                 'type' => 'cambio de estado',
                 'variant' => null,
-                'body' => 'El partner ha respondido a tu consulta. Podés revisar la respuesta y, si es necesario, continuar con la conversación. Si necesitás más información o tenés dudas adicionales, no dudes en responder el mensaje.',
+                'body' => 'El instalador ha respondido a tu consulta. Podés revisar la respuesta y, si es necesario, continuar con la conversación. Si necesitás más información o tenés dudas adicionales, no dudes en responder el mensaje.',
             ],
 
             // Estado: Demorado - Sin Respuesta Del Partner (48h)
@@ -111,7 +111,7 @@ class TransactionalEmailSeeder extends Seeder
                 'subject' => 'Cerramos tu consulta por falta de actividad.',
                 'type' => 'cambio de estado',
                 'variant' => 'respondio_antes',
-                'body' => 'Debido a la falta de respuesta en los últimos 7 días, hemos cerrado tu consulta. Si sigues necesitando ayuda, puedes abrir una nueva solicitud o contactar a tu partner asignado a los datos aquí informados.',
+                'body' => 'Debido a la falta de respuesta en los últimos 7 días, hemos cerrado tu consulta. Si sigues necesitando ayuda, puedes abrir una nueva solicitud o contactar a tu instalador asignado a los datos aquí informados.',
             ],
             [
                 'recipient_type' => 'user',
@@ -119,7 +119,7 @@ class TransactionalEmailSeeder extends Seeder
                 'subject' => 'Cerramos tu consulta por inactividad total.',
                 'type' => 'cambio de estado',
                 'variant' => 'nunca_respondio',
-                'body' => 'Debido a la falta de respuesta en los últimos 7 días, hemos cerrado tu consulta. Si sigues necesitando ayuda, puedes abrir una nueva solicitud o contactar a tu partner asignado a los datos aquí informados.Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del usuario.',
+                'body' => 'Debido a la falta de respuesta en los últimos 7 días, hemos cerrado tu consulta. Si sigues necesitando ayuda, puedes abrir una nueva solicitud o contactar a tu instalador asignado a los datos aquí informados.Esta consulta estuvo inactiva durante 7 días, sin ninguna iteracción por parte del usuario.',
             ],
 
             // Estado: Cerrado Por El Partner
@@ -134,10 +134,10 @@ class TransactionalEmailSeeder extends Seeder
             [
                 'recipient_type' => 'user',
                 'title' => FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
-                'subject' => 'Tu consulta ha sido cerrada por el partner.',
+                'subject' => 'Tu consulta ha sido cerrada por el instalador.',
                 'type' => 'cambio de estado',
                 'variant' => null,
-                'body' => 'El partner ha cerrado la consulta. Si necesitas más información o crees que fue un error, puedes abrir una nueva solicitud o contactar a tu partner asignado a los datos aquí informados.',
+                'body' => 'El instalador ha cerrado la consulta. Si necesitas más información o crees que fue un error, puedes abrir una nueva solicitud o contactar a tu instalador asignado a los datos aquí informados.',
             ],
 
             // Ejemplo de Notificación
