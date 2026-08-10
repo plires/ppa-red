@@ -48,8 +48,36 @@ class PublicFormSubmissionController extends Controller
             'phone' => 'required|string|max:50',
             'message' => 'required|string|max:65535',
             'province_id' => 'required|exists:provinces,id',
-            'zone_id' => 'nullable|exists:zones,id',
-            'locality_id' => 'required|exists:localities,id',
+
+            // La zona enviada tiene que ser exactamente la de la localidad. El
+            // formulario de la landing encadena provincia → zona → localidad,
+            // así que siempre coinciden; esta regla cubre el POST armado a mano.
+            'zone_id' => ['nullable', 'exists:zones,id', function ($attribute, $value, $fail) use ($request) {
+                $locality = Locality::find($request->input('locality_id'));
+
+                if (! $locality) {
+                    return;
+                }
+
+                if ((int) $locality->zone_id !== (int) $value) {
+                    $fail('La zona seleccionada no corresponde a la localidad indicada.');
+                }
+            }],
+
+            // Sin esta regla se podían crear consultas con provincia y localidad
+            // de jerarquías distintas: los reportes quedaban inconsistentes y la
+            // consulta caía en el partner equivocado.
+            'locality_id' => ['required', 'exists:localities,id', function ($attribute, $value, $fail) use ($request) {
+                $locality = Locality::find($value);
+
+                if (! $locality) {
+                    return;
+                }
+
+                if ((int) $locality->province_id !== (int) $request->input('province_id')) {
+                    $fail('La localidad seleccionada no pertenece a la provincia indicada.');
+                }
+            }],
         ]);
 
         $locality = Locality::findOrFail($validated['locality_id']);
@@ -72,9 +100,9 @@ class PublicFormSubmissionController extends Controller
         // Crear el primer mensaje de la conversación con el mensaje del solicitante
         $formResponse = FormResponse::create([
             'form_submission_id' => $formSubmission->id,
-            'user_id'            => null,
-            'message'            => $validated['message'],
-            'is_system'          => false,
+            'user_id' => null,
+            'message' => $validated['message'],
+            'is_system' => false,
         ]);
 
         // Notificar al partner asignado, o al administrador si la localidad no tiene partner
