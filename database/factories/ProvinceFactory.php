@@ -2,13 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Province>
+ * @extends Factory<Province>
  */
 class ProvinceFactory extends Factory
 {
+    /**
+     * Contador de instancias. La columna provinces.name tiene índice único, y
+     * faker->word() agota su diccionario rápidamente y provoca colisiones
+     * intermitentes. Un contador garantiza nombres únicos de forma determinista.
+     */
+    protected static int $sequence = 0;
+
     /**
      * Define the model's default state.
      *
@@ -16,9 +24,8 @@ class ProvinceFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
-            'name' => $this->faker->word(),
+            'name' => 'Provincia '.(++static::$sequence),
         ];
     }
 }
