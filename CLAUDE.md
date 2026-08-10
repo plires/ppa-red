@@ -74,10 +74,10 @@ npm run dev                    # Servidor de desarrollo Vite
 php artisan migrate            # Ejecutar migraciones
 php artisan migrate:fresh --seed  # Resetear y poblar la base de datos
 
-# Tests
-./vendor/bin/pest              # Ejecutar todos los tests
-./vendor/bin/pest tests/Feature/SomeTest.php           # Ejecutar un archivo de test
-./vendor/bin/pest --filter="nombre del test"            # Ejecutar un test por nombre
+# Tests — correr SIEMPRE dentro del contenedor (PHP 8.2, paridad con producción)
+docker compose -f docker-compose.local.yml exec app ./vendor/bin/pest
+docker compose -f docker-compose.local.yml exec app ./vendor/bin/pest tests/Feature/Public
+docker compose -f docker-compose.local.yml exec app ./vendor/bin/pest --filter="nombre del test"
 
 # Formato de código
 ./vendor/bin/pint              # Estilo de código PHP (PSR-12)
@@ -125,4 +125,24 @@ Jobs encolados (driver database): `SendFormResponseEmailToPartner`, `SendFormRes
 
 - `config/form_submission_closure_reasons.php` — Razones de cierre personalizadas
 - Locale: `es` (español), fallback `en`
-- Tests usan SQLite `:memory:` (configurado en `phpunit.xml`)
+- Tests usan SQLite `:memory:`, forzado en `tests/TestCase.php::createApplication()`
+
+## Tests
+
+Plan de cobertura y defectos conocidos: `.claude/testing-plan.md`.
+
+**Por qué la config de testing vive en `tests/TestCase.php` y no en `phpunit.xml`**:
+el contenedor inyecta `APP_ENV`, `DB_*`, `CACHE_STORE`, `MAIL_MAILER`,
+`QUEUE_CONNECTION` y `SESSION_DRIVER` como variables de entorno reales del
+proceso. Laravel prioriza `$_ENV`/`$_SERVER` por sobre lo que PHPUnit setea con
+`putenv()`, así que el bloque `<php><env>` de `phpunit.xml` queda INERTE dentro
+de Docker — incluso con `force="true"`. Sin el override de `config()` en
+`createApplication()`, `RefreshDatabase` vacía la base real de desarrollo y los
+tests envían correo de verdad. **No borrar ese override.**
+
+Correr la suite en el host (PHP 8.5) funciona pero marca los 285 tests como
+`DEPR` por `PDO::MYSQL_ATTR_SSL_CA`, deprecada en PHP 8.5 y usada por el config
+de Laravel en vendor. No son fallos, es ruido: usar Docker.
+
+Las factories son deterministas a propósito — nunca volver a meter
+`inRandomOrder()` en una factory.
