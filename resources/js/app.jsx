@@ -7,10 +7,13 @@ import { createRoot } from 'react-dom/client';
 
 const appName = __APP_NAME__;
 
-// Inertia can throw unhandled promise rejections when a navigation response
-// arrives with a missing or malformed `url` field (e.g. during concurrent
-// requests right after a post-login redirect). Catch these and do a hard
-// reload so the user lands on a working page instead of a broken SPA state.
+// Recovery net for the Inertia navigation TypeError: reload so the user lands
+// on a working page instead of a broken SPA state.
+//
+// This only recovers, it does not diagnose. The response that caused the crash
+// is captured by the axios interceptor in bootstrap.js and reported to the
+// server, so each of these reloads leaves a trace in the Laravel log instead of
+// disappearing silently.
 window.addEventListener('unhandledrejection', (event) => {
     const err = event.reason;
     if (

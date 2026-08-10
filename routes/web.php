@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientDiagnosticController;
 use App\Http\Controllers\FormNotificationController;
 use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\FormSubmissionController;
@@ -47,6 +48,14 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    // Diagnóstico del cliente: recibe la respuesta que rompió la navegación de
+    // Inertia para dejarla en el log del servidor. Con throttle porque el
+    // cliente reporta desde un interceptor y un bucle de fallos no puede
+    // convertirse en un bucle de escritura en el log.
+    Route::post('/client-diagnostics', [ClientDiagnosticController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('client_diagnostics.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
