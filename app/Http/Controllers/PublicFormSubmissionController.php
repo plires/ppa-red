@@ -10,6 +10,7 @@ use App\Models\FormSubmission;
 use App\Models\FormSubmissionStatus;
 use App\Models\Locality;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class PublicFormSubmissionController extends Controller
@@ -36,17 +37,24 @@ class PublicFormSubmissionController extends Controller
 
     public function store(Request $request)
     {
+        // Las reglas `exists` consultan la tabla sin aplicar el scope de soft
+        // delete, así que hay que descartar las filas retiradas a mano. Sin el
+        // whereNull, un formulario abierto antes de retirar una localidad pasaba
+        // la validación y moría después en el findOrFail: 404 crudo en la cara
+        // del solicitante en vez de un error de formulario.
+        $available = fn (string $table) => Rule::exists($table, 'id')->whereNull('deleted_at');
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:50',
             'message' => 'required|string|max:65535',
-            'province_id' => 'required|exists:provinces,id',
+            'province_id' => ['required', $available('provinces')],
 
             // La zona enviada tiene que ser exactamente la de la localidad. El
             // formulario de la landing encadena provincia → zona → localidad,
             // así que siempre coinciden; esta regla cubre el POST armado a mano.
-            'zone_id' => ['nullable', 'exists:zones,id', function ($attribute, $value, $fail) use ($request) {
+            'zone_id' => ['nullable', $available('zones'), function ($attribute, $value, $fail) use ($request) {
                 $locality = Locality::find($request->input('locality_id'));
 
                 if (! $locality) {
@@ -61,7 +69,7 @@ class PublicFormSubmissionController extends Controller
             // Sin esta regla se podían crear consultas con provincia y localidad
             // de jerarquías distintas: los reportes quedaban inconsistentes y la
             // consulta caía en el partner equivocado.
-            'locality_id' => ['required', 'exists:localities,id', function ($attribute, $value, $fail) use ($request) {
+            'locality_id' => ['required', $available('localities'), function ($attribute, $value, $fail) use ($request) {
                 $locality = Locality::find($value);
 
                 if (! $locality) {
@@ -72,6 +80,10 @@ class PublicFormSubmissionController extends Controller
                     $fail('La localidad seleccionada no pertenece a la provincia indicada.');
                 }
             }],
+        ], [
+            'province_id.exists' => 'Esa provincia ya no está disponible. Elegí otra de la lista.',
+            'zone_id.exists' => 'Esa zona ya no está disponible. Elegí otra de la lista.',
+            'locality_id.exists' => 'Esa localidad ya no está disponible. Elegí otra de la lista.',
         ]);
 
         $locality = Locality::findOrFail($validated['locality_id']);

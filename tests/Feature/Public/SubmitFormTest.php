@@ -238,6 +238,61 @@ it('accepts a consistent hierarchy', function () {
     expect(FormSubmission::count())->toBe(1);
 });
 
+/*
+| Retirar una localidad es la forma de dejar de recibir consultas de esa zona.
+| La landing deja de ofrecerla al instante, pero quien ya tenía el formulario
+| abierto la manda igual. Las reglas `exists` de Laravel consultan la tabla sin
+| aplicar el scope de soft delete, así que ese POST pasaba la validación y
+| moría más adelante en un findOrFail: un 404 crudo en la cara del solicitante.
+*/
+
+it('rejects a locality that was retired, without a raw 404', function () {
+    $locality = localityWithPartner();
+    $payload = publicSubmissionPayload($locality);
+
+    $locality->delete();
+
+    $this->post(route('public.form_submission.store'), $payload)
+        ->assertSessionHasErrors('locality_id');
+
+    expect(FormSubmission::count())->toBe(0);
+});
+
+it('explains that the retired locality is no longer available', function () {
+    $locality = localityWithPartner();
+    $payload = publicSubmissionPayload($locality);
+
+    $locality->delete();
+
+    $this->post(route('public.form_submission.store'), $payload);
+
+    expect(session('errors')->first('locality_id'))->toContain('ya no está disponible');
+});
+
+it('rejects a retired zone', function () {
+    $locality = localityWithPartner();
+    $payload = publicSubmissionPayload($locality);
+
+    Zone::find($locality->zone_id)->delete();
+
+    $this->post(route('public.form_submission.store'), $payload)
+        ->assertSessionHasErrors('zone_id');
+
+    expect(FormSubmission::count())->toBe(0);
+});
+
+it('rejects a retired province', function () {
+    $locality = localityWithPartner();
+    $payload = publicSubmissionPayload($locality);
+
+    Province::find($locality->province_id)->delete();
+
+    $this->post(route('public.form_submission.store'), $payload)
+        ->assertSessionHasErrors('province_id');
+
+    expect(FormSubmission::count())->toBe(0);
+});
+
 it('rejects a zone sent for a locality that has none', function () {
     $province = Province::factory()->create();
     $locality = Locality::factory()->forProvince($province)->forPartner(partner())->create();
