@@ -62,6 +62,25 @@ it('does not send anything when the submission has no partner', function () {
     Mail::assertNothingSent();
 });
 
+/*
+| La relación user() es withTrashed() para que el historial conserve al partner
+| que atendió cada consulta, pero eso hace que un partner borrado siga pasando
+| el chequeo de destinatario. La guarda de borrado evita llegar acá; esto es la
+| red por si alguien borra un partner por fuera del panel.
+*/
+
+it('does not notify a partner that was deleted', function () {
+    $owner = partner(['email' => 'partner@example.com']);
+    $submission = FormSubmission::factory()->forLocality(localityWithPartner($owner))->create();
+    $response = FormResponse::factory()->forSubmission($submission)->create();
+
+    $owner->delete();
+
+    (new SendFormResponseEmailToPartner($response, $submission->fresh(), requesterData()))->handle();
+
+    Mail::assertNothingSent();
+});
+
 it('sends the partner reply notification to the requester', function () {
     $owner = partner();
     $submission = FormSubmission::factory()->forLocality(localityWithPartner($owner))->create();

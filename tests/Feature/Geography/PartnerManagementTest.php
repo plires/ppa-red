@@ -2,6 +2,7 @@
 
 use App\Jobs\SendPartnerWelcomeEmail;
 use App\Models\FormSubmission;
+use App\Models\FormSubmissionStatus;
 use App\Models\Locality;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -134,6 +135,87 @@ it('refuses to delete a partner that still has localities', function () {
     $this->delete(route('partners.destroy', $partner))->assertSessionHas('error');
 
     expect(User::find($partner->id))->not->toBeNull();
+});
+
+/*
+| Borrar un partner con consultas abiertas las deja en el limbo: el user_id
+| sigue apuntándolo porque el soft delete no dispara el onDelete('set null'),
+| pero ya no puede entrar al panel. El usuario final sigue escribiendo, nadie
+| lee, y a los 7 días el cron cierra la consulta por abandono. El historial de
+| las consultas ya cerradas sí tiene que conservar al partner que las atendió.
+*/
+
+it('refuses to delete a partner that still has open submissions', function (string $openStatus) {
+    seedStatuses();
+    $partner = partner();
+    FormSubmission::factory()->forPartner($partner)->withStatus($openStatus)->create();
+
+    $this->delete(route('partners.destroy', $partner))->assertSessionHas('error');
+
+    expect(User::find($partner->id))->not->toBeNull();
+})->with([
+    FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER,
+    FormSubmissionStatus::STATUS_RESPONDIO_PARTNER,
+    FormSubmissionStatus::STATUS_DEMORADO_POR_PARTNER,
+]);
+
+it('deletes a partner whose submissions are all closed', function () {
+    seedStatuses();
+    $partner = partner();
+
+    foreach (FormSubmissionStatus::CLOSED_STATUSES as $closed) {
+        FormSubmission::factory()->forPartner($partner)->withStatus($closed)->create();
+    }
+
+    $this->delete(route('partners.destroy', $partner))
+        ->assertRedirect(route('partners.index'))
+        ->assertSessionHas('success');
+
+    expect(User::find($partner->id))->toBeNull();
+});
+
+it('keeps closed submissions under the name of the partner that handled them', function () {
+    seedStatuses();
+    $partner = partner();
+    $submission = FormSubmission::factory()->forPartner($partner)
+        ->withStatus(FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER)
+        ->create();
+
+    $this->delete(route('partners.destroy', $partner))->assertSessionHas('success');
+
+    expect($submission->fresh()->user->name)->toBe($partner->name);
+});
+
+it('names how many open submissions are blocking the deletion', function () {
+    seedStatuses();
+    $partner = partner();
+    FormSubmission::factory()->count(3)->forPartner($partner)
+        ->withStatus(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)
+        ->create();
+    FormSubmission::factory()->forPartner($partner)
+        ->withStatus(FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER)
+        ->create();
+
+    $this->delete(route('partners.destroy', $partner));
+
+    expect(session('error'))->toContain('3');
+});
+
+it('lets the partner be deleted once their open submissions are reassigned', function () {
+    seedStatuses();
+    $partner = partner();
+    $other = partner();
+    $submission = FormSubmission::factory()->forPartner($partner)
+        ->withStatus(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)
+        ->create();
+
+    $this->delete(route('partners.destroy', $partner))->assertSessionHas('error');
+
+    $submission->update(['user_id' => $other->id]);
+
+    $this->delete(route('partners.destroy', $partner))->assertSessionHas('success');
+
+    expect(User::find($partner->id))->toBeNull();
 });
 
 it('lists and restores deleted partners', function () {

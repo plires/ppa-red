@@ -26,16 +26,10 @@ class PublicFormSubmissionController extends Controller
 
         $data = json_decode($formSubmission->data, true);
 
-        $closedStatuses = [
-            FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
-            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_PARTNER,
-            FormSubmissionStatus::STATUS_CERRADO_SIN_RTA_USUARIO,
-        ];
-
         return Inertia::render('PublicForms/Show', [
             'formSubmission' => $formSubmission,
             'formData' => $data,
-            'isClosed' => in_array($formSubmission->status->name, $closedStatuses),
+            'isClosed' => $formSubmission->status->isClosed(),
             'closedByPartner' => $formSubmission->status->name === FormSubmissionStatus::STATUS_CERRADO_POR_EL_PARTNER,
         ]);
     }

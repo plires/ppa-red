@@ -57,6 +57,16 @@ class UserRequest extends FormRequest
                 if ($user->localities()->exists()) {
                     $validator->errors()->add('user', 'No puedes eliminar este partner porque tiene una/s localidad/es asignadas.');
                 }
+
+                // El borrado es lógico: el user_id de las consultas sigue
+                // apuntando al partner, pero él ya no puede entrar a responder.
+                // Las cerradas conservan quién las atendió; las abiertas hay que
+                // reasignarlas antes, o mueren cerradas por abandono.
+                $openSubmissions = $user->formSubmissions()->open()->count();
+
+                if ($openSubmissions > 0) {
+                    $validator->errors()->add('user', "No puedes eliminar este partner porque tiene {$openSubmissions} consulta/s abierta/s. Reasignalas a otro partner antes de eliminarlo.");
+                }
             });
         }
     }

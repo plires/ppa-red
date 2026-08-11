@@ -265,8 +265,9 @@ class UpdateFormSubmissionStatus extends Command
     protected function makeUpdates($submissions, $statusId, $emailTemplateToPartner, $emailTemplateToUser = null, $closure_reason = null, $notificationDetails = null): void
     {
         foreach ($submissions as $formSubmission) {
-            // Enviar email al partner
-            if ($emailTemplateToPartner && $formSubmission->user && $formSubmission->user->email) {
+            // Enviar email al partner. user() es withTrashed(), así que hay que
+            // descartar a los eliminados a mano: nadie lee esa casilla.
+            if ($emailTemplateToPartner && $formSubmission->user && ! $formSubmission->user->trashed() && $formSubmission->user->email) {
                 $this->sendEmailWithChanges($formSubmission, $formSubmission->user->email, $emailTemplateToPartner, 'partner');
             }
 

@@ -81,6 +81,22 @@ class FormSubmission extends Model
         return $this->belongsTo(FormSubmissionStatus::class, 'form_submission_status_id');
     }
 
+    /**
+     * Consultas que todavía esperan acción de alguien.
+     *
+     * Se pregunta por la ausencia de un estado cerrado y no por la presencia de
+     * uno abierto: si aparece un estado nuevo, o si un envío quedara sin estado,
+     * cae del lado de "abierta" y frena el borrado del partner en vez de dejarlo
+     * pasar en silencio.
+     */
+    public function scopeOpen($query)
+    {
+        return $query->whereDoesntHave(
+            'status',
+            fn ($q) => $q->whereIn('name', FormSubmissionStatus::CLOSED_STATUSES)
+        );
+    }
+
     public function notifications()
     {
         return $this->hasMany(FormSubmissionNotification::class, 'form_submission_id');
