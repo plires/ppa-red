@@ -1,0 +1,8 @@
+# Commits que sólo reformatean: git blame los ignora para que la autoría
+# apunte al cambio real y no al pasado de estilo.
+#
+# Activar una vez por clon (no se configura solo):
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: aplicar pint a todo el repositorio
+9d5ad6c857ba84896c1758d33062329874767328
