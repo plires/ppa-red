@@ -113,4 +113,22 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Forced "From" Address
+    |--------------------------------------------------------------------------
+    |
+    | Messages are sent on behalf of a partner or a requester. SenderIdentity
+    | already keeps the From address on the domain of MAIL_FROM_ADDRESS unless
+    | the sender belongs to it, so under a domain authenticated with the provider
+    | this should stay empty.
+    |
+    | Set it only if the provider refuses to relay anything but one specific
+    | mailbox: it then pins every From address to that mailbox, still keeping the
+    | display name and the Reply-To of the real sender.
+    |
+    */
+
+    'force_from_address' => env('MAIL_FORCE_FROM_ADDRESS'),
+
 ];

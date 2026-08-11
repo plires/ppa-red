@@ -25,7 +25,11 @@ class FormSubmissionConfirmationMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $sender = SenderIdentity::forPartner($this->formSubmission->user);
+
         return new Envelope(
+            from: $sender->from(),
+            replyTo: $sender->replyTo(),
             subject: 'Recibimos tu consulta — ' . config('app.name'),
         );
     }

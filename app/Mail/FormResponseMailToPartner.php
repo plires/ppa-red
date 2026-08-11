@@ -34,7 +34,11 @@ class FormResponseMailToPartner extends Mailable
      */
     public function envelope(): Envelope
     {
+        $sender = SenderIdentity::forRequester($this->data);
+
         return new Envelope(
+            from: $sender->from(),
+            replyTo: $sender->replyTo(),
             subject: 'Tenés una nueva consulta de la plataforma PPA RED.',
         );
     }

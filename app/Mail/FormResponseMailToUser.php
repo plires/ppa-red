@@ -31,7 +31,11 @@ class FormResponseMailToUser extends Mailable
      */
     public function envelope(): Envelope
     {
+        $sender = SenderIdentity::forPartner($this->formResponse->formSubmission?->user);
+
         return new Envelope(
+            from: $sender->from(),
+            replyTo: $sender->replyTo(),
             subject: 'Nuevo mensaje del Instalador - PPA RED',
         );
     }

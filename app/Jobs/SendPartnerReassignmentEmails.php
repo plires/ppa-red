@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Mail\SenderIdentity;
 use App\Models\FormSubmission;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,10 +49,17 @@ class SendPartnerReassignmentEmails implements ShouldQueue
         $userEmail = $data['email'] ?? null;
         $userName  = $data['name']  ?? 'Solicitante';
         if ($outgoing && $userEmail) {
+            // El usuario final ve al partner que queda a cargo, no a la plataforma.
+            $sender = SenderIdentity::forPartner($incoming);
+            $from = $sender->from();
+
             Mail::send(
                 'emails.reassign_user',
                 compact('submission', 'incoming', 'data', 'userName'),
-                fn ($m) => $m->to($userEmail)->subject('Tu consulta fue asignada a un nuevo especialista — PPA RED')
+                fn ($m) => $m->to($userEmail)
+                    ->from($from->address, $from->name)
+                    ->replyTo($sender->address, $sender->name)
+                    ->subject('Tu consulta fue asignada a un nuevo especialista — PPA RED')
             );
         }
     }

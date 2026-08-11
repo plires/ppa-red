@@ -46,7 +46,15 @@ class MailFormSubmissionStatusChange extends Mailable
      */
     public function envelope(): Envelope
     {
+        // Sólo el aviso al solicitante habla en nombre de su partner; los avisos
+        // al partner los origina la plataforma, no el usuario final.
+        $sender = $this->recipientType === 'user'
+            ? SenderIdentity::forPartner($this->partner)
+            : SenderIdentity::system();
+
         return new Envelope(
+            from: $sender->from(),
+            replyTo: $sender->replyTo(),
             subject: $this->subject
         );
     }
