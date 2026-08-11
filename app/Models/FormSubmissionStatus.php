@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\FormSubmissionStatusFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 class FormSubmissionStatus extends Model
 {
-    /** @use HasFactory<\Database\Factories\FormSubmissionStatusFactory> */
+    /** @use HasFactory<FormSubmissionStatusFactory> */
     use HasFactory;
 
     protected $fillable = [

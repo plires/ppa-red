@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\LocalityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Locality extends Model
 {
-    /** @use HasFactory<\Database\Factories\LocalityFactory> */
+    /** @use HasFactory<LocalityFactory> */
     use HasFactory;
 
     use SoftDeletes;

@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\ZoneFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Zone extends Model
 {
-    /** @use HasFactory<\Database\Factories\ZoneFactory> */
+    /** @use HasFactory<ZoneFactory> */
     use HasFactory;
 
     use SoftDeletes;

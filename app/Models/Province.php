@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\ProvinceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Province extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProvinceFactory> */
+    /** @use HasFactory<ProvinceFactory> */
     use HasFactory;
 
     use SoftDeletes;

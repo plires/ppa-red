@@ -30,7 +30,7 @@ class FormSubmissionConfirmationMail extends Mailable
         return new Envelope(
             from: $sender->from(),
             replyTo: $sender->replyTo(),
-            subject: 'Recibimos tu consulta — ' . config('app.name'),
+            subject: 'Recibimos tu consulta — '.config('app.name'),
         );
     }
 
@@ -40,8 +40,8 @@ class FormSubmissionConfirmationMail extends Mailable
             view: 'emails.form_submission_confirmation',
             with: [
                 'formSubmission' => $this->formSubmission,
-                'partner'        => $this->formSubmission->user,
-                'data'           => $this->data,
+                'partner' => $this->formSubmission->user,
+                'data' => $this->data,
             ]
         );
     }

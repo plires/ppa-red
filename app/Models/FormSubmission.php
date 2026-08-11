@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Database\Factories\FormSubmissionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class FormSubmission extends Model
 {
-    /** @use HasFactory<\Database\Factories\FormSubmissionFactory> */
+    /** @use HasFactory<FormSubmissionFactory> */
     use HasFactory;
 
     use SoftDeletes;

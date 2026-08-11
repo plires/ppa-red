@@ -23,9 +23,9 @@ class SendPartnerReassignmentEmails implements ShouldQueue
     public function handle(): void
     {
         $submission = $this->formSubmission;
-        $outgoing   = $this->outgoingPartner;
-        $incoming   = $this->incomingPartner;
-        $data       = $this->data;
+        $outgoing = $this->outgoingPartner;
+        $incoming = $this->incomingPartner;
+        $data = $this->data;
 
         // Partner saliente (puede no existir si la consulta nunca tuvo partner asignado)
         if ($outgoing) {
@@ -47,7 +47,7 @@ class SendPartnerReassignmentEmails implements ShouldQueue
         // Si la consulta nunca tuvo partner asignado, es la primera asignación y no una
         // "reasignación" desde la perspectiva del usuario — no corresponde avisarle.
         $userEmail = $data['email'] ?? null;
-        $userName  = $data['name']  ?? 'Solicitante';
+        $userName = $data['name'] ?? 'Solicitante';
         if ($outgoing && $userEmail) {
             // El usuario final ve al partner que queda a cargo, no a la plataforma.
             $sender = SenderIdentity::forPartner($incoming);
