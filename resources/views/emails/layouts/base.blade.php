@@ -15,10 +15,6 @@
     </style>
     <![endif]-->
 
-    <!--[if !mso]><!-->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;900&display=swap" rel="stylesheet" type="text/css">
-    <!--<![endif]-->
-
     <style type="text/css">
         /* CSS Reset */
         html, body { margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
@@ -39,7 +35,6 @@
 
         /* Hover states */
         .btn-primary:hover { opacity: 0.9 !important; }
-        .data-row:nth-child(even) { background-color: #FAFAFA !important; }
 
         /* Mobile */
         @media screen and (max-width: 600px) {
@@ -88,7 +83,7 @@
         {{-- HEADER: Degradado institucional --}}
         <tr>
             <td class="email-header"
-                style="padding:32px 48px 28px; background:#FF7500; border-radius:8px 8px 0 0;">
+                style="padding:32px 48px 28px; background-color:#FF7500; border-radius:8px 8px 0 0;">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="vertical-align:middle;">
@@ -98,8 +93,8 @@
                                  style="display:block; border:0; outline:none; text-decoration:none; height:auto; max-width:150px;">
                         </td>
                         <td align="right" style="vertical-align:middle;">
-                            {{-- Badge tipo etiqueta --}}
-                            <span style="display:inline-block; background:rgba(0,0,0,0.2); border-radius:4px; padding:5px 12px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#FFFFFF; letter-spacing:0.8px; text-transform:uppercase;">
+                            {{-- Badge tipo etiqueta: fallback sólido + rgba() para quien lo soporte --}}
+                            <span style="display:inline-block; background-color:#CC5E00; background:rgba(0,0,0,0.2); border-radius:4px; padding:5px 12px; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#FFFFFF; letter-spacing:0.8px; text-transform:uppercase;">
                                 @yield('badge', 'Notificación')
                             </span>
                         </td>
@@ -110,7 +105,7 @@
 
         {{-- Barra decorativa delgada --}}
         <tr>
-            <td style="height:4px; background:#FF7500;"></td>
+            <td style="height:4px; background-color:#FF7500;"></td>
         </tr>
 
         {{-- CONTENT --}}
@@ -132,10 +127,10 @@
                                  alt="PPA RED"
                                  width="80"
                                  style="display:block; margin:0 auto 12px; border:0; outline:none; text-decoration:none; height:auto; opacity:0.85;">
-                            <p style="margin:0 0 12px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:11px; color:#6B7280; line-height:1.6;">
+                            <p style="margin:0 0 12px; font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#6B7280; line-height:1.6;">
                                 Este correo fue generado automáticamente · Por favor no respondas este mensaje
                             </p>
-                            <p style="margin:0; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:11px; color:#4B5563;">
+                            <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#4B5563;">
                                 &copy; {{ date('Y') }} PPA RED. Todos los derechos reservados.
                             </p>
                         </td>
