@@ -5,6 +5,7 @@ use App\Http\Controllers\FormNotificationController;
 use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\LocalityController;
+use App\Http\Controllers\MailPreviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\PublicFormResponseController;
@@ -168,5 +169,15 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             ->name('reportes.form_submissionsDetail');
     });
 });
+
+// Preview de plantillas de email. Sólo se registra en local: no existe forma
+// de llegar a este controlador con APP_ENV distinto, ni siquiera con la URL
+// exacta, porque las rutas nunca quedan dadas de alta.
+if (app()->environment('local')) {
+    Route::prefix('dev/mail-preview')->group(function () {
+        Route::get('/', [MailPreviewController::class, 'index'])->name('dev.mail_preview.index');
+        Route::get('/{template}', [MailPreviewController::class, 'render'])->name('dev.mail_preview.render');
+    });
+}
 
 require __DIR__.'/auth.php';
