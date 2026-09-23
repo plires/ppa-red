@@ -93,10 +93,16 @@
                                  style="display:block; border:0; outline:none; text-decoration:none; height:auto; max-width:150px;">
                         </td>
                         <td align="right" style="vertical-align:middle;">
-                            {{-- Badge tipo etiqueta: fallback sólido + rgba() para quien lo soporte --}}
-                            <span style="display:inline-block; background-color:#CC5E00; background:rgba(0,0,0,0.2); border-radius:4px; padding:5px 12px; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#FFFFFF; letter-spacing:0.8px; text-transform:uppercase;">
-                                @yield('badge', 'Notificación')
-                            </span>
+                            {{-- Badge tipo etiqueta: fallback sólido + rgba() para quien lo soporte. Padding en el <td>, no en el <span>, para que se respete en clientes que ignoran inline-block. --}}
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="right">
+                                <tr>
+                                    <td style="background-color:#CC5E00; background:rgba(0,0,0,0.2); border-radius:4px; padding:5px 12px;">
+                                        <span style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#FFFFFF; letter-spacing:0.8px; text-transform:uppercase;">
+                                            @yield('badge', 'Notificación')
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>

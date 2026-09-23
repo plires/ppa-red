@@ -107,11 +107,11 @@
     {{-- CTA --}}
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background-color:#FF7500;">
+            <td align="center" style="border-radius:6px; background-color:#FF7500; padding:14px 40px;">
                 <a href="{{ route('public.form_submission.show', $formSubmission->secure_token) }}"
                    target="_blank"
                    class="btn-primary"
-                   style="display:inline-block; padding:14px 40px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
+                   style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
                     Ver el estado de mi consulta
                 </a>
             </td>

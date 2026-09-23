@@ -44,9 +44,15 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
             <td style="padding-bottom:24px;">
-                <span style="display:inline-block; background-color:{{ $sBg }}; border:1px solid {{ $sBorder }}; border-radius:20px; padding:5px 16px; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:{{ $sColor }}; letter-spacing:0.4px; text-transform:uppercase;">
-                    Estado: {{ $submissionStatus }}
-                </span>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left">
+                    <tr>
+                        <td style="background-color:{{ $sBg }}; border:1px solid {{ $sBorder }}; border-radius:20px; padding:5px 16px;">
+                            <span style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:{{ $sColor }}; letter-spacing:0.4px; text-transform:uppercase;">
+                                Estado: {{ $submissionStatus }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -201,11 +207,11 @@
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:56px; font-size:1px; line-height:56px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
             <tr>
-                <td align="center" style="border-radius:6px; background-color:#FF7500;">
+                <td align="center" style="border-radius:6px; background-color:#FF7500; padding:14px 40px;">
                     <a href="{{ route('form_submissions.show', $formSubmission->id) }}"
                        target="_blank"
                        class="btn-primary"
-                       style="display:inline-block; padding:14px 40px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
+                       style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
                         Ver consulta en el Dashboard
                     </a>
                 </td>
@@ -217,11 +223,11 @@
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:56px; font-size:1px; line-height:56px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
             <tr>
-                <td align="center" style="border-radius:6px; background-color:#FF7500;">
+                <td align="center" style="border-radius:6px; background-color:#FF7500; padding:14px 40px;">
                     <a href="{{ route('public.form_submission.show', $formSubmission->token) }}"
                        target="_blank"
                        class="btn-primary"
-                       style="display:inline-block; padding:14px 40px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
+                       style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
                         Ver estado de mi consulta
                     </a>
                 </td>

@@ -24,9 +24,15 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
             <td style="padding-bottom:28px;">
-                <span style="display:inline-block; background-color:#FFF7ED; border:1px solid #FCD34D; border-radius:20px; padding:5px 16px; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#B45309; letter-spacing:0.4px; text-transform:uppercase;">
-                    Consulta reasignada · Requiere tu atención
-                </span>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left">
+                    <tr>
+                        <td style="background-color:#FFF7ED; border:1px solid #FCD34D; border-radius:20px; padding:5px 16px;">
+                            <span style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:700; color:#B45309; letter-spacing:0.4px; text-transform:uppercase;">
+                                Consulta reasignada · Requiere tu atención
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -117,10 +123,10 @@
     {{-- CTA --}}
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background-color:#FF7500;">
+            <td align="center" style="border-radius:6px; background-color:#FF7500; padding:14px 40px;">
                 <a href="{{ route('form_submissions.show', $submission->id) }}" target="_blank"
                    class="btn-primary"
-                   style="display:inline-block; padding:14px 40px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
+                   style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">
                     Ver la consulta
                 </a>
             </td>
