@@ -84,7 +84,7 @@
     {{-- CTA --}}
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+            <td align="center" style="border-radius:6px; background:#FF7500;">
                 <a href="{{ route('public.form_submission.show', $submission->secure_token) }}" target="_blank"
                    class="btn-primary"
                    style="display:inline-block; padding:14px 40px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:15px; font-weight:700; color:#FFFFFF; text-decoration:none; border-radius:6px; letter-spacing:0.3px;">

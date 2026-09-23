@@ -12,7 +12,7 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
             <td align="center">
-                <div style="display:inline-block; width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #FD3C00, #FF7500); text-align:center; line-height:64px; font-size:30px; color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; mso-line-height-rule:exactly;">
+                <div style="display:inline-block; width:64px; height:64px; border-radius:50%; background:#FF7500; text-align:center; line-height:64px; font-size:30px; color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; mso-line-height-rule:exactly;">
                     &#10003;
                 </div>
             </td>
@@ -50,7 +50,7 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="vertical-align:middle; width:52px;">
-                            <div style="display:inline-block; width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #FD3C00, #FF7500); text-align:center; line-height:44px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:18px; font-weight:900; color:#FFFFFF; mso-line-height-rule:exactly;">
+                            <div style="display:inline-block; width:44px; height:44px; border-radius:50%; background:#FF7500; text-align:center; line-height:44px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:18px; font-weight:900; color:#FFFFFF; mso-line-height-rule:exactly;">
                                 {{ mb_strtoupper(mb_substr($partner->name ?? 'P', 0, 1)) }}
                             </div>
                         </td>
@@ -107,7 +107,7 @@
     {{-- CTA --}}
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+            <td align="center" style="border-radius:6px; background:#FF7500;">
                 <a href="{{ route('public.form_submission.show', $formSubmission->secure_token) }}"
                    target="_blank"
                    class="btn-primary"

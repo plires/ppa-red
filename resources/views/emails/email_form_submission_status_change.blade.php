@@ -201,7 +201,7 @@
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:56px; font-size:1px; line-height:56px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
             <tr>
-                <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+                <td align="center" style="border-radius:6px; background:#FF7500;">
                     <a href="{{ route('form_submissions.show', $formSubmission->id) }}"
                        target="_blank"
                        class="btn-primary"
@@ -217,7 +217,7 @@
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:56px; font-size:1px; line-height:56px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
             <tr>
-                <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+                <td align="center" style="border-radius:6px; background:#FF7500;">
                     <a href="{{ route('public.form_submission.show', $formSubmission->token) }}"
                        target="_blank"
                        class="btn-primary"

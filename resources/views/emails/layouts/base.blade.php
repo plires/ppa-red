@@ -88,7 +88,7 @@
         {{-- HEADER: Degradado institucional --}}
         <tr>
             <td class="email-header"
-                style="padding:32px 48px 28px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%); border-radius:8px 8px 0 0;">
+                style="padding:32px 48px 28px; background:#FF7500; border-radius:8px 8px 0 0;">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="vertical-align:middle;">
@@ -110,7 +110,7 @@
 
         {{-- Barra decorativa delgada --}}
         <tr>
-            <td style="height:4px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);"></td>
+            <td style="height:4px; background:#FF7500;"></td>
         </tr>
 
         {{-- CONTENT --}}

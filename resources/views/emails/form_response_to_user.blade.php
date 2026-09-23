@@ -29,7 +29,7 @@
         <tr>
             <td align="center">
                 {{-- Círculo con check icónico --}}
-                <div style="display:inline-block; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg, #FD3C00, #FF7500); text-align:center; line-height:56px; font-size:26px; color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; mso-line-height-rule:exactly;">
+                <div style="display:inline-block; width:56px; height:56px; border-radius:50%; background:#FF7500; text-align:center; line-height:56px; font-size:26px; color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; mso-line-height-rule:exactly;">
                     &#10003;
                 </div>
             </td>
@@ -71,7 +71,7 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                     <tr>
                         <td style="vertical-align:middle;">
-                            <div style="display:inline-block; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #FD3C00, #FF7500); text-align:center; line-height:40px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:16px; font-weight:900; color:#FFFFFF; mso-line-height-rule:exactly;">
+                            <div style="display:inline-block; width:40px; height:40px; border-radius:50%; background:#FF7500; text-align:center; line-height:40px; font-family:'Noto Sans', Arial, Helvetica, sans-serif; font-size:16px; font-weight:900; color:#FFFFFF; mso-line-height-rule:exactly;">
                                 {{ mb_strtoupper(mb_substr($formResponse->user->name ?? 'P', 0, 1)) }}
                             </div>
                         </td>
@@ -125,7 +125,7 @@
     @if (isset($formResponse->formSubmission) && $formResponse->formSubmission?->secure_token)
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+            <td align="center" style="border-radius:6px; background:#FF7500;">
                 <a href="{{ route('public.form_submission.show', $formResponse->formSubmission->secure_token) }}"
                    target="_blank"
                    class="btn-primary"
@@ -138,7 +138,7 @@
     @else
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
         <tr>
-            <td align="center" style="border-radius:6px; background:linear-gradient(90deg, #FD3C00 0%, #FF7500 100%);">
+            <td align="center" style="border-radius:6px; background:#FF7500;">
                 <a href="{{ url('/') }}"
                    target="_blank"
                    class="btn-primary"
