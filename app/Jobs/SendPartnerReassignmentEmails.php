@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Mail\SenderIdentity;
+use App\Mail\ReassignIncomingPartnerMail;
+use App\Mail\ReassignOutgoingPartnerMail;
+use App\Mail\ReassignUserMail;
 use App\Models\FormSubmission;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,19 +31,11 @@ class SendPartnerReassignmentEmails implements ShouldQueue
 
         // Partner saliente (puede no existir si la consulta nunca tuvo partner asignado)
         if ($outgoing) {
-            Mail::send(
-                'emails.reassign_outgoing_partner',
-                compact('submission', 'outgoing', 'incoming', 'data'),
-                fn ($m) => $m->to($outgoing->email)->subject('Tu consulta asignada fue reasignada — PPA RED')
-            );
+            Mail::to($outgoing->email)->send(new ReassignOutgoingPartnerMail($submission, $outgoing, $incoming, $data));
         }
 
         // Partner entrante
-        Mail::send(
-            'emails.reassign_incoming_partner',
-            compact('submission', 'outgoing', 'incoming', 'data'),
-            fn ($m) => $m->to($incoming->email)->subject('Se te asignó una nueva consulta — PPA RED')
-        );
+        Mail::to($incoming->email)->send(new ReassignIncomingPartnerMail($submission, $incoming, $data));
 
         // Usuario final: solo si había un partner previo (reasignación real).
         // Si la consulta nunca tuvo partner asignado, es la primera asignación y no una
@@ -49,18 +43,7 @@ class SendPartnerReassignmentEmails implements ShouldQueue
         $userEmail = $data['email'] ?? null;
         $userName = $data['name'] ?? 'Solicitante';
         if ($outgoing && $userEmail) {
-            // El usuario final ve al partner que queda a cargo, no a la plataforma.
-            $sender = SenderIdentity::forPartner($incoming);
-            $from = $sender->from();
-
-            Mail::send(
-                'emails.reassign_user',
-                compact('submission', 'incoming', 'data', 'userName'),
-                fn ($m) => $m->to($userEmail)
-                    ->from($from->address, $from->name)
-                    ->replyTo($sender->address, $sender->name)
-                    ->subject('Tu consulta fue asignada a un nuevo especialista — PPA RED')
-            );
+            Mail::to($userEmail)->send(new ReassignUserMail($submission, $incoming, $userName));
         }
     }
 }

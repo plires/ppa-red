@@ -1,6 +1,9 @@
 <?php
 
 use App\Jobs\SendPartnerReassignmentEmails;
+use App\Mail\ReassignIncomingPartnerMail;
+use App\Mail\ReassignOutgoingPartnerMail;
+use App\Mail\ReassignUserMail;
 use App\Models\FormSubmission;
 use Illuminate\Support\Facades\Mail;
 
@@ -9,27 +12,15 @@ use Illuminate\Support\Facades\Mail;
 | Correos de reasignación de partner
 |--------------------------------------------------------------------------
 |
-| Este job usa Mail::send() con una vista en vez de una clase Mailable, y
-| MailFake sólo registra Mailables: Mail::fake() lo dejaría pasar sin capturar
-| nada y el test daría un falso verde. Por eso se usa el transporte `array`
-| real (configurado en TestCase) y se inspeccionan los mensajes enviados.
+| El job usa Mailables (ReassignOutgoingPartnerMail, ReassignIncomingPartnerMail,
+| ReassignUserMail), así que Mail::fake() los captura sin enviar nada de verdad.
 |
 */
 
-beforeEach(fn () => seedStatuses());
-
-/**
- * Destinatarios de todos los correos enviados en el request actual.
- *
- * @return array<int, string>
- */
-function sentRecipients(): array
-{
-    return collect(Mail::mailer()->getSymfonyTransport()->messages())
-        ->flatMap(fn ($message) => collect($message->getOriginalMessage()->getTo())
-            ->map(fn ($address) => $address->getAddress()))
-        ->all();
-}
+beforeEach(function () {
+    seedStatuses();
+    Mail::fake();
+});
 
 $requesterData = [
     'name' => 'Juana Solicitante',
@@ -43,11 +34,9 @@ it('notifies the outgoing partner, the incoming partner and the requester', func
 
     (new SendPartnerReassignmentEmails($submission, $outgoing, $incoming, $requesterData))->handle();
 
-    expect(sentRecipients())->toEqualCanonicalizing([
-        'saliente@example.com',
-        'entrante@example.com',
-        'juana@example.com',
-    ]);
+    Mail::assertSent(ReassignOutgoingPartnerMail::class, fn ($mail) => $mail->hasTo('saliente@example.com'));
+    Mail::assertSent(ReassignIncomingPartnerMail::class, fn ($mail) => $mail->hasTo('entrante@example.com'));
+    Mail::assertSent(ReassignUserMail::class, fn ($mail) => $mail->hasTo('juana@example.com'));
 });
 
 it('only notifies the incoming partner on a first assignment', function () use ($requesterData) {
@@ -56,7 +45,9 @@ it('only notifies the incoming partner on a first assignment', function () use (
 
     (new SendPartnerReassignmentEmails($submission, null, $incoming, $requesterData))->handle();
 
-    expect(sentRecipients())->toBe(['entrante@example.com']);
+    Mail::assertSent(ReassignIncomingPartnerMail::class, fn ($mail) => $mail->hasTo('entrante@example.com'));
+    Mail::assertNotSent(ReassignOutgoingPartnerMail::class);
+    Mail::assertNotSent(ReassignUserMail::class);
 });
 
 it('does not warn the requester when there was no previous partner', function () use ($requesterData) {
@@ -65,7 +56,7 @@ it('does not warn the requester when there was no previous partner', function ()
 
     (new SendPartnerReassignmentEmails($submission, null, $incoming, $requesterData))->handle();
 
-    expect(sentRecipients())->not->toContain('juana@example.com');
+    Mail::assertNotSent(ReassignUserMail::class);
 });
 
 it('still notifies both partners when the requester left no email', function () {
@@ -75,8 +66,7 @@ it('still notifies both partners when the requester left no email', function () 
 
     (new SendPartnerReassignmentEmails($submission, $outgoing, $incoming, ['name' => 'Sin correo']))->handle();
 
-    expect(sentRecipients())->toEqualCanonicalizing([
-        'saliente@example.com',
-        'entrante@example.com',
-    ]);
+    Mail::assertSent(ReassignOutgoingPartnerMail::class, fn ($mail) => $mail->hasTo('saliente@example.com'));
+    Mail::assertSent(ReassignIncomingPartnerMail::class, fn ($mail) => $mail->hasTo('entrante@example.com'));
+    Mail::assertNotSent(ReassignUserMail::class);
 });
