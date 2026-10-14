@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -25,7 +26,10 @@ class PartnerWelcomeMail extends Mailable
 
     public function envelope(): Envelope
     {
+        // El correo sale desde una casilla que no recibe respuestas: las dudas
+        // del partner van al administrador.
         return new Envelope(
+            replyTo: [new Address((string) config('mail.admin_address'), (string) config('mail.from.name'))],
             subject: '¡Bienvenido a PPA RED! Activá tu cuenta de partner',
         );
     }
@@ -37,6 +41,8 @@ class PartnerWelcomeMail extends Mailable
             with: [
                 'partner' => $this->partner,
                 'setPasswordUrl' => $this->setPasswordUrl,
+                'adminAddress' => config('mail.admin_address'),
+                'noReplyAddress' => config('mail.force_from_address') ?: config('mail.from.address'),
             ]
         );
     }

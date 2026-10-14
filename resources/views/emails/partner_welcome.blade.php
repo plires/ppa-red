@@ -46,6 +46,19 @@
         Este enlace es personal y expira en 60 minutos por seguridad.
     </p>
 
+    {{-- Enlace alternativo para copiar y pegar --}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr><td style="height:20px; font-size:1px; line-height:20px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr>
+        <tr>
+            <td style="background-color:#F9FAFB; border:1px solid #E5E7EB; border-radius:6px; padding:14px 16px;">
+                <p style="margin:0 0 6px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#6B7280; line-height:1.6;">
+                    Si el botón no funciona, copiá y pegá este enlace en tu navegador:
+                </p>
+                <a href="{{ $setPasswordUrl }}" target="_blank" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#FF7500; text-decoration:underline; word-break:break-all; line-height:1.5;">{{ $setPasswordUrl }}</a>
+            </td>
+        </tr>
+    </table>
+
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:36px; font-size:1px; line-height:36px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
 
     {{-- Divider --}}
@@ -65,15 +78,15 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:700; color:#FF7500; width:28px; vertical-align:top;">1.</td>
-                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Configurá tu contraseña desde el botón de arriba.</td>
+                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Configurá tu contraseña desde el botón de arriba. Si el botón no funciona, copiá y pegá en tu navegador el enlace que aparece debajo.</td>
                     </tr>
                     <tr>
                         <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:700; color:#FF7500; width:28px; vertical-align:top;">2.</td>
-                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Iniciá sesión en la plataforma con tu email y la contraseña que elegiste.</td>
+                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Elegí tu propia contraseña: la definís vos al activar la cuenta, no te asignamos ninguna.</td>
                     </tr>
                     <tr>
                         <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:700; color:#FF7500; width:28px; vertical-align:top;">3.</td>
-                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Completá los datos de tu perfil desde el panel.</td>
+                        <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#374151; vertical-align:top; line-height:1.6;">Iniciá sesión en la plataforma con tu email y la contraseña que elegiste.</td>
                     </tr>
                     <tr>
                         <td style="padding:6px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:700; color:#FF7500; width:28px; vertical-align:top;">4.</td>
@@ -85,6 +98,13 @@
     </table>
 
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td style="height:32px; font-size:1px; line-height:32px; mso-line-height-rule:exactly;" aria-hidden="true">&nbsp;</td></tr></table>
+
+    {{-- Dudas: la casilla de envío no recibe respuestas --}}
+    <p style="margin:0 0 16px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#6B7280; text-align:center; line-height:1.6;">
+        Por favor, no respondas a <strong style="color:#374151;">{{ $noReplyAddress }}</strong>: es una casilla automática que no se monitorea.<br>
+        Si tenés dudas, escribile al
+        <a href="mailto:{{ $adminAddress }}" style="color:#FF7500; text-decoration:underline;">administrador</a>.
+    </p>
 
     {{-- Aviso --}}
     <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#9CA3AF; text-align:center; line-height:1.6;">
