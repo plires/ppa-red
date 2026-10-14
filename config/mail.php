@@ -140,10 +140,11 @@ return [
     | una localidad sin partner). Es independiente del remitente: así
     | MAIL_FROM_ADDRESS puede ser siempre una casilla verificada en el proveedor.
     | Si MAIL_ADMIN_ADDRESS no está definida o llega vacía (por ejemplo,
-    | interpolada desde el compose), cae a MAIL_FROM_ADDRESS.
+    | interpolada desde el compose), cae a MAIL_FROM_ADDRESS, y de ahí al
+    | mismo valor por defecto que 'from'.
     |
     */
 
-    'admin_address' => env('MAIL_ADMIN_ADDRESS') ?: env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+    'admin_address' => env('MAIL_ADMIN_ADDRESS') ?: env('MAIL_FROM_ADDRESS') ?: 'hello@example.com',
 
 ];

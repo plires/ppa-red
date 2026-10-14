@@ -8,6 +8,7 @@ use App\Mail\ReassignIncomingPartnerMail;
 use App\Mail\ReassignOutgoingPartnerMail;
 use App\Models\FormResponse;
 use App\Models\FormSubmission;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Mail;
 
 /*
@@ -97,6 +98,33 @@ it('keeps the display name a mailable already chose when it pins the address', f
     Mail::to('juana@example.com')->send(new FormSubmissionConfirmationMail($submission, ['name' => 'Juana', 'email' => 'juana@example.com']));
 
     expect(forcedTestLastFrom())->toBe(['address' => 'no-reply@ppared.com.ar', 'name' => 'Roberto Instalaciones']);
+});
+
+it('names the variable when the forced address is not a valid email', function () {
+    config(['mail.force_from_address' => 'no-reply']);
+
+    expect(fn () => Mail::to('destino@example.com')->send(new PartnerWelcomeMail(partner(), 'https://ppa.test/reset-password/token')))
+        ->toThrow(InvalidArgumentException::class, 'MAIL_FORCE_FROM_ADDRESS');
+});
+
+it('falls back to a placeholder when neither the admin nor the sender address is defined', function () {
+    $keys = ['MAIL_ADMIN_ADDRESS', 'MAIL_FROM_ADDRESS'];
+    $previous = collect($keys)->mapWithKeys(fn ($key) => [$key => [$_ENV[$key] ?? null, $_SERVER[$key] ?? null]]);
+
+    try {
+        foreach ($keys as $key) {
+            $_ENV[$key] = $_SERVER[$key] = '';
+        }
+
+        $config = require config_path('mail.php');
+    } finally {
+        foreach ($previous as $key => [$env, $server]) {
+            $env === null ? Arr::forget($_ENV, $key) : $_ENV[$key] = $env;
+            $server === null ? Arr::forget($_SERVER, $key) : $_SERVER[$key] = $server;
+        }
+    }
+
+    expect($config['admin_address'])->toBe('hello@example.com');
 });
 
 it('leaves the default sender untouched when no address is forced', function () {

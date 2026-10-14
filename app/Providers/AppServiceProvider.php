@@ -6,6 +6,7 @@ use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 use Symfony\Component\Mime\Address;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
 
             if (! filled($forced)) {
                 return;
+            }
+
+            if (! filter_var($forced, FILTER_VALIDATE_EMAIL)) {
+                throw new InvalidArgumentException("MAIL_FORCE_FROM_ADDRESS no es una dirección de correo válida: [{$forced}].");
             }
 
             $current = $event->message->getFrom()[0] ?? null;
