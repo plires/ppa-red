@@ -33,7 +33,7 @@ class SendFormSubmissionUnassignedEmailToAdmin implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to(config('mail.from.address'))
+        Mail::to(config('mail.admin_address'))
             ->send(new FormSubmissionUnassignedMail($this->formSubmission, $this->data));
     }
 }

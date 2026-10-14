@@ -131,4 +131,19 @@ return [
 
     'force_from_address' => env('MAIL_FORCE_FROM_ADDRESS'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator Mailbox
+    |--------------------------------------------------------------------------
+    |
+    | Destinatario de los avisos operativos (consultas y mensajes que llegan a
+    | una localidad sin partner). Es independiente del remitente: así
+    | MAIL_FROM_ADDRESS puede ser siempre una casilla verificada en el proveedor.
+    | Si MAIL_ADMIN_ADDRESS no está definida o llega vacía (por ejemplo,
+    | interpolada desde el compose), cae a MAIL_FROM_ADDRESS.
+    |
+    */
+
+    'admin_address' => env('MAIL_ADMIN_ADDRESS') ?: env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+
 ];

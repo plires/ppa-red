@@ -50,6 +50,8 @@ services:
       MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
       MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
       MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      MAIL_FORCE_FROM_ADDRESS: ${MAIL_FORCE_FROM_ADDRESS:-}
+      MAIL_ADMIN_ADDRESS: ${MAIL_ADMIN_ADDRESS:-}
     volumes:
       - ppa_storage:/var/www/html/storage
 

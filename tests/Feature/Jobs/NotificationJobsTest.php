@@ -92,6 +92,11 @@ it('sends the partner reply notification to the requester', function () {
 });
 
 it('routes an unassigned new message to the administrator mailbox', function () {
+    config([
+        'mail.from.address' => 'sender@ppared.com.ar',
+        'mail.admin_address' => 'admin@ppa.ar',
+    ]);
+
     $submission = FormSubmission::factory()->forLocality(localityWithoutPartner())->create();
     $response = FormResponse::factory()->forSubmission($submission)->create();
 
@@ -99,18 +104,23 @@ it('routes an unassigned new message to the administrator mailbox', function () 
 
     Mail::assertSent(
         FormResponseUnassignedMail::class,
-        fn ($mail) => $mail->hasTo(config('mail.from.address'))
+        fn ($mail) => $mail->hasTo('admin@ppa.ar') && ! $mail->hasTo('sender@ppared.com.ar')
     );
 });
 
 it('routes an unassigned new submission to the administrator mailbox', function () {
+    config([
+        'mail.from.address' => 'sender@ppared.com.ar',
+        'mail.admin_address' => 'admin@ppa.ar',
+    ]);
+
     $submission = FormSubmission::factory()->forLocality(localityWithoutPartner())->create();
 
     (new SendFormSubmissionUnassignedEmailToAdmin($submission, requesterData()))->handle();
 
     Mail::assertSent(
         FormSubmissionUnassignedMail::class,
-        fn ($mail) => $mail->hasTo(config('mail.from.address'))
+        fn ($mail) => $mail->hasTo('admin@ppa.ar') && ! $mail->hasTo('sender@ppared.com.ar')
     );
 });
 
