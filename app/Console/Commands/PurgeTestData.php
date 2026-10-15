@@ -40,9 +40,9 @@ class PurgeTestData extends Command
         $this->table(['Table', 'Rows'], $this->rows($counts));
 
         if (! $this->option('force') && ! $this->confirm('Delete all of the above? This cannot be undone.')) {
-            $this->info('Aborted. No data was changed.');
+            $this->warn('Aborted. No data was changed.');
 
-            return self::SUCCESS;
+            return self::FAILURE;
         }
 
         $purged = DB::transaction(fn () => $this->purge());

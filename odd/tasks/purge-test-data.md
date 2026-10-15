@@ -68,6 +68,9 @@ Keeps:
   (reliability lens) and acknowledged. Three non-blocking suggestions:
   admin token survival untested, abort returns exit 0, rows created during
   the prompt are also deleted.
+- Follow-up applied: admin access token now seeded and asserted to survive
+  (mutation check: dropping the tokenable_id filter fails the test); declining
+  the confirmation returns exit code 1. Suite: 357 passed.
 
 ## Next step
 

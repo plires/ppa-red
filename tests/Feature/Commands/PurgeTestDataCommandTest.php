@@ -94,10 +94,8 @@ class PurgeTestDataCommandTest extends TestCase
         ]);
 
         DB::table('personal_access_tokens')->insert([
-            'tokenable_type' => User::class,
-            'tokenable_id' => $this->partner->id,
-            'name' => 'test',
-            'token' => str_repeat('a', 64),
+            ['tokenable_type' => User::class, 'tokenable_id' => $this->partner->id, 'name' => 'test', 'token' => str_repeat('a', 64)],
+            ['tokenable_type' => User::class, 'tokenable_id' => $this->admin->id, 'name' => 'test', 'token' => str_repeat('b', 64)],
         ]);
 
         DB::table('jobs')->insert([
@@ -135,7 +133,6 @@ class PurgeTestDataCommandTest extends TestCase
         $this->assertDatabaseMissing('form_responses', ['id' => $records['response']->id]);
         $this->assertDatabaseMissing('form_responses', ['id' => $records['trashedResponse']->id]);
         $this->assertDatabaseCount('form_submission_notifications', 0);
-        $this->assertDatabaseCount('personal_access_tokens', 0);
         $this->assertDatabaseCount('jobs', 0);
         $this->assertDatabaseCount('failed_jobs', 0);
 
@@ -153,7 +150,7 @@ class PurgeTestDataCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_removes_partner_sessions_and_reset_tokens_but_keeps_the_admin_ones()
+    public function it_removes_partner_sessions_and_tokens_but_keeps_the_admin_ones()
     {
         $this->seedTestData();
 
@@ -165,6 +162,9 @@ class PurgeTestDataCommandTest extends TestCase
 
         $this->assertDatabaseMissing('password_reset_tokens', ['email' => $this->partner->email]);
         $this->assertDatabaseHas('password_reset_tokens', ['email' => $this->admin->email]);
+
+        $this->assertDatabaseMissing('personal_access_tokens', ['tokenable_id' => $this->partner->id]);
+        $this->assertDatabaseHas('personal_access_tokens', ['tokenable_id' => $this->admin->id]);
     }
 
     /** @test */
@@ -175,7 +175,7 @@ class PurgeTestDataCommandTest extends TestCase
         $this->artisan('app:purge-test-data')
             ->expectsConfirmation(self::CONFIRMATION, 'no')
             ->expectsOutputToContain('Aborted')
-            ->assertSuccessful();
+            ->assertFailed();
 
         $this->assertDatabaseHas('users', ['id' => $this->partner->id]);
         $this->assertNotNull(User::withTrashed()->find($this->trashedPartner->id));
