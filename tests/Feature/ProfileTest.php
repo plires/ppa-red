@@ -61,39 +61,20 @@ class ProfileTest extends TestCase
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
-    public function test_user_can_delete_their_account(): void
+    public function test_users_cannot_delete_their_own_account(): void
     {
-        $user = User::factory()->create(['role' => 'admin']);
+        foreach (['admin', 'partner'] as $role) {
+            $user = User::factory()->create(['role' => $role]);
 
-        $response = $this
-            ->actingAs($user)
-            ->delete('/dashboard/profile', [
-                'password' => 'password',
-            ]);
+            $this
+                ->actingAs($user)
+                ->delete('/dashboard/profile', [
+                    'password' => 'password',
+                ])
+                ->assertMethodNotAllowed();
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
-
-        $this->assertGuest();
-        $this->assertSoftDeleted('users', ['id' => $user->id]);
-    }
-
-    public function test_correct_password_must_be_provided_to_delete_account(): void
-    {
-        $user = User::factory()->create(['role' => 'admin']);
-
-        $response = $this
-            ->actingAs($user)
-            ->from('/dashboard/profile')
-            ->delete('/dashboard/profile', [
-                'password' => 'wrong-password',
-            ]);
-
-        $response
-            ->assertSessionHasErrors('password')
-            ->assertRedirect('/dashboard/profile');
-
-        $this->assertNotNull($user->fresh());
+            $this->assertAuthenticatedAs($user);
+            $this->assertNotSoftDeleted('users', ['id' => $user->id]);
+        }
     }
 }
