@@ -36,7 +36,9 @@ class FormSubmissionFactory extends Factory
                 'phone' => $this->faker->phoneNumber(),
                 'email' => $this->faker->safeEmail(),
             ]),
-            'form_submission_status_id' => FormSubmissionStatus::factory(),
+            // Reusa el estado sembrado: crear uno por envío duplica el catálogo.
+            'form_submission_status_id' => fn () => FormSubmissionStatus::where('name', FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)->value('id')
+                ?? FormSubmissionStatus::factory()->create()->id,
             'closure_reason' => null,
         ];
     }

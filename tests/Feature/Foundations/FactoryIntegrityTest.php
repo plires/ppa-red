@@ -78,6 +78,22 @@ it('creates a pending status by default instead of a random one', function () {
     expect($status->name)->toBe(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER);
 });
 
+it('reuses the seeded pending status instead of creating one per submission', function () {
+    seedStatuses();
+
+    FormSubmission::factory()->count(3)->create();
+
+    expect(FormSubmissionStatus::count())->toBe(6)
+        ->and(FormSubmission::pluck('form_submission_status_id')->unique()->all())
+        ->toBe([statusId(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER)]);
+});
+
+it('creates a single shared pending status when none is seeded', function () {
+    FormSubmission::factory()->count(3)->create();
+
+    expect(FormSubmissionStatus::count())->toBe(1);
+});
+
 it('seeds the six real lifecycle statuses', function () {
     seedStatuses();
 
