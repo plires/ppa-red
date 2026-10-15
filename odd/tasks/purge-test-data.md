@@ -64,8 +64,13 @@ Keeps:
 - Dry run on local MySQL without `--force`: counts printed, default answer
   aborted, no rows changed.
 - If there is nothing to purge, the command exits without prompting.
+- T1 commit `b750189`. Review: medium risk, consent granted, approved
+  (reliability lens) and acknowledged. Three non-blocking suggestions:
+  admin token survival untested, abort returns exit 0, rows created during
+  the prompt are also deleted.
 
 ## Next step
 
-Back up production (`mysqldump`), then run
-`php artisan app:purge-test-data` inside the production container.
+Back up production (`mysqldump`), put the site in maintenance mode
+(`php artisan down`), run `php artisan app:purge-test-data`, then
+`php artisan up`.
