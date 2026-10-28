@@ -1,5 +1,6 @@
 import './Landing.css'
 import { Head, useForm } from '@inertiajs/react'
+import { pushDataLayerEvent } from '@/lib/analytics'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AOS from 'aos'
@@ -92,7 +93,13 @@ export default function Landing() {
 
   function submit(e) {
     e.preventDefault()
-    post(route('public.form_submission.store'))
+    post(route('public.form_submission.store'), {
+      // Only fires when the server accepted the submission (no validation errors).
+      onSuccess: () =>
+        pushDataLayerEvent('landing_form_submit_success', {
+          form_name: 'landing_presupuesto',
+        }),
+    })
   }
 
   return (

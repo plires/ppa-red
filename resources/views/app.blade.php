@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        @php
+            // GTM solo en páginas públicas: el área autenticada y las pantallas
+            // de acceso no deben mezclar tráfico de admins/partners en las métricas.
+            $gtmId = config('services.gtm.id');
+            $loadGtm = $gtmId && ! request()->is(
+                'dashboard', 'dashboard/*', 'login', 'register', 'logout',
+                'forgot-password', 'reset-password', 'reset-password/*',
+                'verify-email', 'verify-email/*', 'confirm-password',
+            );
+        @endphp
+        @if ($loadGtm)
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',@js($gtmId));</script>
+        <!-- End Google Tag Manager -->
+        @endif
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -38,6 +57,12 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
+        @if ($loadGtm)
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        @endif
         @inertia
     </body>
 </html>

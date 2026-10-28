@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // Contenedor de Google Tag Manager. Sin ID no se inyecta el snippet, así
+    // que local y staging quedan fuera de las métricas salvo que se configure.
+    'gtm' => [
+        'id' => env('GTM_ID'),
+    ],
+
 ];
