@@ -16,7 +16,29 @@ class FormSubmission extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id', 'closure_reason'];
+    /**
+     * Campos de atribución de marketing y su largo máximo almacenable.
+     */
+    public const ATTRIBUTION_FIELDS = [
+        'gclid' => 255,
+        'gbraid' => 255,
+        'wbraid' => 255,
+        'fbclid' => 255,
+        'utm_source' => 255,
+        'utm_medium' => 255,
+        'utm_campaign' => 255,
+        'utm_term' => 255,
+        'utm_content' => 255,
+        'landing_url' => 2048,
+        'referrer' => 2048,
+    ];
+
+    protected $fillable = [
+        'user_id', 'province_id', 'zone_id', 'locality_id', 'data', 'form_submission_status_id', 'closure_reason',
+        'gclid', 'gbraid', 'wbraid', 'fbclid',
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+        'landing_url', 'referrer',
+    ];
 
     protected $hidden = ['secure_token'];
 

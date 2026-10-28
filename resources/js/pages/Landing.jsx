@@ -1,7 +1,8 @@
 import './Landing.css'
 import { Head, useForm } from '@inertiajs/react'
 import { buildUserData, pushDataLayerEvent } from '@/lib/analytics'
-import { useState, useEffect } from 'react'
+import { attributionPayload, captureAttribution } from '@/lib/attribution'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -24,7 +25,9 @@ export default function Landing() {
   const [loadingZones, setLoadingZones] = useState(false)
   const [loadingLocalities, setLoadingLocalities] = useState(false)
 
-  const { data, setData, post, processing, errors } = useForm({
+  const attributionRef = useRef(null)
+
+  const { data, setData, post, processing, errors, transform } = useForm({
     name: '',
     email: '',
     phone: '',
@@ -33,6 +36,11 @@ export default function Landing() {
     zone_id: '',
     locality_id: '',
   })
+
+  // Capture on first load, while the URL still carries the click IDs / UTMs.
+  useEffect(() => {
+    attributionRef.current = captureAttribution()
+  }, [])
 
   useEffect(() => {
     AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 })
@@ -100,6 +108,11 @@ export default function Landing() {
       province: provinces.find(p => String(p.id) === String(data.province_id))?.name,
       city: localities.find(l => String(l.id) === String(data.locality_id))?.name,
     })
+
+    transform(formData => ({
+      ...formData,
+      ...attributionPayload(attributionRef.current),
+    }))
 
     post(route('public.form_submission.store'), {
       // Only fires when the server accepted the submission (no validation errors).

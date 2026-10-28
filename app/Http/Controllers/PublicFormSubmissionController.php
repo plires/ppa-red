@@ -89,7 +89,18 @@ class PublicFormSubmissionController extends Controller
         $locality = Locality::findOrFail($validated['locality_id']);
         $statusId = FormSubmissionStatus::getIdByName(FormSubmissionStatus::STATUS_PENDIENTE_RTA_DE_PARTNER);
 
+        // La atribución se sanea en vez de validarse: un click ID o una UTM rara
+        // nunca puede rechazar un lead. Lo que no es texto se descarta y lo que
+        // excede el largo de la columna se recorta.
+        $attribution = [];
+        foreach (FormSubmission::ATTRIBUTION_FIELDS as $field => $maxLength) {
+            $value = $request->input($field);
+            $value = is_string($value) ? trim($value) : '';
+            $attribution[$field] = $value === '' ? null : mb_substr($value, 0, $maxLength);
+        }
+
         $formSubmission = FormSubmission::create([
+            ...$attribution,
             'user_id' => $locality->user_id,
             'province_id' => $validated['province_id'],
             'zone_id' => $validated['zone_id'] ?? null,
