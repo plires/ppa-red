@@ -52,6 +52,7 @@ services:
       MAIL_FROM_NAME: ${MAIL_FROM_NAME}
       MAIL_FORCE_FROM_ADDRESS: ${MAIL_FORCE_FROM_ADDRESS:-}
       MAIL_ADMIN_ADDRESS: ${MAIL_ADMIN_ADDRESS:-}
+      GTM_ID: ${GTM_ID:-}
     volumes:
       - ppa_storage:/var/www/html/storage
 
