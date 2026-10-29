@@ -1,5 +1,5 @@
 # ── Stage 1: build frontend assets ──────────────────────────────────────────
-FROM node:20-alpine AS assets
+FROM node:22-alpine AS assets
 WORKDIR /app
 ARG APP_NAME
 ENV APP_NAME=$APP_NAME
@@ -41,6 +41,7 @@ COPY --from=assets /app/public/build ./public/build
 COPY docker/nginx.conf       /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/entrypoint.sh    /entrypoint.sh
+COPY docker/php/security.ini /usr/local/etc/php/conf.d/zz-security.ini
 RUN chmod +x /entrypoint.sh
 
 # Permisos de Laravel
